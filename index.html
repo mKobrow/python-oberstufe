@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informatik – Materialien</title>
+
+<script>
+/* ==========================================================================
+   HIER NEUE MATERIALIEN EINTRAGEN
+   ==========================================================================
+
+   Jeder Eintrag ist ein Block zwischen { und },  getrennt durch ein Komma.
+   Zum Hinzufuegen: einen vorhandenen Block markieren, kopieren, einfuegen
+   und die Werte anpassen. Auf das Komma hinter der schliessenden Klammer
+   achten - beim letzten Eintrag darf es stehen oder fehlen.
+
+   Felder
+   ------
+   titel         Pflicht.  Ueberschrift der Kachel.
+   text          Pflicht.  Ein bis zwei Saetze, was das Material ist.
+   datei         Pflicht.  Relativer Pfad oder vollstaendige Adresse.
+                           Beispiele:  "python-turtle-uebungen.html"
+                                       "material/klasse9/netzwerke.pdf"
+                                       "https://..."
+   jahrgang      Pflicht.  Freier Text, z. B. "11/12", "9", "7-8".
+                           Erzeugt automatisch einen Filterknopf.
+   art           Pflicht.  Freier Text, z. B. "Uebungen", "Arbeitsblatt",
+                           "Praesentation", "Quiz", "Simulation", "Video".
+                           Erzeugt automatisch einen Filterknopf.
+   themen        Optional. Liste von Schlagwoertern fuer die Suche,
+                           z. B. ["Schleifen", "Listen"].  Weglassen: []
+   stand         Optional. Datum als "2026-08-18". Wird als Monat angezeigt.
+   neu           Optional. true blendet eine NEU-Marke ein.  Sonst weglassen.
+
+   Reihenfolge
+   -----------
+   Die Kacheln erscheinen in genau der Reihenfolge, in der sie hier stehen.
+   Neues also nach oben schreiben, wenn es zuerst auftauchen soll.
+
+   ========================================================================== */
+
+const MATERIALIEN = [
+
+  {
+    titel:    "Python mit Turtle – Übungen",
+    text:     "43 Aufgaben zu Sequenz, Schleifen, Verzweigungen, Funktionen und "
+            + "Listen. Zu jeder Aufgabe gibt es gestufte Tipps und eine "
+            + "vollständig erklärte Lösung.",
+    datei:    "python-turtle-uebungen.html",
+    jahrgang: "11/12",
+    art:      "Übungen",
+    themen:   ["Python", "Turtle", "Sequenz", "Schleifen", "Verzweigung",
+               "Funktionen", "Listen", "Struktogramme", "Datentypen"],
+    stand:    "2026-08-18",
+    neu:      true
+  },
+
+  // --------------------------------------------------------------------
+  // KOPIERVORLAGE
+  // Die beiden Schraegstriche am Zeilenanfang entfernen, dann ist der
+  // Eintrag aktiv. Reihenfolge der Felder ist egal, Anfuehrungszeichen
+  // und Kommas muessen aber stehen bleiben.
+  //
+  // {
+  //   titel:    "Titel des Materials",
+  //   text:     "Ein bis zwei Saetze zur Beschreibung.",
+  //   datei:    "dateiname.html",
+  //   jahrgang: "9",
+  //   art:      "Arbeitsblatt",
+  //   themen:   ["Stichwort", "noch ein Stichwort"],
+  //   stand:    "2026-01-01"
+  // },
+  // --------------------------------------------------------------------
+
+];
+
+/* Text unter der Überschrift. Darf auch leer sein: "" */
+const BEGRUESSUNG =
+  "Hier findest du alle Materialien zum Informatikunterricht. "
++ "Nutze die Suche oder die Filter, um schnell zum passenden Thema zu kommen.";
+
+const SEITENTITEL   = "Informatik";
+const SEITENUNTERTITEL = "Materialien und Übungen";
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9; --panel:#fff; --ink:#1c2430; --mut:#5d6b7e;
+  --line:#dde3ec; --akz:#2f5d8c; --akz-hell:#eaf1f8; --neu:#2e7d5b;
+  --radius:10px;
+}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+.huelle{max-width:1120px; margin:0 auto; padding:38px 24px 90px}
+
+/* ---------- Kopf ---------- */
+header{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:30px 34px; margin-bottom:24px;
+}
+header h1{margin:0; font-size:1.85rem; letter-spacing:-.015em}
+header .unter{color:var(--akz); font-weight:600; font-size:1rem; margin:2px 0 0}
+header p.gruss{margin:14px 0 0; color:var(--mut); max-width:62ch}
+
+/* ---------- Steuerung ---------- */
+.steuerung{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px 22px; margin-bottom:24px;
+}
+.suchzeile{position:relative; margin-bottom:16px}
+#suche{
+  width:100%; font:inherit; padding:11px 40px 11px 14px;
+  border:1px solid var(--line); border-radius:8px; background:#fbfcfe; color:var(--ink);
+}
+#suche:focus{outline:2px solid var(--akz); outline-offset:-1px; background:#fff}
+.loeschen{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  border:none; background:none; font-size:1.3rem; line-height:1; color:var(--mut);
+  cursor:pointer; padding:4px 8px; border-radius:6px; display:none;
+}
+.loeschen:hover{background:var(--akz-hell); color:var(--ink)}
+
+.filterzeile{display:flex; flex-wrap:wrap; gap:18px}
+.filtergruppe{display:flex; flex-wrap:wrap; align-items:center; gap:7px}
+.filtergruppe .beschriftung{
+  font-size:.7rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--mut); font-weight:700; margin-right:2px;
+}
+.chip{
+  font:inherit; font-size:.84rem; padding:5px 13px; border-radius:99px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; color:var(--ink); white-space:nowrap;
+}
+.chip:hover{border-color:var(--akz); background:var(--akz-hell)}
+.chip[aria-pressed="true"]{background:var(--akz); border-color:var(--akz); color:#fff}
+
+/* ---------- Kacheln ---------- */
+.zaehlzeile{font-size:.85rem; color:var(--mut); margin:0 4px 12px}
+.gitter{display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+a.kachel{
+  display:flex; flex-direction:column; background:var(--panel); color:inherit;
+  border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px;
+  text-decoration:none; transition:border-color .12s, box-shadow .12s, transform .12s;
+}
+a.kachel:hover{
+  border-color:var(--akz); box-shadow:0 4px 16px rgba(47,93,140,.13); transform:translateY(-2px);
+}
+a.kachel:focus-visible{outline:2px solid var(--akz); outline-offset:2px}
+.kachel .marken{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; align-items:center}
+.marke{
+  font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px; background:var(--akz-hell); color:var(--akz);
+}
+.marke.jg{background:#eef2f7; color:var(--mut)}
+.marke.neu{background:var(--neu); color:#fff}
+.kachel h2{margin:0 0 7px; font-size:1.08rem; line-height:1.35}
+.kachel p{margin:0; font-size:.91rem; color:var(--mut); flex:1 1 auto}
+.kachel .fuss{
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  margin-top:16px; padding-top:12px; border-top:1px solid var(--line);
+  font-size:.8rem; color:var(--mut);
+}
+.kachel .oeffnen{color:var(--akz); font-weight:600; white-space:nowrap}
+.kachel .oeffnen::after{content:" →"}
+
+.leer{
+  background:var(--panel); border:1px dashed var(--line); border-radius:var(--radius);
+  padding:44px 24px; text-align:center; color:var(--mut);
+}
+.leer strong{display:block; color:var(--ink); margin-bottom:6px; font-size:1.05rem}
+
+footer{margin-top:44px; font-size:.82rem; color:var(--mut); text-align:center}
+
+@media print{
+  .steuerung,footer{display:none}
+  body{background:#fff}
+  a.kachel{break-inside:avoid; box-shadow:none}
+}
+@media(max-width:560px){
+  .huelle{padding:22px 14px 60px}
+  header{padding:22px 20px}
+  .gitter{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="huelle">
+
+  <header>
+    <h1 id="titel"></h1>
+    <p class="unter" id="untertitel"></p>
+    <p class="gruss" id="gruss"></p>
+  </header>
+
+  <div class="steuerung">
+    <div class="suchzeile">
+      <input type="search" id="suche" placeholder="Suchen nach Titel, Thema oder Stichwort …"
+             autocomplete="off" aria-label="Materialien durchsuchen">
+      <button class="loeschen" id="loeschen" type="button" title="Suche leeren"
+              aria-label="Suche leeren">&times;</button>
+    </div>
+    <div class="filterzeile" id="filter"></div>
+  </div>
+
+  <p class="zaehlzeile" id="zaehler"></p>
+  <div class="gitter" id="gitter"></div>
+
+  <footer>
+    Statische Übersichtsseite – funktioniert ohne Internetverbindung.
+    Alle verlinkten Dateien müssen im selben Ordner liegen wie diese Seite.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var gitter  = document.getElementById("gitter");
+  var zaehler = document.getElementById("zaehler");
+  var suche   = document.getElementById("suche");
+  var loeschen= document.getElementById("loeschen");
+  var filterbereich = document.getElementById("filter");
+
+  document.getElementById("titel").textContent = SEITENTITEL;
+  document.getElementById("untertitel").textContent = SEITENUNTERTITEL;
+  document.getElementById("gruss").textContent = BEGRUESSUNG;
+  document.title = SEITENTITEL + " – " + SEITENUNTERTITEL;
+
+  var aktiv = { jahrgang: null, art: null };
+
+  var MONATE = ["Januar","Februar","März","April","Mai","Juni",
+                "Juli","August","September","Oktober","November","Dezember"];
+
+  function standText(s) {
+    if (!s) return "";
+    var t = String(s).split("-");
+    if (t.length < 2) return String(s);
+    var m = parseInt(t[1], 10) - 1;
+    if (isNaN(m) || m < 0 || m > 11) return String(s);
+    return MONATE[m] + " " + t[0];
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  // ---- Filterknoepfe aus den Daten erzeugen -------------------------------
+  function werteVon(feld) {
+    var gesehen = [];
+    MATERIALIEN.forEach(function (m) {
+      var w = (m[feld] || "").trim();
+      if (w && gesehen.indexOf(w) === -1) gesehen.push(w);
+    });
+    return gesehen.sort(function (a, b) {
+      return a.localeCompare(b, "de", { numeric: true });
+    });
+  }
+
+  function baueGruppe(feld, beschriftung) {
+    var werte = werteVon(feld);
+    if (werte.length < 2) return;            // ein einziger Wert: kein Filter noetig
+
+    var g = document.createElement("div");
+    g.className = "filtergruppe";
+
+    var b = document.createElement("span");
+    b.className = "beschriftung";
+    b.textContent = beschriftung;
+    g.appendChild(b);
+
+    var alle = document.createElement("button");
+    alle.type = "button"; alle.className = "chip"; alle.textContent = "alle";
+    alle.setAttribute("aria-pressed", "true");
+    alle.addEventListener("click", function () { aktiv[feld] = null; zeichnen(); });
+    g.appendChild(alle);
+
+    werte.forEach(function (w) {
+      var c = document.createElement("button");
+      c.type = "button"; c.className = "chip"; c.textContent = w;
+      c.dataset.feld = feld; c.dataset.wert = w;
+      c.setAttribute("aria-pressed", "false");
+      c.addEventListener("click", function () {
+        aktiv[feld] = (aktiv[feld] === w) ? null : w;   // erneuter Klick hebt auf
+        zeichnen();
+      });
+      g.appendChild(c);
+    });
+
+    g.dataset.feld = feld;
+    filterbereich.appendChild(g);
+  }
+
+  baueGruppe("jahrgang", "Jahrgang");
+  baueGruppe("art", "Art");
+
+  function chipsAktualisieren() {
+    filterbereich.querySelectorAll(".filtergruppe").forEach(function (g) {
+      var feld = g.dataset.feld;
+      g.querySelectorAll(".chip").forEach(function (c) {
+        var gesetzt = c.dataset.wert
+          ? (aktiv[feld] === c.dataset.wert)
+          : (aktiv[feld] === null);
+        c.setAttribute("aria-pressed", gesetzt ? "true" : "false");
+      });
+    });
+  }
+
+  // ---- Filtern und zeichnen ----------------------------------------------
+  function passt(m, begriff) {
+    if (aktiv.jahrgang && (m.jahrgang || "").trim() !== aktiv.jahrgang) return false;
+    if (aktiv.art && (m.art || "").trim() !== aktiv.art) return false;
+    if (!begriff) return true;
+    var heuhaufen = [m.titel, m.text, m.jahrgang, m.art]
+                      .concat(m.themen || []).join(" ").toLowerCase();
+    return begriff.split(/\s+/).every(function (wort) {
+      return heuhaufen.indexOf(wort) !== -1;
+    });
+  }
+
+  function kachel(m) {
+    var marken = '<span class="marke">' + esc(m.art || "Material") + "</span>";
+    if (m.jahrgang) marken += '<span class="marke jg">Jg. ' + esc(m.jahrgang) + "</span>";
+    if (m.neu) marken += '<span class="marke neu">neu</span>';
+
+    return '<a class="kachel" href="' + esc(m.datei || "#") + '">'
+         + '<div class="marken">' + marken + "</div>"
+         + "<h2>" + esc(m.titel || "Ohne Titel") + "</h2>"
+         + "<p>" + esc(m.text || "") + "</p>"
+         + '<div class="fuss"><span>' + esc(standText(m.stand)) + "</span>"
+         + '<span class="oeffnen">öffnen</span></div></a>';
+  }
+
+  function zeichnen() {
+    var begriff = suche.value.trim().toLowerCase();
+    loeschen.style.display = begriff ? "block" : "none";
+
+    var treffer = MATERIALIEN.filter(function (m) { return passt(m, begriff); });
+
+    if (treffer.length === 0) {
+      gitter.innerHTML = '<div class="leer"><strong>Nichts gefunden</strong>'
+        + "Versuche einen anderen Suchbegriff oder setze die Filter zurück.</div>";
+    } else {
+      gitter.innerHTML = treffer.map(kachel).join("");
+    }
+
+    var gesamt = MATERIALIEN.length;
+    zaehler.textContent = (treffer.length === gesamt)
+      ? gesamt + (gesamt === 1 ? " Material" : " Materialien")
+      : treffer.length + " von " + gesamt + " Materialien";
+
+    chipsAktualisieren();
+  }
+
+  suche.addEventListener("input", zeichnen);
+  loeschen.addEventListener("click", function () {
+    suche.value = ""; suche.focus(); zeichnen();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.activeElement === suche) {
+      suche.value = ""; zeichnen();
+    }
+  });
+
+  zeichnen();
+})();
+</script>
+</body>
+</html>
