@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python mit Turtle – Übungen</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --ink:#1c2430; --mut:#5d6b7e;
+  --line:#dde3ec; --akz:#2f5d8c; --akz-hell:#eaf1f8;
+  --basis:#2e7d5b; --standard:#2f5d8c; --erw:#8a4b9c;
+  --codebg:#1e2733; --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.65 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+a{color:var(--akz)}
+
+/* ---------- Layout ---------- */
+.wrap{display:flex; align-items:flex-start; max-width:1500px; margin:0 auto}
+nav.side{
+  position:sticky; top:0; flex:0 0 268px; height:100vh; overflow-y:auto;
+  background:var(--panel); border-right:1px solid var(--line); padding:22px 18px 40px;
+}
+main{flex:1 1 auto; min-width:0; padding:34px 42px 120px; max-width:1050px}
+
+nav.side h1{font-size:1.05rem; line-height:1.35; margin:0 0 4px}
+nav.side .sub{font-size:.78rem; color:var(--mut); margin:0 0 18px}
+nav.side ol{list-style:none; margin:0; padding:0; counter-reset:k}
+nav.side li{margin:0 0 2px}
+nav.side a.kaplink{
+  display:flex; gap:9px; align-items:baseline; padding:7px 9px; border-radius:7px;
+  text-decoration:none; color:var(--ink); font-size:.88rem; line-height:1.3;
+}
+nav.side a.kaplink:hover{background:var(--akz-hell)}
+nav.side a.kaplink .nr{
+  flex:0 0 20px; font-weight:700; color:var(--akz); font-variant-numeric:tabular-nums;
+}
+nav.side .navtitel{font-size:.7rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--mut); margin:22px 0 8px; font-weight:700}
+
+.filter{display:flex; flex-direction:column; gap:5px}
+.filter label{display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer;
+  padding:4px 6px; border-radius:6px}
+.filter label:hover{background:var(--akz-hell)}
+.filter input{accent-color:var(--akz); width:15px; height:15px}
+.werkzeug{margin-top:16px; display:flex; flex-direction:column; gap:6px}
+.werkzeug button{
+  font:inherit; font-size:.83rem; padding:7px 10px; border:1px solid var(--line);
+  background:#fff; border-radius:7px; cursor:pointer; text-align:left; color:var(--ink);
+}
+.werkzeug button:hover{background:var(--akz-hell); border-color:var(--akz)}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:26px 30px; margin-bottom:26px;
+}
+header.kopf h2{margin:0 0 6px; font-size:1.6rem; letter-spacing:-.01em}
+header.kopf p{margin:0; color:var(--mut)}
+.uebersicht{
+  width:100%; border-collapse:collapse; margin-top:20px; font-size:.87rem;
+}
+.uebersicht th,.uebersicht td{
+  text-align:left; padding:7px 10px; border-bottom:1px solid var(--line);
+}
+.uebersicht th{font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color:var(--mut)}
+.uebersicht td:first-child{font-weight:700; color:var(--akz); width:34px}
+.uebersicht td:last-child{white-space:nowrap; color:var(--mut); text-align:right}
+
+/* ---------- Kapitel ---------- */
+section.kap{margin:0 0 46px; scroll-margin-top:18px}
+.kaphead{
+  display:flex; align-items:flex-start; gap:16px; padding:0 4px 14px;
+  border-bottom:3px solid var(--akz); margin-bottom:20px;
+}
+.kaphead .knr{
+  flex:0 0 auto; font-size:2.1rem; font-weight:800; color:var(--akz); line-height:1;
+  letter-spacing:-.03em;
+}
+.kaphead h3{margin:0 0 3px; font-size:1.3rem}
+.kaphead .meta{font-size:.83rem; color:var(--mut)}
+
+.ziele{
+  background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--basis);
+  border-radius:var(--radius); padding:15px 20px; margin:0 0 18px;
+}
+.ziele h4,.wissen h4{
+  margin:0 0 8px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--mut);
+}
+.ziele ul{margin:0; padding-left:20px}
+.ziele li{margin:2px 0}
+
+.wissen{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px 22px; margin:0 0 26px;
+}
+.wissen p{margin:.6em 0}
+.wissen > :last-child{margin-bottom:0}
+
+/* ---------- Aufgabenkarte ---------- */
+article.auf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  margin:0 0 16px; overflow:hidden; scroll-margin-top:18px;
+}
+article.auf.aus{display:none}
+.aufkopf{display:flex; align-items:center; gap:12px; padding:14px 20px; border-bottom:1px solid var(--line)}
+.aufkopf .aid{
+  font-weight:800; color:var(--akz); font-variant-numeric:tabular-nums; font-size:.95rem;
+  flex:0 0 auto;
+}
+.aufkopf h5{margin:0; font-size:1.02rem; flex:1 1 auto; font-weight:600}
+.badge{
+  flex:0 0 auto; font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px; color:#fff;
+}
+.st-basis{background:var(--basis)} .st-standard{background:var(--standard)} .st-erw{background:var(--erw)}
+.hakenbox{flex:0 0 auto; display:flex; align-items:center; cursor:pointer}
+.hakenbox input{width:17px; height:17px; accent-color:var(--basis); cursor:pointer}
+article.auf.fertig .aufkopf{background:#f2f9f5}
+article.auf.fertig .aufkopf h5{text-decoration:line-through; text-decoration-color:#a9c9b8}
+
+.aufkoerper{padding:16px 20px 6px}
+.aufkoerper p{margin:.55em 0}
+.aufkoerper > :first-child{margin-top:0}
+ul.kompakt,ol.kompakt{margin:.5em 0; padding-left:22px}
+ul.kompakt li,ol.kompakt li{margin:3px 0}
+
+.knopfleiste{display:flex; flex-wrap:wrap; gap:8px; padding:6px 20px 16px}
+.knopfleiste button{
+  font:inherit; font-size:.84rem; padding:7px 14px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; color:var(--ink);
+}
+.knopfleiste button:hover{border-color:var(--akz); background:var(--akz-hell)}
+.knopfleiste button.loesknopf{border-color:var(--akz); color:var(--akz); font-weight:600}
+.knopfleiste button[disabled]{opacity:.4; cursor:default}
+.knopfleiste button[disabled]:hover{border-color:var(--line); background:#fff}
+
+.tipp{
+  margin:0 20px 12px; padding:12px 16px; border-radius:8px;
+  background:#fffaf0; border:1px solid #f0e0c0; border-left:4px solid #d9a441; font-size:.93rem;
+}
+.tipp .tnr{font-weight:700; color:#a9741d; margin-right:6px}
+.loesung{
+  margin:0 20px 18px; padding:16px 18px; border-radius:8px;
+  background:#f7faf8; border:1px solid #d8e6de; border-left:4px solid var(--basis);
+}
+.loesung h6{
+  margin:0 0 10px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--basis);
+}
+.loesung p{margin:.55em 0} .loesung > :last-child{margin-bottom:0}
+.verborgen{display:none}
+
+/* ---------- Code ---------- */
+pre.code,pre.hl{
+  background:var(--codebg); color:#e6edf3; padding:14px 16px; border-radius:8px;
+  overflow-x:auto; font:13.5px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+  margin:.7em 0; white-space:pre; tab-size:4;
+}
+code{
+  background:#eef2f7; padding:1px 5px; border-radius:4px;
+  font:.88em/1.4 "Cascadia Code",Consolas,Menlo,monospace; color:#25405c;
+}
+pre code{background:none; padding:0; color:inherit; font-size:inherit}
+.codebox{position:relative}
+.codebox .kopieren{
+  position:absolute; top:8px; right:8px; font:inherit; font-size:.74rem; padding:4px 9px;
+  border:1px solid #3d4b5c; background:#2b3542; color:#c3ceda; border-radius:6px; cursor:pointer;
+}
+.codebox .kopieren:hover{background:#3a4756; color:#fff}
+.tok-kw{color:#ff8fbf} .tok-bi{color:#8fd3ff} .tok-str{color:#b9e88a}
+.tok-num{color:#f2c97d} .tok-com{color:#7f8ea3; font-style:italic}
+
+/* ---------- Tabellen im Merkkasten ---------- */
+table.ref{border-collapse:collapse; width:100%; margin:.9em 0; font-size:.88rem; background:#fff}
+table.ref th,table.ref td{border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top}
+table.ref th{background:var(--akz-hell); font-weight:700; font-size:.8rem}
+p.hinweis{
+  background:#fffaf0; border-left:4px solid #d9a441; padding:10px 14px; border-radius:0 7px 7px 0;
+  font-size:.93rem;
+}
+
+/* ---------- Struktogramme ---------- */
+.sg{
+  border:2px solid #33404f; display:inline-block; min-width:330px; max-width:100%;
+  background:#fff; font-size:.87rem; margin:.9em 0; vertical-align:top;
+}
+.sg-row{border-bottom:1px solid #33404f; padding:6px 11px}
+.sg-loop{border-bottom:1px solid #33404f}
+.sg-loop-head{padding:6px 11px; font-style:italic; background:#f4f7fb; border-bottom:1px solid #33404f}
+.sg-loop-body{margin-left:20px; border-left:1px solid #33404f}
+.sg-if{border-bottom:1px solid #33404f}
+.sg-if-head{
+  position:relative; height:56px; border-bottom:1px solid #33404f; background:
+   linear-gradient(to bottom left,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     left/50% 100% no-repeat,
+   linear-gradient(to bottom right,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     right/50% 100% no-repeat;
+}
+.sg-cond{
+  position:absolute; top:2px; left:50%; transform:translateX(-50%);
+  background:#fff; padding:0 6px; white-space:nowrap; font-weight:600;
+}
+.sg-ja{position:absolute; bottom:2px; left:8px; font-size:.8rem; color:#2e7d5b}
+.sg-nein{position:absolute; bottom:2px; right:8px; font-size:.8rem; color:#a5453d}
+.sg-if-body{display:flex}
+.sg-branch{flex:1 1 50%; min-width:0; display:flex; flex-direction:column}
+.sg-branch > :last-child{flex:1 1 auto}
+.sg-branch:first-child{border-right:1px solid #33404f}
+.sg > :last-child,.sg-loop-body > :last-child,.sg-branch > :last-child{border-bottom:none}
+.sg-legende{display:flex; flex-wrap:wrap; gap:26px; align-items:flex-start; margin:1em 0}
+.sg-legende .sg{min-width:220px}
+.sg-titel{font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--mut);
+  margin:0 0 4px; font-weight:700}
+
+/* ---------- Listenbild ---------- */
+.listenbild{display:flex; gap:0; margin:1.1em 0; flex-wrap:wrap}
+.lb-zelle{
+  border:2px solid #33404f; border-right-width:1px; border-left-width:1px;
+  min-width:74px; text-align:center; background:#fff;
+}
+.lb-zelle:first-child{border-left-width:2px} .lb-zelle:last-child{border-right-width:2px}
+.lb-idx{display:block; font-size:.72rem; background:#eef2f7; color:var(--mut);
+  border-bottom:1px solid #cfd8e3; padding:2px}
+.lb-wert{display:block; padding:8px 4px; font-weight:700; font-family:Consolas,Menlo,monospace}
+
+/* ---------- Fuss ---------- */
+footer{
+  margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:.82rem; color:var(--mut);
+}
+
+/* ---------- Druck ---------- */
+@media print{
+  nav.side{display:none}
+  main{max-width:none; padding:0}
+  body{background:#fff; font-size:11pt}
+  .knopfleiste,.hakenbox{display:none !important}
+  .verborgen{display:block !important}
+  article.auf{border:1px solid #ccd4de}
+  .aufkopf,.tipp,.ziele{break-inside:avoid; page-break-inside:avoid}
+  .aufkopf,.kaphead,.loesung h6{break-after:avoid; page-break-after:avoid}
+  pre.code,pre.hl,.sg,table.ref{break-inside:avoid; page-break-inside:avoid}
+  section.kap{page-break-before:always}
+  section.kap:first-of-type{page-break-before:auto}
+  header.kopf .uebersicht{display:none}
+  pre.code,pre.hl{background:#f3f5f8; color:#1c2430; border:1px solid #ccd4de;
+    white-space:pre-wrap; font-size:9.5pt}
+  .tok-kw,.tok-bi,.tok-str,.tok-num{color:#1c2430}
+  .tok-com{color:#667}
+  .codebox .kopieren{display:none}
+  header.kopf{border:none; padding:0}
+}
+@media(max-width:940px){
+  nav.side{display:none}
+  main{padding:20px 16px 80px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="side">
+  <h1>Python mit Turtle</h1>
+  <p class="sub">Algorithmen und Datenstruktur Liste<br>Jahrgangsstufe 11/12</p>
+
+  <div class="navtitel">Kapitel</div>
+  <ol><li><a class="kaplink" href="#k1"><span class="nr">1</span><span>Sequenz - die Turtle in Bewegung</span></a></li><li><a class="kaplink" href="#k2"><span class="nr">2</span><span>Variablen, Datentypen und Typkonvertierung</span></a></li><li><a class="kaplink" href="#k3"><span class="nr">3</span><span>Wiederholung - Schleifen</span></a></li><li><a class="kaplink" href="#k4"><span class="nr">4</span><span>Verzweigung, Vergleichs- und logische Operatoren</span></a></li><li><a class="kaplink" href="#k5"><span class="nr">5</span><span>Funktionen - eigene Befehle bauen</span></a></li><li><a class="kaplink" href="#k6"><span class="nr">6</span><span>Struktogramme</span></a></li><li><a class="kaplink" href="#k7"><span class="nr">7</span><span>Die lineare Datenstruktur Liste</span></a></li><li><a class="kaplink" href="#k8"><span class="nr">8</span><span>Projekt: Suchen und Sortieren sichtbar machen</span></a></li></ol>
+
+  <div class="navtitel">Niveau anzeigen</div>
+  <div class="filter">
+    <label><input type="checkbox" value="basis" checked> Basis</label>
+    <label><input type="checkbox" value="standard" checked> Standard</label>
+    <label><input type="checkbox" value="erweiterung" checked> Erweiterung</label>
+  </div>
+
+  <div class="werkzeug">
+    <button type="button" id="allesauf">Alle Tipps und Lösungen zeigen</button>
+    <button type="button" id="alleszu">Alle wieder verbergen</button>
+  </div>
+
+  <div class="navtitel">Fortschritt</div>
+  <p class="sub" id="zaehler" style="margin:0"></p>
+</nav>
+
+<main>
+<header class="kopf">
+  <h2>Programmieren lernen mit Python&nbsp;Turtle</h2>
+  <p>43 Aufgaben in acht Kapiteln – jeweils mit gestuften Tipps und einer vollständig
+  erläuterten Lösung. Die Aufgaben sind in drei Niveaus eingeteilt:
+  <strong>Basis</strong> für den Einstieg ohne Vorkenntnisse, <strong>Standard</strong>
+  als verbindliches Niveau, <strong>Erweiterung</strong> für alle, die schneller sind.
+  Arbeite die Tipps der Reihe nach ab – die Lösung erst danach.</p>
+  <table class="uebersicht">
+    <tr><th></th><th>Kapitel</th><th>Umfang</th><th>Zeitrichtwert</th></tr>
+    <tr><td>1</td><td>Sequenz - die Turtle in Bewegung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>2</td><td>Variablen, Datentypen und Typkonvertierung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>3</td><td>Wiederholung - Schleifen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>4</td><td>Verzweigung, Vergleichs- und logische Operatoren</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>5</td><td>Funktionen - eigene Befehle bauen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>6</td><td>Struktogramme</td><td>4 Aufgaben</td><td>1 Unterrichtsstunde</td></tr><tr><td>7</td><td>Die lineare Datenstruktur Liste</td><td>7 Aufgaben</td><td>2-3 Unterrichtsstunden</td></tr><tr><td>8</td><td>Projekt: Suchen und Sortieren sichtbar machen</td><td>4 Aufgaben</td><td>2 Unterrichtsstunden</td></tr>
+  </table>
+</header>
+
+<section class="kap" id="k1"><div class="kaphead"><div class="knr">1</div><div><h3>Sequenz - die Turtle in Bewegung</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Erste Programme: Befehle werden Schritt für Schritt von oben nach unten abgearbeitet.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>ein Python-Programm starten und den Programmablauf als Sequenz beschreiben</li><li>die Grundbefehle der Turtle gezielt einsetzen</li><li>eine vorgegebene Zeichnung in eine Befehlsfolge zerlegen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>Jedes Turtle-Programm beginnt damit, das Modul zu laden, und endet damit, das
+Fenster offen zu halten:</p>
+<pre class="code">import turtle
+
+turtle.forward(100)
+
+turtle.done()</pre>
+<p>Die Turtle ist ein Stift mit Blickrichtung. Sie startet in der Mitte (0, 0) und
+schaut nach rechts (Osten).</p>
+<table class="ref">
+<tr><th>Befehl</th><th>Wirkung</th></tr>
+<tr><td><code>forward(100)</code> / <code>fd(100)</code></td><td>100 Schritte vorwärts</td></tr>
+<tr><td><code>backward(50)</code> / <code>bk(50)</code></td><td>50 Schritte rückwärts</td></tr>
+<tr><td><code>right(90)</code> / <code>rt(90)</code></td><td>dreht sich um 90° nach rechts</td></tr>
+<tr><td><code>left(90)</code> / <code>lt(90)</code></td><td>dreht sich um 90° nach links</td></tr>
+<tr><td><code>penup()</code> / <code>pendown()</code></td><td>Stift heben / senken</td></tr>
+<tr><td><code>goto(x, y)</code></td><td>fährt zum Punkt (x, y)</td></tr>
+<tr><td><code>setheading(0)</code></td><td>dreht auf eine absolute Richtung (0 = rechts, 90 = oben)</td></tr>
+<tr><td><code>pencolor("red")</code></td><td>Stiftfarbe</td></tr>
+<tr><td><code>pensize(5)</code></td><td>Strichstärke</td></tr>
+<tr><td><code>speed(0)</code></td><td>Zeichengeschwindigkeit (0 = am schnellsten)</td></tr>
+<tr><td><code>hideturtle()</code></td><td>Turtle-Symbol ausblenden</td></tr>
+</table>
+<p class="hinweis"><strong>Sequenz</strong> heißt: Die Anweisungen werden in genau der
+Reihenfolge ausgeführt, in der sie im Quelltext stehen. Vertauscht man zwei Zeilen,
+entsteht in aller Regel ein anderes Bild.</p>
+</div><article class="auf" id="a1-1" data-stufe="basis"><div class="aufkopf"><span class="aid">1.1</span><h5>Erste Schritte</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Lege eine Datei <code>quadrat.py</code> an und zeichne ein
+            <strong>Quadrat mit der Seitenlänge 120</strong> — <em>ohne</em> Schleife, also mit
+            acht einzelnen Befehlen.</p>
+            <p>Ändere anschließend die Farbe auf Blau und die Strichstärke auf 4.</p></div><div class="knopfleiste"><button type="button" data-ziel="t1-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t1-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l1-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t1-1-0"><span class="tnr">Tipp 1</span>Ein Quadrat hat vier gleich lange Seiten und vier rechte Winkel. Für jede Ecke brauchst du eine Drehung um 90°.</div><div class="tipp verborgen" id="t1-1-1"><span class="tnr">Tipp 2</span>Die Reihenfolge ist immer: vorwärts, drehen, vorwärts, drehen, ... Beginne mit <code>turtle.pencolor("blue")</code> und <code>turtle.pensize(4)</code> ganz oben.</div><div class="loesung verborgen" id="l1-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pencolor(&quot;blue&quot;)
+turtle.pensize(4)
+
+turtle.forward(120)
+turtle.right(90)
+turtle.forward(120)
+turtle.right(90)
+turtle.forward(120)
+turtle.right(90)
+turtle.forward(120)
+turtle.right(90)
+
+turtle.done()</pre></div><p>Die letzte Drehung ist optional für das Bild, aber sinnvoll:
+            Danach steht die Turtle wieder genau so da wie am Anfang. Solche
+            <em>„aufgeräumten“ Bausteine</em> lassen sich später problemlos aneinanderhängen.</p></div></article><article class="auf" id="a1-2" data-stufe="basis"><div class="aufkopf"><span class="aid">1.2</span><h5>Treppe</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>Treppe mit drei Stufen</strong>. Jede Stufe ist
+            50 Schritte hoch und 50 Schritte breit.</p>
+            <p><em>Zusatz:</em> Wie viele Befehlszeilen brauchst du? Notiere die Zahl und vergleiche
+            sie später mit deiner Lösung aus Kapitel 3.</p></div><div class="knopfleiste"><button type="button" data-ziel="t1-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t1-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l1-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t1-2-0"><span class="tnr">Tipp 1</span>Eine Stufe besteht aus: nach oben, dann nach rechts. Zwischen den Teilstrecken musst du drehen.</div><div class="tipp verborgen" id="t1-2-1"><span class="tnr">Tipp 2</span>Die Turtle schaut zu Beginn nach rechts. Drehe also zuerst mit <code>left(90)</code> nach oben, gehe 50, drehe mit <code>right(90)</code> zurück nach rechts, gehe 50 — und das dreimal.</div><div class="loesung verborgen" id="l1-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+
+# 1. Stufe
+turtle.left(90)
+turtle.forward(50)
+turtle.right(90)
+turtle.forward(50)
+
+# 2. Stufe
+turtle.left(90)
+turtle.forward(50)
+turtle.right(90)
+turtle.forward(50)
+
+# 3. Stufe
+turtle.left(90)
+turtle.forward(50)
+turtle.right(90)
+turtle.forward(50)
+
+turtle.done()</pre></div><p>Zwölf Befehle für drei Stufen. Auffällig: Der Block von vier Zeilen
+            wiederholt sich exakt. Genau solche Wiederholungen ersetzt man später durch eine
+            <code>for</code>-Schleife (Kapitel 3) oder eine Funktion (Kapitel 5).</p></div></article><article class="auf" id="a1-3" data-stufe="standard"><div class="aufkopf"><span class="aid">1.3</span><h5>Haus vom Nikolaus</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne das <strong>Haus vom Nikolaus</strong> in einem Zug — die
+            Turtle darf den Stift nicht heben.</p>
+            <p>Das Haus besteht aus einem Quadrat (Seitenlänge 100), den beiden Diagonalen und
+            einem gleichschenkligen Dach.</p>
+            <p><em>Prüffrage:</em> Warum muss die Turtle in einer <strong>unteren</strong> Ecke
+            starten? Probiere es zum Vergleich einmal von „oben links“ aus.</p></div><div class="knopfleiste"><button type="button" data-ziel="t1-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t1-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t1-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l1-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t1-3-0"><span class="tnr">Tipp 1</span>Die Diagonale eines Quadrats mit Seitenlänge 100 ist ungefähr 141 Schritte lang (100 · √2).</div><div class="tipp verborgen" id="t1-3-1"><span class="tnr">Tipp 2</span>Statt jeden Winkel einzeln auszurechnen, hilft <code>setheading()</code>: Damit gibst du absolute Richtungen an — 0 = rechts, 90 = oben, 45 = schräg rechts oben, 135 = schräg links oben.</div><div class="tipp verborgen" id="t1-3-2"><span class="tnr">Tipp 3</span>Die Dachschräge trifft die Firstspitze unter 45°. Ihre Länge ist etwa 71 Schritte (die Hälfte der Diagonale).</div><div class="loesung verborgen" id="l1-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+turtle.pencolor(&quot;darkred&quot;)
+
+# Startpunkt: unten LINKS  (Ecken: A unten links, B unten rechts,
+# C oben rechts, D oben links, E Dachspitze)
+turtle.penup()
+turtle.goto(-50, -100)
+turtle.pendown()
+
+turtle.setheading(0)
+turtle.forward(100)             # A -&gt; B   Boden
+turtle.setheading(90)
+turtle.forward(100)             # B -&gt; C   rechte Wand
+turtle.setheading(180)
+turtle.forward(100)             # C -&gt; D   Decke
+turtle.setheading(270)
+turtle.forward(100)             # D -&gt; A   linke Wand
+turtle.setheading(45)
+turtle.forward(141.4)           # A -&gt; C   1. Diagonale (100 * Wurzel 2)
+turtle.setheading(135)
+turtle.forward(70.7)            # C -&gt; E   rechte Dachschraege
+turtle.setheading(225)
+turtle.forward(70.7)            # E -&gt; D   linke Dachschraege
+turtle.setheading(-45)
+turtle.forward(141.4)           # D -&gt; B   2. Diagonale
+
+turtle.done()</pre></div><p>Mit <code>setheading()</code> denkst du in <em>absoluten</em>
+            Richtungen statt in Drehwinkeln — das ist bei schrägen Linien deutlich weniger
+            fehleranfällig.</p>
+            <p>Zur Prüffrage: Das Haus vom Nikolaus ist ein Eulerweg. Ein solcher Weg
+            existiert nur, wenn genau zwei Ecken eine ungerade Anzahl von Kanten haben —
+            das sind hier die beiden <em>unteren</em> Ecken (an ihnen treffen jeweils drei
+            Linien zusammen). Man muss also zwingend in einer unteren Ecke starten und
+            endet dann automatisch in der anderen. Von „oben links“ aus bleibt immer
+            mindestens eine Linie übrig.</p></div></article><article class="auf" id="a1-4" data-stufe="standard"><div class="aufkopf"><span class="aid">1.4</span><h5>Dein Initial</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne den <strong>Anfangsbuchstaben deines Vornamens</strong> als
+            Turtle-Grafik, ungefähr 150 Schritte hoch.</p>
+            <p>Runde Buchstaben darfst du eckig annähern oder mit
+            <code>turtle.circle(radius, winkel)</code> zeichnen.</p>
+            <p>Kommentiere im Quelltext, welcher Befehlsblock welchen Teil des Buchstabens malt.</p></div><div class="knopfleiste"><button type="button" data-ziel="t1-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t1-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t1-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l1-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t1-4-0"><span class="tnr">Tipp 1</span>Zeichne den Buchstaben zuerst auf kariertem Papier und trage die Schrittzahlen ein. Erst danach tippen.</div><div class="tipp verborgen" id="t1-4-1"><span class="tnr">Tipp 2</span><code>turtle.circle(50, 180)</code> zeichnet einen Halbkreis mit Radius 50. Der Kreis wird immer <em>links</em> von der Turtle gezeichnet.</div><div class="tipp verborgen" id="t1-4-2"><span class="tnr">Tipp 3</span>Für abgesetzte Teilstriche (z. B. beim „T“ oder „K“): <code>penup()</code> → <code>goto(...)</code> → <code>pendown()</code>.</div><div class="loesung verborgen" id="l1-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(6)
+turtle.pencolor(&quot;teal&quot;)
+turtle.speed(3)
+
+# Beispiel: Buchstabe &quot;M&quot;
+turtle.penup()
+turtle.goto(-60, -75)
+turtle.pendown()
+
+turtle.setheading(90)
+turtle.forward(150)             # linker Senkrechtstrich
+turtle.setheading(-60)
+turtle.forward(90)              # Schraege nach unten rechts
+turtle.setheading(60)
+turtle.forward(90)              # Schraege nach oben rechts
+turtle.setheading(-90)
+turtle.forward(150)             # rechter Senkrechtstrich
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Das Muster „Stift heben – positionieren – Stift senken“ brauchst du
+            bei fast jeder mehrteiligen Grafik. Merke dir die drei Zeilen als Baustein; in
+            Kapitel 5 machst du daraus eine eigene Funktion <code>gehe_zu(x, y)</code>.</p></div></article><article class="auf" id="a1-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">1.5</span><h5>Fehlersuche im Fremdcode</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Das folgende Programm <em>soll</em> ein gleichseitiges Dreieck mit der
+            Seitenlänge 100 zeichnen. Es tut es aber nicht.</p>
+            <pre class="code">import turtle
+
+turtle.forward(100)
+turtle.right(60)
+turtle.forward(100)
+turtle.right(60)
+turtle.forward(100)
+
+turtle.done()</pre>
+            <p><strong>a)</strong> Beschreibe, welche Figur tatsächlich entsteht.<br>
+            <strong>b)</strong> Finde den Fehler und begründe ihn geometrisch.<br>
+            <strong>c)</strong> Verallgemeinere: Welchen Drehwinkel braucht ein regelmäßiges
+            <em>n</em>-Eck?</p></div><div class="knopfleiste"><button type="button" data-ziel="t1-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t1-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t1-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l1-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t1-5-0"><span class="tnr">Tipp 1</span>Zeichne den Weg mit Bleistift nach: Wo steht die Turtle nach dem zweiten <code>forward</code>, und in welche Richtung schaut sie?</div><div class="tipp verborgen" id="t1-5-1"><span class="tnr">Tipp 2</span>Unterscheide sauber zwischen dem <em>Innenwinkel</em> der Figur (beim Dreieck 60°) und dem <em>Drehwinkel</em> der Turtle (dem Außenwinkel).</div><div class="tipp verborgen" id="t1-5-2"><span class="tnr">Tipp 3</span>Die Turtle läuft die Figur einmal komplett ab und schaut am Ende wieder in die Startrichtung. Insgesamt hat sie sich also um 360° gedreht.</div><div class="loesung verborgen" id="l1-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+# a) Es entsteht ein offener Streckenzug mit zwei stumpfen Knicken -
+#    kein geschlossenes Dreieck.
+# b) 60 Grad ist der INNENwinkel. Die Turtle dreht sich aber um den
+#    AUSSENwinkel: 180 - 60 = 120 Grad.
+# c) Regelmaessiges n-Eck: Drehwinkel = 360 / n
+
+turtle.pensize(3)
+
+turtle.forward(100)
+turtle.right(120)
+turtle.forward(100)
+turtle.right(120)
+turtle.forward(100)
+turtle.right(120)
+
+turtle.done()</pre></div><p>Die <strong>Winkelsumme der Außenwinkel</strong> beträgt bei jedem
+            geschlossenen Polygon 360°. Bei <em>n</em> gleichen Ecken entfällt auf jede Ecke
+            der Drehwinkel 360/<em>n</em>. Für das Dreieck: 360/3 = 120°, für das Quadrat
+            360/4 = 90°, für das Sechseck 360/6 = 60°.</p>
+            <p class="hinweis">Diese Formel ist der Schlüssel für Aufgabe 3.2 — merke sie dir.</p></div></article></section><section class="kap" id="k2"><div class="kaphead"><div class="knr">2</div><div><h3>Variablen, Datentypen und Typkonvertierung</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Werte benennen, Datentypen unterscheiden und ineinander umwandeln.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>Variablen sinnvoll benennen und einsetzen</li><li>die Datentypen int, float, str und bool unterscheiden</li><li>Daten mit int(), float() und str() in einen anderen Datentyp konvertieren</li><li>Benutzereingaben entgegennehmen und weiterverarbeiten</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>Eine <strong>Variable</strong> ist ein benannter Speicherplatz. Die Zuweisung erfolgt
+mit <code>=</code>, gelesen als „bekommt den Wert“:</p>
+<pre class="code">seite = 120
+farbe = "blue"
+faktor = 1.5</pre>
+<table class="ref">
+<tr><th>Datentyp</th><th>Bedeutung</th><th>Beispiel</th></tr>
+<tr><td><code>int</code></td><td>ganze Zahl</td><td><code>42</code>, <code>-7</code></td></tr>
+<tr><td><code>float</code></td><td>Kommazahl (Punkt!)</td><td><code>3.14</code>, <code>-0.5</code></td></tr>
+<tr><td><code>str</code></td><td>Zeichenkette</td><td><code>"rot"</code>, <code>"120"</code></td></tr>
+<tr><td><code>bool</code></td><td>Wahrheitswert</td><td><code>True</code>, <code>False</code></td></tr>
+</table>
+<p><strong>Typkonvertierung</strong> (Casting) wandelt einen Wert in einen anderen Typ um:</p>
+<pre class="code">int("120")     # -> 120        (str  -> int)
+int(3.99)      # -> 3          (float -> int, schneidet ab!)
+float("2.5")   # -> 2.5        (str  -> float)
+str(120)       # -> "120"      (int  -> str)
+round(3.99)    # -> 4          (rundet kaufmaennisch)
+type(seite)    # zeigt den Datentyp an</pre>
+<p><strong>Eingabe</strong> — in Turtle-Programmen bequem über kleine Dialogfenster:</p>
+<pre class="code">fenster = turtle.Screen()
+laenge  = fenster.numinput("Titel", "Seitenlaenge?", 100)   # liefert float
+name    = fenster.textinput("Titel", "Dein Name?")          # liefert str</pre>
+<p class="hinweis"><strong>Typischer Stolperstein:</strong> <code>numinput()</code> liefert
+immer einen <code>float</code>. Wenn du damit zählen willst (z. B. Ecken eines Vielecks),
+musst du mit <code>int(...)</code> konvertieren. Und: <code>"5" + 3</code> ist ein Fehler,
+<code>int("5") + 3</code> ergibt 8, <code>"5" + str(3)</code> ergibt <code>"53"</code>.</p>
+</div><article class="auf" id="a2-1" data-stufe="basis"><div class="aufkopf"><span class="aid">2.1</span><h5>Quadrat mit Variable</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Schreibe dein Quadrat aus Aufgabe 1.1 so um, dass die Seitenlänge in
+            einer Variablen <code>seite</code> steht.</p>
+            <p>Teste dein Programm mit den Werten 50, 120 und 200 — du darfst dafür nur
+            <strong>eine einzige Zeile</strong> ändern.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l2-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-1-0"><span class="tnr">Tipp 1</span>Lege die Variable ganz oben an: <code>seite = 120</code>.</div><div class="tipp verborgen" id="t2-1-1"><span class="tnr">Tipp 2</span>Schreibe danach überall <code>turtle.forward(seite)</code> statt <code>turtle.forward(120)</code>.</div><div class="loesung verborgen" id="l2-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+seite = 120          # nur diese Zeile aendern!
+
+turtle.pensize(3)
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
+turtle.right(90)
+
+turtle.done()</pre></div><p>Das ist das <em>Prinzip der einen Quelle</em>: Ein Wert, der an
+            mehreren Stellen gebraucht wird, steht nur einmal im Programm. Änderungen
+            werden dadurch schnell und fehlerfrei.</p></div></article><article class="auf" id="a2-2" data-stufe="basis"><div class="aufkopf"><span class="aid">2.2</span><h5>Datentypen erkennen</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Notiere zuerst <strong>auf Papier</strong>, welchen Datentyp jeder
+            Ausdruck hat. Prüfe dann mit <code>print(type(...))</code>.</p>
+            <ol class="kompakt">
+              <li><code>120</code></li>
+              <li><code>120.0</code></li>
+              <li><code>"120"</code></li>
+              <li><code>120 / 4</code></li>
+              <li><code>120 // 4</code></li>
+              <li><code>120 &gt; 4</code></li>
+              <li><code>"12" + "0"</code></li>
+              <li><code>int("120") / 2</code></li>
+            </ol></div><div class="knopfleiste"><button type="button" data-ziel="t2-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l2-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-2-0"><span class="tnr">Tipp 1</span>Die normale Division <code>/</code> liefert in Python <em>immer</em> einen float — auch wenn das Ergebnis glatt aufgeht.</div><div class="tipp verborgen" id="t2-2-1"><span class="tnr">Tipp 2</span><code>//</code> ist die Ganzzahldivision, <code>%</code> der Rest. Vergleiche liefern immer <code>bool</code>.</div><div class="loesung verborgen" id="l2-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">print(type(120))            # &lt;class &#x27;int&#x27;&gt;
+print(type(120.0))          # &lt;class &#x27;float&#x27;&gt;
+print(type(&quot;120&quot;))          # &lt;class &#x27;str&#x27;&gt;
+print(type(120 / 4))        # &lt;class &#x27;float&#x27;&gt;   -&gt; 30.0
+print(type(120 // 4))       # &lt;class &#x27;int&#x27;&gt;     -&gt; 30
+print(type(120 &gt; 4))        # &lt;class &#x27;bool&#x27;&gt;    -&gt; True
+print(type(&quot;12&quot; + &quot;0&quot;))     # &lt;class &#x27;str&#x27;&gt;     -&gt; &quot;120&quot;
+print(type(int(&quot;120&quot;) / 2)) # &lt;class &#x27;float&#x27;&gt;   -&gt; 60.0</pre></div><p>Merke: <code>/</code> erzeugt immer <code>float</code>,
+            <code>//</code> bleibt bei <code>int</code>. Das <code>+</code> bei zwei Strings ist
+            keine Addition, sondern eine <em>Verkettung</em> (Konkatenation).</p></div></article><article class="auf" id="a2-3" data-stufe="standard"><div class="aufkopf"><span class="aid">2.3</span><h5>Vieleck nach Wunsch</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage den Benutzer über ein Dialogfenster nach der
+            <strong>Eckenzahl</strong> und der <strong>Seitenlänge</strong> und zeichne das
+            passende regelmäßige Vieleck.</p>
+            <p>Achte darauf, dass die Eckenzahl eine <strong>ganze Zahl</strong> sein muss —
+            konvertiere sie entsprechend.</p>
+            <p>Schreibe abschließend mit <code>turtle.write()</code> den Text
+            „<em>n-Eck, Seite s</em>“ neben die Figur.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-3-0"><span class="tnr">Tipp 1</span><code>fenster = turtle.Screen()</code>, dann <code>fenster.numinput("Vieleck", "Wie viele Ecken?", 6)</code>. Der dritte Parameter ist der Vorgabewert.</div><div class="tipp verborgen" id="t2-3-1"><span class="tnr">Tipp 2</span><code>numinput</code> liefert einen float wie <code>6.0</code>. Mit <code>ecken = int(fenster.numinput(...))</code> erhältst du eine ganze Zahl.</div><div class="tipp verborgen" id="t2-3-2"><span class="tnr">Tipp 3</span><code>turtle.write()</code> erwartet einen String. Zahlen musst du mit <code>str()</code> umwandeln und mit <code>+</code> anhängen.</div><div class="loesung verborgen" id="l2-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+fenster = turtle.Screen()
+
+ecken = int(fenster.numinput(&quot;Vieleck&quot;, &quot;Wie viele Ecken?&quot;, 6))
+seite = fenster.numinput(&quot;Vieleck&quot;, &quot;Wie lang ist eine Seite?&quot;, 80)
+
+winkel = 360 / ecken
+
+turtle.pensize(3)
+turtle.pencolor(&quot;darkgreen&quot;)
+
+for i in range(ecken):
+    turtle.forward(seite)
+    turtle.right(winkel)
+
+# Beschriftung: Zahlen muessen zu Text konvertiert werden
+text = str(ecken) + &quot;-Eck, Seite &quot; + str(int(seite))
+turtle.penup()
+turtle.goto(-120, -150)
+turtle.write(text, font=(&quot;Arial&quot;, 14, &quot;normal&quot;))
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Zwei Konvertierungen in einem Programm:
+            <code>int(...)</code> beim Einlesen der Eckenzahl (weil <code>range()</code> nur ganze
+            Zahlen akzeptiert) und <code>str(...)</code> bei der Ausgabe (weil
+            <code>write()</code> Text erwartet).</p>
+            <p>Der Drehwinkel <code>360 / ecken</code> darf ruhig ein float bleiben —
+            <code>right()</code> kommt damit klar.</p></div></article><article class="auf" id="a2-4" data-stufe="standard"><div class="aufkopf"><span class="aid">2.4</span><h5>Vier Fehler</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Im folgenden Programm stecken <strong>vier</strong> Fehler, die alle
+            mit Datentypen zu tun haben. Finde sie, benenne den jeweiligen Fehlertyp und
+            korrigiere sie.</p>
+            <pre class="code">import turtle
+
+fenster = turtle.Screen()
+anzahl = fenster.numinput("Kreise", "Wie viele?", 5)
+
+for i in range(anzahl):
+    turtle.circle(20)
+    turtle.right(360 / anzahl)
+
+turtle.write("Fertig: " + anzahl + " Kreise")
+turtle.write("Radius: " + 20)
+
+turtle.done()</pre></div><div class="knopfleiste"><button type="button" data-ziel="t2-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-4-0"><span class="tnr">Tipp 1</span>Was liefert <code>numinput</code> genau — und was verlangt <code>range()</code>?</div><div class="tipp verborgen" id="t2-4-1"><span class="tnr">Tipp 2</span>Was passiert, wenn man einen String mit einer Zahl per <code>+</code> verbinden will?</div><div class="tipp verborgen" id="t2-4-2"><span class="tnr">Tipp 3</span>Achte auch darauf, ob <code>anzahl</code> überhaupt jemals 0 sein könnte — was würde dann bei <code>360 / anzahl</code> passieren?</div><div class="loesung verborgen" id="l2-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+fenster = turtle.Screen()
+
+# FEHLER 1: numinput liefert float, range() braucht int -&gt; int(...)
+anzahl = int(fenster.numinput(&quot;Kreise&quot;, &quot;Wie viele?&quot;, 5))
+
+# FEHLER 4 (Absicherung): Division durch 0 vermeiden
+if anzahl &lt; 1:
+    anzahl = 1
+
+for i in range(anzahl):
+    turtle.circle(20)
+    turtle.right(360 / anzahl)
+
+# FEHLER 2: str + int geht nicht -&gt; str(anzahl)
+turtle.write(&quot;Fertig: &quot; + str(anzahl) + &quot; Kreise&quot;)
+
+# FEHLER 3: gleicher Fehler mit einer Literal-Zahl -&gt; str(20)
+turtle.write(&quot;Radius: &quot; + str(20))
+
+turtle.done()</pre></div><ul class="kompakt">
+            <li><strong>Fehler 1</strong> — <code>TypeError: 'float' object cannot be interpreted
+            as an integer</code>: <code>range()</code> verlangt <code>int</code>.</li>
+            <li><strong>Fehler 2 und 3</strong> — <code>TypeError: can only concatenate str
+            (not "int") to str</code>: Text und Zahl lassen sich nicht mit <code>+</code>
+            verbinden.</li>
+            <li><strong>Fehler 4</strong> — <code>ZeroDivisionError</code>, sobald der Benutzer 0
+            eingibt. Ein Laufzeitfehler, den man durch eine Plausibilitätsprüfung abfängt.</li>
+            </ul>
+            <p class="hinweis">Alternativ zur Verkettung geht auch ein f-String:
+            <code>turtle.write(f"Fertig: {anzahl} Kreise")</code> — die Konvertierung passiert
+            dann automatisch.</p></div></article><article class="auf" id="a2-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">2.5</span><h5>Skalierbares Logo</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Entwirf ein kleines Logo aus mindestens vier Teilstrecken (z. B. ein
+            stilisiertes Haus, ein Pfeil, ein Blitz).</p>
+            <p>Führe eine Variable <code>skala</code> ein, mit der sich die <strong>gesamte
+            Grafik</strong> vergrößern oder verkleinern lässt. Bei <code>skala = 1</code> soll das
+            Logo die Grundgröße haben, bei <code>skala = 2</code> die doppelte.</p>
+            <p>Frage <code>skala</code> per <code>numinput</code> ab und passe zusätzlich die
+            Strichstärke proportional an — sie muss aber eine ganze Zahl und mindestens 1 sein.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-5-0"><span class="tnr">Tipp 1</span>Alle Längen mit <code>skala</code> multiplizieren: <code>turtle.forward(50 * skala)</code>. Winkel bleiben unverändert!</div><div class="tipp verborgen" id="t2-5-1"><span class="tnr">Tipp 2</span>Für die Strichstärke: <code>dicke = int(3 * skala)</code>. Mit <code>if dicke &lt; 1: dicke = 1</code> verhinderst du die Strichstärke 0.</div><div class="tipp verborgen" id="t2-5-2"><span class="tnr">Tipp 3</span>Praktischer ist es, eine Hilfsvariable <code>e = 50 * skala</code> („Einheit“) zu definieren und im Programm nur noch Vielfache von <code>e</code> zu verwenden.</div><div class="loesung verborgen" id="l2-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+fenster = turtle.Screen()
+skala = fenster.numinput(&quot;Logo&quot;, &quot;Skalierungsfaktor (0.5 - 3)?&quot;, 1)
+
+e = 50 * skala                  # eine &quot;Einheit&quot; der Grafik
+
+dicke = int(3 * skala)          # float -&gt; int
+if dicke &lt; 1:                   # Strichstaerke 0 waere unsichtbar
+    dicke = 1
+turtle.pensize(dicke)
+turtle.pencolor(&quot;navy&quot;)
+
+# stilisiertes Haus
+turtle.penup()
+turtle.goto(-e, -e)
+turtle.pendown()
+
+turtle.setheading(0)
+turtle.forward(2 * e)           # Boden
+turtle.left(90)
+turtle.forward(2 * e)           # rechte Wand
+turtle.left(90)
+turtle.forward(2 * e)           # Decke
+turtle.left(90)
+turtle.forward(2 * e)           # linke Wand
+
+turtle.setheading(0)            # zur Dachspitze
+turtle.penup()
+turtle.goto(-e, e)
+turtle.pendown()
+turtle.setheading(45)
+turtle.forward(1.41 * e)
+turtle.setheading(-45)
+turtle.forward(1.41 * e)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Zwei Ideen stecken darin:</p>
+            <ul class="kompakt">
+            <li><strong>Relative Maße.</strong> Statt absoluter Zahlen rechnest du in Vielfachen
+            einer Einheit <code>e</code>. Das Bild bleibt bei jeder Skalierung proportional.</li>
+            <li><strong>Konvertierung mit Plausibilitätsprüfung.</strong> <code>int()</code>
+            schneidet ab — aus <code>3 · 0.2 = 0.6</code> würde 0. Deshalb die Absicherung auf
+            das Minimum 1.</li>
+            </ul>
+            <p>Winkel werden beim Skalieren <em>nicht</em> verändert — eine zentrale
+            geometrische Einsicht: Ähnlichkeitsabbildungen sind winkeltreu.</p></div></article></section><section class="kap" id="k3"><div class="kaphead"><div class="knr">3</div><div><h3>Wiederholung - Schleifen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Zählschleife und bedingte Schleife: Wiederholungen kompakt und lesbar formulieren.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>die Kontrollstruktur Wiederholung erkennen und implementieren</li><li>die Zählschleife (for) und die bedingte Schleife (while) unterscheiden</li><li>die Schleifenvariable als Wert im Rumpf nutzen</li><li>verschachtelte Schleifen lesen und schreiben</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p><strong>Zählschleife</strong> — die Anzahl der Durchläufe steht vorher fest:</p>
+<pre class="code">for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)</pre>
+<p>Alles, was <em>eingerückt</em> ist (vier Leerzeichen), gehört zum Schleifenrumpf.
+Die Variable <code>i</code> zählt dabei mit:</p>
+<table class="ref">
+<tr><th>Aufruf</th><th>i nimmt nacheinander die Werte an</th></tr>
+<tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4</td></tr>
+<tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5</td></tr>
+<tr><td><code>range(0, 100, 20)</code></td><td>0, 20, 40, 60, 80</td></tr>
+<tr><td><code>range(10, 0, -2)</code></td><td>10, 8, 6, 4, 2</td></tr>
+</table>
+<p><strong>Bedingte Schleife</strong> — die Anzahl der Durchläufe ist vorher unbekannt:</p>
+<pre class="code">laenge = 5
+while laenge &lt; 200:
+    turtle.forward(laenge)
+    turtle.right(90)
+    laenge = laenge + 10</pre>
+<p class="hinweis"><strong>Wichtig:</strong> Bei <code>while</code> musst du selbst dafür
+sorgen, dass sich die Bedingung irgendwann ändert — sonst läuft das Programm endlos.
+Bei <code>for</code> passiert das automatisch.</p>
+<p><strong>Verschachtelung:</strong> Eine Schleife im Rumpf einer anderen Schleife. Die innere
+Schleife läuft bei <em>jedem</em> Durchlauf der äußeren komplett durch. Bei 8 äußeren und
+4 inneren Durchläufen wird der innere Rumpf 8 · 4 = 32-mal ausgeführt.</p>
+</div><article class="auf" id="a3-1" data-stufe="basis"><div class="aufkopf"><span class="aid">3.1</span><h5>Quadrat und Treppe kompakt</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p><strong>a)</strong> Schreibe das Quadrat aus Aufgabe 1.1 mit einer
+            <code>for</code>-Schleife. Wie viele Zeilen sparst du?</p>
+            <p><strong>b)</strong> Mache dasselbe mit der Treppe aus 1.2 — und erweitere sie
+            danach auf <strong>zehn</strong> Stufen, ohne neue Zeilen hinzuzufügen.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l3-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-1-0"><span class="tnr">Tipp 1</span>Suche den Block, der sich wortwörtlich wiederholt. Genau dieser Block kommt in den Schleifenrumpf.</div><div class="tipp verborgen" id="t3-1-1"><span class="tnr">Tipp 2</span>Die Zahl in <code>range(...)</code> gibt an, wie oft der Block ausgeführt wird.</div><div class="loesung verborgen" id="l3-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+
+# a) Quadrat: 8 Zeilen werden zu 3
+for i in range(4):
+    turtle.forward(120)
+    turtle.right(90)
+
+# b) Treppe mit 10 Stufen: nur die Zahl in range() aendert sich
+turtle.penup()
+turtle.goto(-250, -150)
+turtle.pendown()
+turtle.setheading(0)
+
+for i in range(10):
+    turtle.left(90)
+    turtle.forward(30)
+    turtle.right(90)
+    turtle.forward(30)
+
+turtle.done()</pre></div><p>Aus 12 Zeilen Treppe werden 5 — und die Stufenzahl ist jetzt ein
+            <em>Parameter</em> des Programms statt Fließtext. Genau das ist der Sinn der
+            Kontrollstruktur Wiederholung: weniger Text, weniger Tippfehler, leichter zu
+            ändern.</p></div></article><article class="auf" id="a3-2" data-stufe="basis"><div class="aufkopf"><span class="aid">3.2</span><h5>Regelmäßige Vielecke</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne nacheinander ein Dreieck, ein Viereck, ein Fünfeck und ein
+            Sechseck — jeweils mit Seitenlänge 80, jeweils in einer eigenen Farbe, jeweils
+            versetzt nebeneinander.</p>
+            <p>Nutze die Formel für den Drehwinkel aus Aufgabe 1.5.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-2-0"><span class="tnr">Tipp 1</span>Drehwinkel = 360 / Eckenzahl.</div><div class="tipp verborgen" id="t3-2-1"><span class="tnr">Tipp 2</span>Vier fast gleiche Schleifen untereinander sind erlaubt — eleganter ist eine äußere Schleife über <code>range(3, 7)</code>.</div><div class="tipp verborgen" id="t3-2-2"><span class="tnr">Tipp 3</span>Zum Versetzen: <code>penup()</code>, <code>goto(...)</code>, <code>pendown()</code> und <code>setheading(0)</code> zwischen den Figuren.</div><div class="loesung verborgen" id="l3-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+turtle.speed(0)
+
+farben = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;purple&quot;]
+x = -240
+
+# aeussere Schleife: n laeuft von 3 bis 6
+for n in range(3, 7):
+    turtle.penup()
+    turtle.goto(x, 0)
+    turtle.pendown()
+    turtle.setheading(0)
+    turtle.pencolor(farben[n - 3])
+
+    # innere Schleife: zeichnet das n-Eck
+    for i in range(n):
+        turtle.forward(80)
+        turtle.right(360 / n)
+
+    x = x + 140
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Die äußere Schleifenvariable <code>n</code> steuert hier gleich
+            drei Dinge: die Anzahl der inneren Durchläufe, den Drehwinkel und (über
+            <code>n - 3</code>) die Farbe aus der Liste. Die Liste greift Kapitel 7 vor.</p>
+            <p><code>range(3, 7)</code> liefert 3, 4, 5, 6 — die obere Grenze ist immer
+            <em>ausgeschlossen</em>.</p></div></article><article class="auf" id="a3-3" data-stufe="standard"><div class="aufkopf"><span class="aid">3.3</span><h5>Spirale</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>eckige Spirale</strong>: Die Turtle dreht sich
+            immer um 90°, aber jede Strecke ist 5 Schritte länger als die vorherige. Führe
+            60 Durchläufe aus.</p>
+            <p><strong>Experimentiere anschließend:</strong> Was passiert bei einem Drehwinkel
+            von 91°? Von 120°? Von 89,5°? Notiere deine Beobachtungen.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-3-0"><span class="tnr">Tipp 1</span>Die Schleifenvariable <code>i</code> zählt 0, 1, 2, 3, … Damit kannst du die Länge direkt berechnen.</div><div class="tipp verborgen" id="t3-3-1"><span class="tnr">Tipp 2</span><code>turtle.forward(i * 5)</code> — beim ersten Durchlauf ist das 0, das stört nicht.</div><div class="tipp verborgen" id="t3-3-2"><span class="tnr">Tipp 3</span>Für das Experiment: Setze den Drehwinkel in eine Variable, dann musst du nur eine Zahl ändern.</div><div class="loesung verborgen" id="l3-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.speed(0)
+turtle.pensize(2)
+
+winkel = 90        # spaeter 91, 120, 89.5 ausprobieren
+
+for i in range(60):
+    turtle.forward(i * 5)
+    turtle.right(winkel)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p><strong>Beobachtungen:</strong></p>
+            <ul class="kompakt">
+            <li><strong>90°</strong> — eine saubere rechteckige Spirale.</li>
+            <li><strong>91°</strong> — die Spirale „verdreht“ sich langsam und bildet ein
+            rotierendes Muster, weil sich der Fehler von 1° pro Ecke aufsummiert.</li>
+            <li><strong>120°</strong> — eine dreieckige Spirale (360/120 = 3 Ecken).</li>
+            <li><strong>89,5°</strong> — Verdrehung in die andere Richtung, deutlich langsamer.</li>
+            </ul>
+            <p>Kernidee: Die <em>Schleifenvariable als Wert</em> zu nutzen (nicht nur als Zähler)
+            ist einer der produktivsten Tricks in der Programmierung.</p></div></article><article class="auf" id="a3-4" data-stufe="standard"><div class="aufkopf"><span class="aid">3.4</span><h5>Rosette</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>Rosette</strong>: ein Quadrat der Seitenlänge 100,
+            das 36-mal um jeweils 10° gedreht gezeichnet wird.</p>
+            <p><strong>a)</strong> Wie viele <code>forward</code>-Befehle werden insgesamt
+            ausgeführt? Rechne es aus, <em>bevor</em> du das Programm startest.<br>
+            <strong>b)</strong> Ersetze das Quadrat durch ein Sechseck. Was ändert sich?</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-4-0"><span class="tnr">Tipp 1</span>Du brauchst zwei ineinander verschachtelte Schleifen: außen die 36 Drehungen, innen die 4 Seiten des Quadrats.</div><div class="tipp verborgen" id="t3-4-1"><span class="tnr">Tipp 2</span>Die Drehung um 10° gehört in den Rumpf der <strong>äußeren</strong> Schleife — nach der inneren Schleife.</div><div class="tipp verborgen" id="t3-4-2"><span class="tnr">Tipp 3</span>Achte auf die Einrückung: Zwei Ebenen bedeuten 4 bzw. 8 Leerzeichen.</div><div class="loesung verborgen" id="l3-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.speed(0)
+turtle.pensize(1)
+turtle.pencolor(&quot;darkblue&quot;)
+
+for k in range(36):             # aeussere Schleife: 36 Drehungen
+    for i in range(4):          # innere Schleife: ein Quadrat
+        turtle.forward(100)
+        turtle.right(90)
+    turtle.right(10)            # gehoert zur AEUSSEREN Schleife
+
+turtle.hideturtle()
+turtle.done()</pre></div><p><strong>a)</strong> 36 · 4 = <strong>144</strong>
+            <code>forward</code>-Aufrufe. Bei verschachtelten Schleifen multiplizieren sich die
+            Durchlaufzahlen.</p>
+            <p><strong>b)</strong> Mit einem Sechseck (<code>range(6)</code>, 60° Drehung) wird die
+            Rosette runder und dichter — 36 · 6 = 216 Striche.</p>
+            <p class="hinweis"><strong>Häufigster Fehler:</strong> die Zeile
+            <code>turtle.right(10)</code> versehentlich zu weit einzurücken. Dann gehört sie zur
+            inneren Schleife und es entsteht ein einziges verzerrtes Gekritzel. Einrückung ist in
+            Python <em>Syntax</em>, nicht Kosmetik.</p></div></article><article class="auf" id="a3-5" data-stufe="standard"><div class="aufkopf"><span class="aid">3.5</span><h5>Bedingte Schleife</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Turtle soll von der Mitte aus geradeaus laufen und dabei in
+            10er-Schritten immer schneller werden — <strong>so lange, bis sie mehr als 250
+            Schritte vom Startpunkt entfernt ist</strong>.</p>
+            <p>Verwende eine <code>while</code>-Schleife und <code>turtle.distance(0, 0)</code>.</p>
+            <p><strong>Frage:</strong> Warum ist hier <code>while</code> die richtige Wahl und nicht
+            <code>for</code>?</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-5-0"><span class="tnr">Tipp 1</span><code>turtle.distance(0, 0)</code> liefert den aktuellen Abstand vom Ursprung als Zahl.</div><div class="tipp verborgen" id="t3-5-1"><span class="tnr">Tipp 2</span>Grundgerüst: <code>while turtle.distance(0, 0) &lt; 250:</code> — im Rumpf ein <code>forward()</code>, dessen Schrittweite du selbst hochzählst.</div><div class="tipp verborgen" id="t3-5-2"><span class="tnr">Tipp 3</span>Denke daran, die Schrittweite im Rumpf zu erhöhen — sonst ändert sich zwar der Abstand, aber achte darauf, dass die Bedingung wirklich irgendwann falsch wird.</div><div class="loesung verborgen" id="l3-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(2)
+turtle.speed(3)
+
+schritt = 10
+
+while turtle.distance(0, 0) &lt; 250:
+    turtle.forward(schritt)
+    turtle.right(20)
+    schritt = schritt + 5       # wird immer groesser
+
+turtle.pencolor(&quot;red&quot;)
+turtle.dot(12)                  # Endpunkt markieren
+
+turtle.hideturtle()
+turtle.done()</pre></div><p><code>while</code> ist richtig, weil die <strong>Anzahl der
+            Durchläufe vorher nicht bekannt</strong> ist. Sie hängt davon ab, wie sich Position
+            und Schrittweite entwickeln — das lässt sich nicht ohne Weiteres vorher ausrechnen.</p>
+            <p>Faustregel:</p>
+            <ul class="kompakt">
+            <li>Anzahl steht fest → <code>for</code></li>
+            <li>Abbruch hängt von einer Bedingung ab → <code>while</code></li>
+            </ul>
+            <p class="hinweis">Ohne die Zeile <code>schritt = schritt + 5</code> würde die Turtle
+            trotzdem irgendwann herauslaufen — aber wenn man auch <code>right(20)</code>
+            weglässt und mit fester kleiner Schrittweite kreist, entsteht eine Endlosschleife.
+            Bei <code>while</code> immer prüfen: <em>Wird die Bedingung garantiert falsch?</em></p></div></article><article class="auf" id="a3-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">3.6</span><h5>Farbverlauf-Kaleidoskop</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Erzeuge ein Kaleidoskop aus 120 Durchläufen. In jedem Durchlauf soll
+            die Turtle</p>
+            <ul class="kompakt">
+              <li>eine Strecke zeichnen, die mit jedem Durchlauf länger wird,</li>
+              <li>sich um 59° drehen,</li>
+              <li>ihre Farbe zyklisch aus einer Liste von mindestens fünf Farben wechseln.</li>
+            </ul>
+            <p><strong>Zusatz:</strong> Baue mit <code>turtle.tracer(0)</code> und
+            <code>turtle.update()</code> ein, dass die Grafik ohne sichtbare Animation sofort
+            fertig erscheint.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-6-0"><span class="tnr">Tipp 1</span>Zyklischer Zugriff auf eine Liste: <code>farben[i % len(farben)]</code>. Der Modulo-Operator sorgt dafür, dass der Index nie zu groß wird.</div><div class="tipp verborgen" id="t3-6-1"><span class="tnr">Tipp 2</span><code>turtle.tracer(0)</code> schaltet das Zeichnen auf dem Bildschirm ab; <code>turtle.update()</code> am Ende zeigt alles auf einmal.</div><div class="tipp verborgen" id="t3-6-2"><span class="tnr">Tipp 3</span>Für einen weichen Verlauf kannst du auch mit RGB-Werten arbeiten: <code>turtle.colormode(1.0)</code> und dann <code>turtle.pencolor(i/120, 0.2, 1 - i/120)</code>.</div><div class="loesung verborgen" id="l3-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+farben = [&quot;crimson&quot;, &quot;orange&quot;, &quot;gold&quot;, &quot;seagreen&quot;, &quot;steelblue&quot;, &quot;purple&quot;]
+
+turtle.tracer(0)                # Bildschirm-Aktualisierung aus
+turtle.pensize(2)
+
+for i in range(120):
+    turtle.pencolor(farben[i % len(farben)])
+    turtle.forward(i * 2)
+    turtle.right(59)
+
+turtle.hideturtle()
+turtle.update()                 # alles auf einmal anzeigen
+turtle.done()</pre></div><p>Zwei Techniken, die dich durch den Rest des Kurses begleiten:</p>
+            <ul class="kompakt">
+            <li><strong><code>i % len(farben)</code></strong> — der Modulo-Operator macht aus einem
+            unbegrenzt wachsenden Zähler einen Index, der immer im gültigen Bereich bleibt.
+            Bei 6 Farben ergibt sich die Folge 0, 1, 2, 3, 4, 5, 0, 1, 2, …</li>
+            <li><strong><code>tracer(0)</code> / <code>update()</code></strong> — bei mehreren
+            hundert Strichen ist die Animation nur noch lästig. Beides zusammen macht das
+            Programm um Größenordnungen schneller.</li>
+            </ul>
+            <p>Der Winkel 59° ist bewusst kein Teiler von 360: Dadurch schließt sich das Muster
+            nie und es entsteht ein dichtes Geflecht.</p></div></article></section><section class="kap" id="k4"><div class="kaphead"><div class="knr">4</div><div><h3>Verzweigung, Vergleichs- und logische Operatoren</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Das Programm trifft Entscheidungen: Bedingungen formulieren und kombinieren.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>Bedingungen mit Vergleichsoperatoren formulieren</li><li>Bedingungen mit and, or und not verknüpfen</li><li>ein- und mehrseitige Verzweigungen implementieren</li><li>Verzweigungen im Rumpf einer Schleife einsetzen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<pre class="code">if bedingung:
+    # wird ausgefuehrt, wenn die Bedingung True ist
+elif andere_bedingung:
+    # wird geprueft, wenn die erste Bedingung False war
+else:
+    # wird ausgefuehrt, wenn keine Bedingung zutraf</pre>
+<table class="ref">
+<tr><th colspan="2">Vergleichsoperatoren</th><th colspan="2">Logische Operatoren</th></tr>
+<tr><td><code>==</code></td><td>gleich</td><td><code>and</code></td><td>beide Bedingungen wahr</td></tr>
+<tr><td><code>!=</code></td><td>ungleich</td><td><code>or</code></td><td>mindestens eine wahr</td></tr>
+<tr><td><code>&lt;</code> <code>&gt;</code></td><td>kleiner / größer</td><td><code>not</code></td><td>kehrt den Wahrheitswert um</td></tr>
+<tr><td><code>&lt;=</code> <code>&gt;=</code></td><td>kleiner-gleich / größer-gleich</td><td colspan="2"></td></tr>
+</table>
+<p class="hinweis"><strong>Der Klassiker:</strong> <code>=</code> ist die <em>Zuweisung</em>,
+<code>==</code> der <em>Vergleich</em>. <code>if x = 5:</code> ist ein Syntaxfehler.</p>
+<p><strong>Der Modulo-Operator <code>%</code></strong> liefert den Rest einer Division und ist
+das wichtigste Werkzeug für Bedingungen in Schleifen:</p>
+<pre class="code">7 % 2   # -> 1   (7 : 2 = 3 Rest 1)
+8 % 2   # -> 0   -> 8 ist gerade
+i % 3 == 0   # jeder dritte Durchlauf</pre>
+<p><strong>Wahrheitstafel</strong> für zwei Bedingungen A und B:</p>
+<table class="ref">
+<tr><th>A</th><th>B</th><th>A and B</th><th>A or B</th><th>not A</th></tr>
+<tr><td>True</td><td>True</td><td>True</td><td>True</td><td>False</td></tr>
+<tr><td>True</td><td>False</td><td>False</td><td>True</td><td>False</td></tr>
+<tr><td>False</td><td>True</td><td>False</td><td>True</td><td>True</td></tr>
+<tr><td>False</td><td>False</td><td>False</td><td>False</td><td>True</td></tr>
+</table>
+</div><article class="auf" id="a4-1" data-stufe="basis"><div class="aufkopf"><span class="aid">4.1</span><h5>Ampel</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage per <code>numinput</code> eine Zahl zwischen 1 und 3 ab und
+            zeichne einen ausgefüllten Kreis:</p>
+            <ul class="kompakt">
+              <li>1 → rot</li><li>2 → gelb</li><li>3 → grün</li>
+              <li>jede andere Eingabe → grauer Kreis und der Text „ungültig“</li>
+            </ul></div><div class="knopfleiste"><button type="button" data-ziel="t4-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-1-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l4-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-1-0"><span class="tnr">Tipp 1</span>Struktur: <code>if</code> … <code>elif</code> … <code>elif</code> … <code>else</code>.</div><div class="tipp verborgen" id="t4-1-1"><span class="tnr">Tipp 2</span>Ausgefüllter Kreis: <code>turtle.dot(80, "red")</code> — Größe und Farbe in einem Befehl.</div><div class="tipp verborgen" id="t4-1-2"><span class="tnr">Tipp 3</span>Vergiss <code>int(...)</code> beim Einlesen nicht, sonst vergleichst du <code>1.0 == 1</code> (das geht zwar gut, aber sauberer ist die Konvertierung).</div><div class="loesung verborgen" id="l4-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+fenster = turtle.Screen()
+zahl = int(fenster.numinput(&quot;Ampel&quot;, &quot;Zahl 1-3?&quot;, 1))
+
+if zahl == 1:
+    turtle.dot(80, &quot;red&quot;)
+elif zahl == 2:
+    turtle.dot(80, &quot;gold&quot;)
+elif zahl == 3:
+    turtle.dot(80, &quot;green&quot;)
+else:
+    turtle.dot(80, &quot;gray&quot;)
+    turtle.penup()
+    turtle.goto(-30, -70)
+    turtle.write(&quot;ungueltig&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Eine <strong>mehrseitige Verzweigung</strong>. Wichtig: Sobald ein
+            Zweig zutrifft, werden alle folgenden <code>elif</code>-Bedingungen gar nicht mehr
+            geprüft. Der <code>else</code>-Zweig fängt alles ab, was übrig bleibt — bei
+            Benutzereingaben ist er praktisch immer nötig.</p></div></article><article class="auf" id="a4-2" data-stufe="basis"><div class="aufkopf"><span class="aid">4.2</span><h5>Gestrichelte Linie</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>gestrichelte Linie</strong> über 400 Schritte:
+            immer 20 Schritte Strich, 20 Schritte Lücke.</p>
+            <p>Löse die Aufgabe mit einer Schleife und einer Verzweigung, die mit dem
+            Modulo-Operator prüft, ob der Durchlauf gerade oder ungerade ist.</p></div><div class="knopfleiste"><button type="button" data-ziel="t4-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l4-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-2-0"><span class="tnr">Tipp 1</span>Du brauchst 20 Durchläufe à 20 Schritte.</div><div class="tipp verborgen" id="t4-2-1"><span class="tnr">Tipp 2</span><code>if i % 2 == 0:</code> ist bei geraden <code>i</code> wahr — dann <code>pendown()</code>, sonst <code>penup()</code>.</div><div class="tipp verborgen" id="t4-2-2"><span class="tnr">Tipp 3</span>Die Turtle geht in beiden Fällen vorwärts — nur der Stift ist unterschiedlich.</div><div class="loesung verborgen" id="l4-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(4)
+turtle.penup()
+turtle.goto(-200, 0)
+
+for i in range(20):
+    if i % 2 == 0:
+        turtle.pendown()        # Strich
+    else:
+        turtle.penup()          # Luecke
+    turtle.forward(20)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p><code>i % 2</code> liefert abwechselnd 0 und 1 — das klassische
+            Werkzeug für „jedes zweite Mal“. Für „jedes dritte Mal“ nimmt man
+            <code>i % 3 == 0</code>.</p>
+            <p class="hinweis">Statt <code>if i % 2 == 0</code> könnte man auch
+            <code>if i % 2 != 0</code> schreiben und die Zweige tauschen — logisch äquivalent,
+            aber schlechter lesbar. Positive Bedingungen sind fast immer verständlicher als
+            verneinte.</p></div></article><article class="auf" id="a4-3" data-stufe="standard"><div class="aufkopf"><span class="aid">4.3</span><h5>Schachbrett</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne ein <strong>8 × 8-Schachbrett</strong> mit Feldgröße 40. Die
+            Felder sollen abwechselnd schwarz und weiß ausgefüllt sein.</p>
+            <p><strong>Denkfrage:</strong> Die Bedingung <code>spalte % 2 == 0</code> allein
+            funktioniert nicht — es entstehen Streifen statt eines Schachbretts. Warum? Und wie
+            musst du die Bedingung ergänzen?</p></div><div class="knopfleiste"><button type="button" data-ziel="t4-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l4-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-3-0"><span class="tnr">Tipp 1</span>Zwei verschachtelte Schleifen: <code>for zeile in range(8)</code> und darin <code>for spalte in range(8)</code>.</div><div class="tipp verborgen" id="t4-3-1"><span class="tnr">Tipp 2</span>Füllen: <code>turtle.fillcolor(farbe)</code>, dann <code>begin_fill()</code>, das Quadrat zeichnen, <code>end_fill()</code>.</div><div class="tipp verborgen" id="t4-3-2"><span class="tnr">Tipp 3</span>Die Farbe hängt von <strong>beiden</strong> Zählern ab. Betrachte <code>(zeile + spalte) % 2</code> — in benachbarten Feldern wechselt diese Zahl.</div><div class="loesung verborgen" id="l4-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(1)
+
+feld = 40
+start_x = -160
+start_y = -160
+
+for zeile in range(8):
+    for spalte in range(8):
+        # Position des Feldes anfahren
+        turtle.penup()
+        turtle.goto(start_x + spalte * feld, start_y + zeile * feld)
+        turtle.setheading(0)
+        turtle.pendown()
+
+        # Farbe: Summe der Indizes entscheidet
+        if (zeile + spalte) % 2 == 0:
+            turtle.fillcolor(&quot;white&quot;)
+        else:
+            turtle.fillcolor(&quot;black&quot;)
+
+        turtle.begin_fill()
+        for i in range(4):
+            turtle.forward(feld)
+            turtle.left(90)
+        turtle.end_fill()
+
+turtle.hideturtle()
+turtle.update()
+turtle.done()</pre></div><p><strong>Zur Denkfrage:</strong> <code>spalte % 2</code> hängt nur
+            von der waagerechten Position ab. In jeder Zeile ergibt sich dasselbe Muster —
+            also senkrechte Streifen.</p>
+            <p>Beim Schachbrett muss die Farbe in <em>beide</em> Richtungen wechseln. Das leistet
+            <code>(zeile + spalte) % 2</code>: Geht man ein Feld nach rechts <em>oder</em> ein
+            Feld nach oben, ändert sich die Summe um 1 und damit der Rest.</p>
+            <p class="hinweis">Die gleiche Bedingung lässt sich mit logischen Operatoren
+            ausdrücken: <code>if (zeile % 2 == 0) != (spalte % 2 == 0)</code> — ein
+            „exklusives Oder“ (XOR).</p></div></article><article class="auf" id="a4-4" data-stufe="standard"><div class="aufkopf"><span class="aid">4.4</span><h5>Randerkennung</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Turtle soll 200-mal einen zufälligen Schritt machen. <strong>Sobald
+            sie den sichtbaren Bereich verlässt</strong> (|x| &gt; 250 oder |y| &gt; 250), soll sie
+            in die Mitte zurückgesetzt werden.</p>
+            <p>Formuliere die Bedingung mit <code>or</code>. Färbe die Spur rot ein, solange die
+            Turtle sich im inneren Bereich (|x| &lt; 100 <strong>und</strong> |y| &lt; 100)
+            befindet, sonst blau.</p></div><div class="knopfleiste"><button type="button" data-ziel="t4-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l4-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-4-0"><span class="tnr">Tipp 1</span>Zufallszahlen: <code>import random</code>, dann <code>random.randint(-90, 90)</code> für den Drehwinkel.</div><div class="tipp verborgen" id="t4-4-1"><span class="tnr">Tipp 2</span>Position abfragen: <code>turtle.xcor()</code> und <code>turtle.ycor()</code>. Den Betrag liefert <code>abs(...)</code>.</div><div class="tipp verborgen" id="t4-4-2"><span class="tnr">Tipp 3</span>Zurücksetzen ohne Strich: <code>penup()</code> → <code>goto(0, 0)</code> → <code>pendown()</code>.</div><div class="loesung verborgen" id="l4-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import random
+
+turtle.speed(0)
+turtle.pensize(2)
+
+for i in range(200):
+    # Farbe abhaengig vom inneren Bereich -&gt; and
+    if abs(turtle.xcor()) &lt; 100 and abs(turtle.ycor()) &lt; 100:
+        turtle.pencolor(&quot;red&quot;)
+    else:
+        turtle.pencolor(&quot;blue&quot;)
+
+    turtle.right(random.randint(-90, 90))
+    turtle.forward(20)
+
+    # Rand verlassen? -&gt; or
+    if abs(turtle.xcor()) &gt; 250 or abs(turtle.ycor()) &gt; 250:
+        turtle.penup()
+        turtle.goto(0, 0)
+        turtle.pendown()
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Beide logischen Operatoren in einem Programm, und beide an der
+            inhaltlich passenden Stelle:</p>
+            <ul class="kompakt">
+            <li><strong><code>and</code></strong> für „im inneren Quadrat“ — <em>beide</em>
+            Koordinaten müssen klein sein.</li>
+            <li><strong><code>or</code></strong> für „Rand verlassen“ — <em>eine</em> überschrittene
+            Koordinate genügt.</li>
+            </ul>
+            <p class="hinweis">Nach dem Gesetz von De Morgan gilt:
+            „nicht (|x| &lt; 250 <strong>and</strong> |y| &lt; 250)“ ist dasselbe wie
+            „|x| ≥ 250 <strong>or</strong> |y| ≥ 250“. Beim Umformen von Bedingungen kippt
+            <code>and</code> zu <code>or</code> — ein häufiger Fehler.</p></div></article><article class="auf" id="a4-5" data-stufe="standard"><div class="aufkopf"><span class="aid">4.5</span><h5>FizzBuzz als Grafik</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne 40 Punkte in einer Reihe. Der Punkt Nummer <em>i</em> wird</p>
+            <ul class="kompakt">
+              <li>grün, wenn <em>i</em> durch 3 teilbar ist,</li>
+              <li>blau, wenn <em>i</em> durch 5 teilbar ist,</li>
+              <li><strong>rot und größer</strong>, wenn <em>i</em> durch 3 <em>und</em> 5 teilbar ist,</li>
+              <li>sonst grau.</li>
+            </ul>
+            <p><strong>Achtung:</strong> Die Reihenfolge der Abfragen ist entscheidend.</p></div><div class="knopfleiste"><button type="button" data-ziel="t4-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l4-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-5-0"><span class="tnr">Tipp 1</span>Teilbarkeit durch 3: <code>i % 3 == 0</code>.</div><div class="tipp verborgen" id="t4-5-1"><span class="tnr">Tipp 2</span>Prüfe den Spezialfall (durch 3 <em>und</em> 5) <strong>zuerst</strong> — sonst greift schon der erste Zweig.</div><div class="tipp verborgen" id="t4-5-2"><span class="tnr">Tipp 3</span>Zum Positionieren: <code>penup()</code>, <code>goto(-300 + i * 15, 0)</code>, dann <code>dot(...)</code>.</div><div class="loesung verborgen" id="l4-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.penup()
+turtle.hideturtle()
+
+for i in range(1, 41):
+    turtle.goto(-300 + i * 15, 0)
+
+    if i % 3 == 0 and i % 5 == 0:       # Spezialfall ZUERST
+        turtle.dot(20, &quot;red&quot;)
+    elif i % 3 == 0:
+        turtle.dot(12, &quot;green&quot;)
+    elif i % 5 == 0:
+        turtle.dot(12, &quot;blue&quot;)
+    else:
+        turtle.dot(6, &quot;lightgray&quot;)
+
+turtle.done()</pre></div><p>Der Kern der Aufgabe ist die <strong>Reihenfolge</strong>: Stünde
+            <code>elif i % 3 == 0</code> vor der kombinierten Bedingung, würde die 15 grün statt
+            rot — der Spezialfall käme nie zum Zug, weil eine <code>if/elif</code>-Kette nach
+            dem ersten Treffer abbricht.</p>
+            <p><strong>Regel:</strong> Bei <code>if/elif</code>-Ketten immer von der
+            <em>speziellsten</em> zur <em>allgemeinsten</em> Bedingung.</p></div></article><article class="auf" id="a4-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">4.6</span><h5>Turtle im Kasten</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Simuliere eine Kugel, die in einem Kasten (600 × 400) hin und her
+            prallt.</p>
+            <p>Die Turtle bewegt sich in 10er-Schritten geradeaus. Trifft sie auf eine
+            <strong>senkrechte</strong> Wand, wird ihre Richtung an der Senkrechten gespiegelt
+            (<code>180 - richtung</code>), bei einer <strong>waagerechten</strong> Wand an der
+            Waagerechten (<code>-richtung</code>).</p>
+            <p>Lasse 500 Schritte laufen und zeichne vorab den Kasten.</p></div><div class="knopfleiste"><button type="button" data-ziel="t4-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t4-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t4-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l4-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-6-0"><span class="tnr">Tipp 1</span>Zeichne den Rahmen zuerst mit einer Schleife und merke dir die Grenzen in Variablen: <code>xmax = 300</code>, <code>ymax = 200</code>.</div><div class="tipp verborgen" id="t4-6-1"><span class="tnr">Tipp 2</span>Aktuelle Richtung: <code>turtle.heading()</code>. Neue Richtung setzen: <code>turtle.setheading(...)</code>.</div><div class="tipp verborgen" id="t4-6-2"><span class="tnr">Tipp 3</span>Die beiden Reflexionsfälle brauchen getrennte <code>if</code>-Blöcke (nicht <code>elif</code>) — in einer Ecke treten beide gleichzeitig auf.</div><div class="tipp verborgen" id="t4-6-3"><span class="tnr">Tipp 4</span>Damit die Turtle nicht im Rand „hängen bleibt“, prüfe knapp <em>innerhalb</em> der Grenze, z. B. <code>abs(x) &gt; xmax - 10</code>.</div><div class="loesung verborgen" id="l4-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import random
+
+xmax = 300
+ymax = 200
+
+turtle.speed(0)
+turtle.tracer(0)
+
+# Kasten zeichnen
+turtle.penup()
+turtle.goto(-xmax, -ymax)
+turtle.pendown()
+turtle.pensize(3)
+turtle.pencolor(&quot;black&quot;)
+for i in range(2):
+    turtle.forward(2 * xmax)
+    turtle.left(90)
+    turtle.forward(2 * ymax)
+    turtle.left(90)
+
+# Kugel starten
+turtle.penup()
+turtle.goto(0, 0)
+turtle.setheading(random.randint(20, 70))
+turtle.pensize(1)
+turtle.pencolor(&quot;crimson&quot;)
+turtle.pendown()
+
+for i in range(500):
+    turtle.forward(10)
+
+    x = turtle.xcor()
+    y = turtle.ycor()
+    richtung = turtle.heading()
+
+    # senkrechte Wand: an der Senkrechten spiegeln
+    if abs(x) &gt; xmax - 10:
+        richtung = 180 - richtung
+        turtle.setheading(richtung)
+
+    # waagerechte Wand: an der Waagerechten spiegeln
+    if abs(y) &gt; ymax - 10:
+        richtung = -turtle.heading()
+        turtle.setheading(richtung)
+
+turtle.hideturtle()
+turtle.update()
+turtle.done()</pre></div><p>Warum zwei getrennte <code>if</code>-Blöcke und kein
+            <code>elif</code>? Weil in einer <strong>Ecke</strong> beide Bedingungen gleichzeitig
+            wahr sind — dort muss zweimal gespiegelt werden. Mit <code>elif</code> würde die
+            Kugel aus der Ecke herauslaufen.</p>
+            <p>Die Reflexionsformeln folgen direkt aus dem Einfallswinkel = Ausfallswinkel:</p>
+            <ul class="kompakt">
+            <li>senkrechte Wand: die x-Komponente kehrt sich um → <code>180 - richtung</code></li>
+            <li>waagerechte Wand: die y-Komponente kehrt sich um → <code>-richtung</code></li>
+            </ul>
+            <p class="hinweis">Der Sicherheitsabstand <code>- 10</code> entspricht der
+            Schrittweite. Ohne ihn kann die Turtle in einem Schritt so weit über den Rand
+            springen, dass sie auch nach der Spiegelung noch außerhalb ist — und dann in jedem
+            Durchlauf erneut gespiegelt wird. Sie zittert dann am Rand fest.</p></div></article></section><section class="kap" id="k5"><div class="kaphead"><div class="knr">5</div><div><h3>Funktionen - eigene Befehle bauen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Unterprogramme mit Parametern und optionalem Rückgabewert.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>eigene Funktionen definieren und aufrufen</li><li>Parameter zur Steuerung einsetzen</li><li>Funktionen mit Rückgabewert schreiben und nutzen</li><li>ein Problem in Teilprobleme zerlegen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>Eine <strong>Funktion</strong> (allgemein: ein Unterprogramm) ist ein benannter Block von
+Anweisungen. Rückgabewerte und Parameter sind dabei <em>optional</em>.</p>
+<pre class="code">def quadrat(seite):          # Definition, mit Parameter
+    for i in range(4):
+        turtle.forward(seite)
+        turtle.right(90)
+
+quadrat(100)                 # Aufruf
+quadrat(50)</pre>
+<pre class="code">def flaeche(seite):          # mit Rueckgabewert
+    return seite * seite
+
+a = flaeche(12)              # a hat jetzt den Wert 144</pre>
+<table class="ref">
+<tr><th>Begriff</th><th>Bedeutung</th></tr>
+<tr><td><strong>Parameter</strong></td><td>Platzhalter in der Definition, z. B. <code>seite</code></td></tr>
+<tr><td><strong>Argument</strong></td><td>der konkrete Wert beim Aufruf, z. B. <code>100</code></td></tr>
+<tr><td><strong>Rückgabewert</strong></td><td>das Ergebnis, das <code>return</code> zurückliefert</td></tr>
+<tr><td><strong>lokale Variable</strong></td><td>existiert nur innerhalb der Funktion</td></tr>
+</table>
+<p><strong>Vorgabewerte</strong> machen Parameter optional:</p>
+<pre class="code">def vieleck(n, seite=80, farbe="black"):
+    ...
+
+vieleck(6)                       # seite=80, farbe="black"
+vieleck(6, 120)                  # farbe="black"
+vieleck(6, 120, "red")</pre>
+<p class="hinweis"><strong>Wichtige Konvention:</strong> Eine gute Zeichenfunktion hinterlässt
+die Turtle so, wie sie sie vorgefunden hat — gleiche Position, gleiche Blickrichtung. Dann
+lassen sich Funktionen beliebig kombinieren, ohne dass sich Fehler aufaddieren.</p>
+</div><article class="auf" id="a5-1" data-stufe="basis"><div class="aufkopf"><span class="aid">5.1</span><h5>Die Funktion quadrat()</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Definiere eine Funktion <code>quadrat(seite)</code>, die ein Quadrat
+            der angegebenen Seitenlänge zeichnet.</p>
+            <p>Rufe sie danach fünfmal auf, mit den Seitenlängen 20, 40, 60, 80 und 100 —
+            am besten aus einer Schleife heraus.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-1-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l5-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-1-0"><span class="tnr">Tipp 1</span><code>def quadrat(seite):</code> — der Doppelpunkt und die Einrückung sind Pflicht.</div><div class="tipp verborgen" id="t5-1-1"><span class="tnr">Tipp 2</span>Die Definition muss <em>vor</em> dem ersten Aufruf im Quelltext stehen.</div><div class="tipp verborgen" id="t5-1-2"><span class="tnr">Tipp 3</span>Für die fünf Aufrufe: <code>for s in range(20, 101, 20): quadrat(s)</code>.</div><div class="loesung verborgen" id="l5-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def quadrat(seite):
+    &quot;&quot;&quot;Zeichnet ein Quadrat mit der angegebenen Seitenlaenge.&quot;&quot;&quot;
+    for i in range(4):
+        turtle.forward(seite)
+        turtle.right(90)
+
+
+turtle.pensize(2)
+turtle.speed(0)
+
+for s in range(20, 101, 20):
+    quadrat(s)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Weil <code>quadrat()</code> die Turtle am Ende wieder an ihrem
+            Ausgangspunkt und in ihrer Ausgangsrichtung zurücklässt (viermal 90° = 360°), liegen
+            alle fünf Quadrate ineinander in derselben Ecke. Genau darum ist die
+            „aufgeräumte“ Bauweise so nützlich.</p></div></article><article class="auf" id="a5-2" data-stufe="basis"><div class="aufkopf"><span class="aid">5.2</span><h5>gehe_zu()</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Der Dreierblock <code>penup()</code> – <code>goto(x, y)</code> –
+            <code>pendown()</code> kommt in fast jedem Programm mehrfach vor.</p>
+            <p>Schreibe dafür eine Funktion <code>gehe_zu(x, y)</code>, die zusätzlich die
+            Blickrichtung auf 0° zurücksetzt.</p>
+            <p>Zeichne damit vier Quadrate in den vier Ecken eines gedachten großen Quadrats.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l5-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-2-0"><span class="tnr">Tipp 1</span>Die Funktion braucht zwei Parameter und keinen Rückgabewert.</div><div class="tipp verborgen" id="t5-2-1"><span class="tnr">Tipp 2</span><code>turtle.setheading(0)</code> sorgt dafür, dass danach jede Figur gleich orientiert ist.</div><div class="tipp verborgen" id="t5-2-2"><span class="tnr">Tipp 3</span>Du darfst deine Funktion <code>quadrat()</code> aus 5.1 einfach mitbenutzen — Funktionen dürfen sich gegenseitig aufrufen.</div><div class="loesung verborgen" id="l5-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def gehe_zu(x, y):
+    &quot;&quot;&quot;Faehrt ohne Spur zu (x, y) und richtet die Turtle nach rechts aus.&quot;&quot;&quot;
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def quadrat(seite):
+    for i in range(4):
+        turtle.forward(seite)
+        turtle.right(90)
+
+
+turtle.pensize(2)
+turtle.speed(0)
+
+gehe_zu(-150, 150)
+quadrat(80)
+
+gehe_zu(70, 150)
+quadrat(80)
+
+gehe_zu(-150, -70)
+quadrat(80)
+
+gehe_zu(70, -70)
+quadrat(80)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Dies ist eine Funktion <strong>ohne</strong> Rückgabewert, aber
+            <strong>mit</strong> Parametern — der Rahmenplan formuliert das genau so: „Funktionen
+            werden allgemein als Unterprogramme verstanden, bei denen Rückgabewerte und
+            Parameter optional sind.“</p>
+            <p>Die Kombination <code>gehe_zu()</code> + <code>quadrat()</code> zeigt das Prinzip
+            der <em>Komposition</em>: kleine, zuverlässige Bausteine werden zu größeren
+            zusammengesetzt.</p></div></article><article class="auf" id="a5-3" data-stufe="standard"><div class="aufkopf"><span class="aid">5.3</span><h5>Vieleck mit Vorgabewerten</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Schreibe eine Funktion
+            <code>vieleck(n, seite=80, farbe="black", fuellen=False)</code>.</p>
+            <p>Sie zeichnet ein regelmäßiges <em>n</em>-Eck und füllt es aus, wenn
+            <code>fuellen</code> den Wert <code>True</code> hat.</p>
+            <p>Demonstriere alle vier Aufrufvarianten: nur <code>n</code>, mit Seitenlänge, mit
+            Farbe, mit Füllung.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l5-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-3-0"><span class="tnr">Tipp 1</span>Vorgabewerte schreibt man direkt in die Parameterliste: <code>def vieleck(n, seite=80):</code>.</div><div class="tipp verborgen" id="t5-3-1"><span class="tnr">Tipp 2</span>Parameter mit Vorgabewert müssen <em>hinter</em> den Parametern ohne Vorgabewert stehen.</div><div class="tipp verborgen" id="t5-3-2"><span class="tnr">Tipp 3</span>Beim Aufruf kannst du Parameter auch benennen: <code>vieleck(8, farbe="red")</code> — dann ist die Reihenfolge egal.</div><div class="loesung verborgen" id="l5-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def vieleck(n, seite=80, farbe=&quot;black&quot;, fuellen=False):
+    &quot;&quot;&quot;Zeichnet ein regelmaessiges n-Eck.&quot;&quot;&quot;
+    turtle.pencolor(farbe)
+    turtle.fillcolor(farbe)
+
+    if fuellen:
+        turtle.begin_fill()
+
+    for i in range(n):
+        turtle.forward(seite)
+        turtle.right(360 / n)
+
+    if fuellen:
+        turtle.end_fill()
+
+
+turtle.speed(0)
+turtle.pensize(3)
+
+gehe_zu(-260, 0)
+vieleck(3)                                  # nur n
+
+gehe_zu(-130, 0)
+vieleck(5, 60)                              # mit Seitenlaenge
+
+gehe_zu(20, 0)
+vieleck(6, 50, &quot;steelblue&quot;)                 # mit Farbe
+
+gehe_zu(160, 0)
+vieleck(8, 45, farbe=&quot;crimson&quot;, fuellen=True)   # benannte Argumente
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Vorgabewerte machen eine Funktion gleichzeitig <em>einfach</em>
+            (für den Normalfall) und <em>mächtig</em> (für Sonderfälle). Der Aufruf
+            <code>vieleck(3)</code> bleibt kurz, ohne dass man auf die Steuerung durch Farbe
+            und Füllung verzichten muss.</p>
+            <p>Der Parameter <code>fuellen</code> ist ein <code>bool</code> — er wird direkt als
+            Bedingung verwendet: <code>if fuellen:</code> ist gleichbedeutend mit
+            <code>if fuellen == True:</code>, aber kürzer und üblicher.</p></div></article><article class="auf" id="a5-4" data-stufe="standard"><div class="aufkopf"><span class="aid">5.4</span><h5>Funktion mit Rückgabewert</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Schreibe zwei Funktionen mit Rückgabewert:</p>
+            <ul class="kompakt">
+              <li><code>innenwinkel(n)</code> — liefert den Innenwinkel eines regelmäßigen
+              <em>n</em>-Ecks in Grad,</li>
+              <li><code>umfang(n, seite)</code> — liefert den Umfang.</li>
+            </ul>
+            <p>Zeichne für <em>n</em> = 3 bis 8 das jeweilige Vieleck und schreibe die beiden
+            berechneten Werte darunter.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l5-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-4-0"><span class="tnr">Tipp 1</span>Der Innenwinkel eines regelmäßigen n-Ecks beträgt (n − 2) · 180 / n.</div><div class="tipp verborgen" id="t5-4-1"><span class="tnr">Tipp 2</span><code>return</code> beendet die Funktion sofort und gibt den Wert zurück.</div><div class="tipp verborgen" id="t5-4-2"><span class="tnr">Tipp 3</span>Beim Beschriften: <code>round(wert, 1)</code> rundet auf eine Nachkommastelle, <code>str(...)</code> macht Text daraus.</div><div class="loesung verborgen" id="l5-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def innenwinkel(n):
+    &quot;&quot;&quot;Liefert den Innenwinkel eines regelmaessigen n-Ecks in Grad.&quot;&quot;&quot;
+    return (n - 2) * 180 / n
+
+
+def umfang(n, seite):
+    &quot;&quot;&quot;Liefert den Umfang eines regelmaessigen n-Ecks.&quot;&quot;&quot;
+    return n * seite
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+turtle.speed(0)
+turtle.pensize(2)
+seite = 40
+x = -260
+
+for n in range(3, 9):
+    gehe_zu(x, 0)
+    for i in range(n):
+        turtle.forward(seite)
+        turtle.right(360 / n)
+
+    # Rueckgabewerte verwenden
+    w = innenwinkel(n)
+    u = umfang(n, seite)
+
+    turtle.penup()
+    turtle.goto(x, -60)
+    turtle.write(str(n) + &quot;-Eck&quot;, font=(&quot;Arial&quot;, 10, &quot;bold&quot;))
+    turtle.goto(x, -80)
+    turtle.write(&quot;Winkel &quot; + str(round(w, 1)) + &quot; Grad&quot;, font=(&quot;Arial&quot;, 9, &quot;normal&quot;))
+    turtle.goto(x, -95)
+    turtle.write(&quot;Umfang &quot; + str(u), font=(&quot;Arial&quot;, 9, &quot;normal&quot;))
+
+    x = x + 95
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Der Unterschied zu den bisherigen Funktionen: Diese beiden
+            <em>zeichnen nichts</em>, sie <em>rechnen</em>. Sie liefern einen Wert zurück, den
+            das aufrufende Programm weiterverwendet.</p>
+            <p class="hinweis">Kontrolle: Innenwinkel + Drehwinkel = 180°. Für das Sechseck
+            120° + 60° = 180°. ✔</p></div></article><article class="auf" id="a5-5" data-stufe="standard"><div class="aufkopf"><span class="aid">5.5</span><h5>Ein Haus aus Bausteinen</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zerlege ein Haus in Teilfunktionen und setze es daraus zusammen:</p>
+            <ul class="kompakt">
+              <li><code>rechteck(breite, hoehe, farbe)</code></li>
+              <li><code>dach(breite, hoehe, farbe)</code></li>
+              <li><code>fenster(groesse)</code></li>
+              <li><code>haus(x, y, breite)</code> — ruft die drei anderen auf</li>
+            </ul>
+            <p>Zeichne damit eine Häuserzeile aus vier Häusern unterschiedlicher Breite.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l5-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-5-0"><span class="tnr">Tipp 1</span>Baue jede Teilfunktion einzeln und teste sie sofort, bevor du die nächste schreibst.</div><div class="tipp verborgen" id="t5-5-1"><span class="tnr">Tipp 2</span>Achte auf die Konvention: Jede Funktion setzt die Turtle am Ende wieder auf ihren Startpunkt zurück.</div><div class="tipp verborgen" id="t5-5-2"><span class="tnr">Tipp 3</span>In <code>haus()</code> berechnest du die Maße relativ zur Breite, z. B. <code>hoehe = breite * 0.8</code>.</div><div class="loesung verborgen" id="l5-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def rechteck(breite, hoehe, farbe):
+    &quot;&quot;&quot;Zeichnet ein gefuelltes Rechteck ab der aktuellen Position (links unten).&quot;&quot;&quot;
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(breite)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+
+def dach(breite, hoehe, farbe):
+    &quot;&quot;&quot;Zeichnet ein Satteldach ab der aktuellen Position (links unten).&quot;&quot;&quot;
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    turtle.forward(breite)
+    turtle.goto(turtle.xcor() - breite / 2, turtle.ycor() + hoehe)
+    turtle.goto(turtle.xcor() - breite / 2, turtle.ycor() - hoehe)
+    turtle.end_fill()
+    turtle.setheading(0)
+
+
+def fenster(groesse):
+    &quot;&quot;&quot;Zeichnet ein Fenster mit Kreuzsprosse.&quot;&quot;&quot;
+    x = turtle.xcor()
+    y = turtle.ycor()
+    rechteck(groesse, groesse, &quot;lightyellow&quot;)
+    gehe_zu(x + groesse / 2, y)
+    turtle.setheading(90)
+    turtle.forward(groesse)
+    gehe_zu(x, y + groesse / 2)
+    turtle.forward(groesse)
+    gehe_zu(x, y)
+
+
+def haus(x, y, breite):
+    &quot;&quot;&quot;Setzt ein komplettes Haus aus den Bausteinen zusammen.&quot;&quot;&quot;
+    hoehe = breite * 0.8
+
+    gehe_zu(x, y)
+    rechteck(breite, hoehe, &quot;burlywood&quot;)
+
+    gehe_zu(x, y + hoehe)
+    dach(breite, breite * 0.4, &quot;sienna&quot;)
+
+    gehe_zu(x + breite * 0.2, y + hoehe * 0.45)
+    fenster(breite * 0.25)
+
+    gehe_zu(x + breite * 0.55, y + hoehe * 0.45)
+    fenster(breite * 0.25)
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+
+haus(-300, -100, 120)
+haus(-160, -100, 90)
+haus(-50, -100, 140)
+haus(110, -100, 100)
+
+turtle.hideturtle()
+turtle.update()
+turtle.done()</pre></div><p>Das ist <strong>Zerlegung (Dekomposition)</strong> — die zentrale
+            Arbeitstechnik der Informatik. Statt eines 80-Zeilen-Blocks entstehen fünf kurze
+            Funktionen, die man einzeln verstehen, testen und wiederverwenden kann.</p>
+            <p>Beachte, wie <code>fenster()</code> sich Position und Richtung in lokalen Variablen
+            <code>x</code> und <code>y</code> merkt und am Ende dorthin zurückkehrt. Diese
+            Variablen existieren nur innerhalb der Funktion — außerhalb sind sie unbekannt.</p></div></article><article class="auf" id="a5-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">5.6</span><h5>Rekursiver Baum</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Eine Funktion darf sich selbst aufrufen — das nennt man
+            <strong>Rekursion</strong>.</p>
+            <p>Schreibe <code>baum(laenge, tiefe)</code>:</p>
+            <ul class="kompakt">
+              <li>Ist <code>tiefe</code> gleich 0, wird nichts gezeichnet (<strong>Abbruchbedingung</strong>).</li>
+              <li>Sonst: Stamm zeichnen, um 25° nach links drehen und einen kleineren Baum
+              zeichnen, um 50° nach rechts drehen und noch einen kleineren Baum zeichnen,
+              zurückdrehen und zum Ausgangspunkt zurückfahren.</li>
+            </ul>
+            <p><strong>Zusatz:</strong> Lasse Strichstärke und Farbe von der Tiefe abhängen —
+            dicke braune Äste unten, dünne grüne Zweige oben.</p></div><div class="knopfleiste"><button type="button" data-ziel="t5-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t5-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t5-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t5-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l5-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t5-6-0"><span class="tnr">Tipp 1</span>Die Abbruchbedingung steht immer ganz am Anfang der Funktion: <code>if tiefe == 0: return</code>.</div><div class="tipp verborgen" id="t5-6-1"><span class="tnr">Tipp 2</span>Der rekursive Aufruf verkleinert beides: <code>baum(laenge * 0.7, tiefe - 1)</code>. So wird die Abbruchbedingung garantiert erreicht.</div><div class="tipp verborgen" id="t5-6-2"><span class="tnr">Tipp 3</span>Nach dem Zeichnen des Stamms mit <code>turtle.forward(laenge)</code> musst du am Ende exakt gleich weit zurück: <code>turtle.backward(laenge)</code>.</div><div class="tipp verborgen" id="t5-6-3"><span class="tnr">Tipp 4</span>Beginne mit <code>tiefe = 3</code> und zeichne den Ablauf auf Papier nach, bevor du auf 10 hochgehst.</div><div class="loesung verborgen" id="l5-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def baum(laenge, tiefe):
+    &quot;&quot;&quot;Zeichnet rekursiv einen verzweigten Baum.&quot;&quot;&quot;
+    if tiefe == 0:                  # Abbruchbedingung
+        return
+
+    # Aussehen abhaengig von der Tiefe
+    turtle.pensize(tiefe)
+    if tiefe &gt; 3:
+        turtle.pencolor(&quot;saddlebrown&quot;)
+    else:
+        turtle.pencolor(&quot;forestgreen&quot;)
+
+    turtle.forward(laenge)          # Stamm
+
+    turtle.left(25)
+    baum(laenge * 0.7, tiefe - 1)   # linker Teilbaum
+    turtle.right(50)
+    baum(laenge * 0.7, tiefe - 1)   # rechter Teilbaum
+    turtle.left(25)
+
+    turtle.backward(laenge)         # exakt zurueck zum Startpunkt
+
+
+turtle.speed(0)
+turtle.tracer(0)
+
+turtle.penup()
+turtle.goto(0, -250)
+turtle.setheading(90)
+turtle.pendown()
+
+baum(110, 9)
+
+turtle.hideturtle()
+turtle.update()
+turtle.done()</pre></div><p>Rekursion steht nicht im Pflichtteil des Rahmenplans — sie ist hier
+            als Ausblick für die Schnellen gedacht und zeigt, wie mächtig das Konzept
+            „Unterprogramm“ ist.</p>
+            <p>Drei Bestandteile machen jede Rekursion aus:</p>
+            <ol class="kompakt">
+            <li><strong>Abbruchbedingung</strong> — <code>if tiefe == 0: return</code></li>
+            <li><strong>Verkleinerung</strong> — jeder Aufruf bekommt <code>tiefe - 1</code></li>
+            <li><strong>Aufräumen</strong> — <code>backward(laenge)</code> und die Rückdrehungen
+            stellen den Ausgangszustand wieder her</li>
+            </ol>
+            <p class="hinweis">Bei <code>tiefe = 9</code> wird die Funktion 2⁹ − 1 = 511-mal
+            aufgerufen. Ohne <code>tracer(0)</code> würdest du minutenlang zuschauen.</p></div></article></section><section class="kap" id="k6"><div class="kaphead"><div class="knr">6</div><div><h3>Struktogramme</h3><div class="meta">1 Unterrichtsstunde &nbsp;·&nbsp; Algorithmen sprachunabhängig darstellen - und in beide Richtungen übersetzen.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>Struktogramme (Nassi-Shneiderman-Diagramme) lesen und interpretieren</li><li>ein gegebenes Struktogramm in Python implementieren</li><li>einen gegebenen Quelltext als Struktogramm darstellen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>Ein <strong>Struktogramm</strong> stellt einen Algorithmus grafisch dar — unabhängig von
+einer konkreten Programmiersprache. Es kennt genau die drei Kontrollstrukturen:</p>
+<div class="sg-legende">
+  <div>
+    <p class="sg-titel">Sequenz</p>
+    <div class="sg">
+      <div class="sg-row">Anweisung 1</div>
+      <div class="sg-row">Anweisung 2</div>
+    </div>
+  </div>
+  <div>
+    <p class="sg-titel">Wiederholung</p>
+    <div class="sg">
+      <div class="sg-loop"><div class="sg-loop-head">wiederhole 4-mal</div>
+        <div class="sg-loop-body"><div class="sg-row">Anweisung</div></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="sg-titel">Verzweigung</p>
+    <div class="sg">
+      <div class="sg-if">
+        <div class="sg-if-head"><span class="sg-cond">Bedingung</span>
+        <span class="sg-ja">ja</span><span class="sg-nein">nein</span></div>
+        <div class="sg-if-body"><div class="sg-branch"><div class="sg-row">A</div></div>
+        <div class="sg-branch"><div class="sg-row">B</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<p><strong>Übersetzungstabelle:</strong></p>
+<table class="ref">
+<tr><th>Struktogramm</th><th>Python</th></tr>
+<tr><td>Anweisungen untereinander</td><td>Zeilen untereinander, gleiche Einrückung</td></tr>
+<tr><td>„wiederhole n-mal“</td><td><code>for i in range(n):</code></td></tr>
+<tr><td>„solange Bedingung“</td><td><code>while bedingung:</code></td></tr>
+<tr><td>Verzweigung ja/nein</td><td><code>if ...: ... else: ...</code></td></tr>
+<tr><td>eingerückter Bereich im Kasten</td><td>eingerückter Block nach dem Doppelpunkt</td></tr>
+</table>
+<p class="hinweis">Die <strong>Einrückung</strong> im Struktogramm (der Balken links) entspricht
+exakt der <strong>Einrückung</strong> in Python. Wer Struktogramme sauber liest, macht in
+Python weniger Einrückungsfehler.</p>
+</div><article class="auf" id="a6-1" data-stufe="basis"><div class="aufkopf"><span class="aid">6.1</span><h5>Struktogramm → Python</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Implementiere das folgende Struktogramm in Python.</p><div class="sg"><div class="sg-row">Stiftstärke auf 3 setzen</div><div class="sg-row">Farbe auf „blue“ setzen</div><div class="sg-loop"><div class="sg-loop-head">wiederhole 6-mal</div><div class="sg-loop-body"><div class="sg-row">gehe 90 Schritte vorwärts</div><div class="sg-row">drehe dich um 60° nach rechts</div></div></div><div class="sg-row">Turtle ausblenden</div></div></div><div class="knopfleiste"><button type="button" data-ziel="t6-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t6-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l6-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t6-1-0"><span class="tnr">Tipp 1</span>Arbeite das Struktogramm strikt von oben nach unten ab — jede Zeile wird zu genau einer Python-Zeile.</div><div class="tipp verborgen" id="t6-1-1"><span class="tnr">Tipp 2</span>Der Schleifenkasten wird zu <code>for i in range(6):</code>; alles, was rechts vom Balken steht, kommt eingerückt darunter.</div><div class="loesung verborgen" id="l6-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+turtle.pencolor(&quot;blue&quot;)
+
+for i in range(6):
+    turtle.forward(90)
+    turtle.right(60)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Es entsteht ein regelmäßiges Sechseck: 6 · 60° = 360°.</p>
+            <p>Beachte, dass <code>turtle.hideturtle()</code> <em>nicht</em> eingerückt ist — im
+            Struktogramm steht es unterhalb und außerhalb des Schleifenkastens.</p></div></article><article class="auf" id="a6-2" data-stufe="standard"><div class="aufkopf"><span class="aid">6.2</span><h5>Python → Struktogramm</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne für den folgenden Quelltext ein Struktogramm — auf Papier
+            oder mit einem Struktogramm-Editor.</p>
+            <pre class="code">import turtle
+
+turtle.penup()
+turtle.goto(-200, 0)
+
+for i in range(20):
+    if i % 3 == 0:
+        turtle.pencolor("red")
+        turtle.dot(16)
+    else:
+        turtle.pencolor("gray")
+        turtle.dot(8)
+    turtle.forward(20)
+
+turtle.hideturtle()</pre></div><div class="knopfleiste"><button type="button" data-ziel="t6-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t6-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t6-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l6-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t6-2-0"><span class="tnr">Tipp 1</span>Das Struktogramm hat drei Ebenen: außen die Sequenz, darin ein Schleifenkasten, darin eine Verzweigung.</div><div class="tipp verborgen" id="t6-2-1"><span class="tnr">Tipp 2</span>Der Befehl <code>turtle.forward(20)</code> steht <em>nach</em> der Verzweigung, aber noch <em>innerhalb</em> der Schleife — im Struktogramm also unter dem Verzweigungskasten, aber rechts vom Schleifenbalken.</div><div class="tipp verborgen" id="t6-2-2"><span class="tnr">Tipp 3</span>Beschrifte die Verzweigung mit der Bedingung <code>i % 3 == 0</code> und die Zweige mit „ja“ und „nein“.</div><div class="loesung verborgen" id="l6-2"><h6>Lösung und Erläuterung</h6><p>So sieht das Struktogramm aus:</p><div class="sg"><div class="sg-row">Stift heben</div><div class="sg-row">gehe zu (−200, 0)</div><div class="sg-loop"><div class="sg-loop-head">für i von 0 bis 19</div><div class="sg-loop-body"><div class="sg-if"><div class="sg-if-head"><span class="sg-cond">i % 3 == 0</span><span class="sg-ja">ja</span><span class="sg-nein">nein</span></div><div class="sg-if-body"><div class="sg-branch"><div class="sg-row">Farbe „red“</div><div class="sg-row">Punkt mit Größe 16</div></div><div class="sg-branch"><div class="sg-row">Farbe „gray“</div><div class="sg-row">Punkt mit Größe 8</div></div></div></div><div class="sg-row">gehe 20 Schritte vorwärts</div></div></div><div class="sg-row">Turtle ausblenden</div></div>
+            <p>Entscheidend ist die <strong>Schachtelung</strong>: Die Verzweigung liegt
+            vollständig <em>innerhalb</em> des Schleifenkastens, und <code>forward(20)</code>
+            steht darunter — ebenfalls noch in der Schleife. Die letzten beiden Zeilen sind
+            wieder außerhalb.</p></div></article><article class="auf" id="a6-3" data-stufe="standard"><div class="aufkopf"><span class="aid">6.3</span><h5>Verzweigung in der Schleife</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Implementiere dieses Struktogramm. Überlege <strong>vorher</strong>,
+            welche Figur entsteht.</p><div class="sg"><div class="sg-row">laenge ← 10</div><div class="sg-loop"><div class="sg-loop-head">solange laenge < 200</div><div class="sg-loop-body"><div class="sg-if"><div class="sg-if-head"><span class="sg-cond">laenge < 100</span><span class="sg-ja">ja</span><span class="sg-nein">nein</span></div><div class="sg-if-body"><div class="sg-branch"><div class="sg-row">Farbe „green“</div></div><div class="sg-branch"><div class="sg-row">Farbe „red“</div></div></div></div><div class="sg-row">gehe laenge Schritte vorwärts</div><div class="sg-row">drehe dich um 90° nach rechts</div><div class="sg-row">laenge ← laenge + 10</div></div></div><div class="sg-row">Turtle ausblenden</div></div></div><div class="knopfleiste"><button type="button" data-ziel="t6-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t6-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t6-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l6-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t6-3-0"><span class="tnr">Tipp 1</span>„solange“ bedeutet <code>while</code> — die Anzahl der Durchläufe steht nicht vorher fest.</div><div class="tipp verborgen" id="t6-3-1"><span class="tnr">Tipp 2</span>Der Pfeil ← ist die Zuweisung, in Python also <code>=</code>.</div><div class="tipp verborgen" id="t6-3-2"><span class="tnr">Tipp 3</span>Die letzte Zeile im Schleifenrumpf sorgt dafür, dass die Bedingung irgendwann falsch wird. Vergisst du sie, läuft das Programm endlos.</div><div class="loesung verborgen" id="l6-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+turtle.pensize(3)
+
+laenge = 10
+
+while laenge &lt; 200:
+    if laenge &lt; 100:
+        turtle.pencolor(&quot;green&quot;)
+    else:
+        turtle.pencolor(&quot;red&quot;)
+
+    turtle.forward(laenge)
+    turtle.right(90)
+    laenge = laenge + 10
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Es entsteht eine <strong>rechteckige Spirale</strong> mit 19
+            Strecken (10, 20, …, 190). Die ersten neun sind grün, die restlichen zehn rot.</p>
+            <p>Die Anzahl der Durchläufe lässt sich hier zwar ausrechnen — man könnte also auch
+            <code>for</code> verwenden. Das Struktogramm gibt aber „solange“ vor, und diese
+            Vorgabe ist verbindlich: Sie beschreibt den Algorithmus, nicht nur das Ergebnis.</p></div></article><article class="auf" id="a6-4" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">6.4</span><h5>Eigenes Struktogramm entwerfen</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Entwirf <strong>zuerst</strong> ein Struktogramm für folgendes
+            Programm — und implementiere es erst danach:</p>
+            <p><em>„Zeichne 12 Kreise auf einer waagerechten Linie. Jeder dritte Kreis wird
+            ausgefüllt. Kreise in der linken Hälfte sind blau, in der rechten Hälfte orange.
+            Über jeden ausgefüllten Kreis wird seine Nummer geschrieben.“</em></p>
+            <p>Tausche dein Struktogramm mit einem Mitschüler und implementiert
+            <em>gegenseitig</em> die Vorlage des anderen. Vergleicht anschließend die Ergebnisse:
+            Waren die Struktogramme eindeutig genug?</p></div><div class="knopfleiste"><button type="button" data-ziel="t6-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t6-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t6-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l6-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t6-4-0"><span class="tnr">Tipp 1</span>Du brauchst zwei unabhängige Entscheidungen: „jeder dritte“ (Füllung) und „linke Hälfte“ (Farbe). Das sind zwei getrennte Verzweigungen, keine geschachtelte.</div><div class="tipp verborgen" id="t6-4-1"><span class="tnr">Tipp 2</span>Die Reihenfolge im Struktogramm: erst Farbe bestimmen, dann Füllung entscheiden, dann zeichnen, dann weiterrücken.</div><div class="tipp verborgen" id="t6-4-2"><span class="tnr">Tipp 3</span>Für die Beschriftung brauchst du eine Positionsänderung nach oben und danach zurück.</div><div class="loesung verborgen" id="l6-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+turtle.speed(0)
+turtle.pensize(2)
+
+for i in range(12):
+    x = -300 + i * 55
+
+    # Verzweigung 1: Farbe nach Bildschirmhaelfte
+    if x &lt; 0:
+        farbe = &quot;steelblue&quot;
+    else:
+        farbe = &quot;darkorange&quot;
+
+    turtle.pencolor(farbe)
+    turtle.fillcolor(farbe)
+
+    gehe_zu(x, 0)
+
+    # Verzweigung 2: jeder dritte Kreis wird gefuellt
+    if i % 3 == 0:
+        turtle.begin_fill()
+        turtle.circle(22)
+        turtle.end_fill()
+
+        turtle.penup()
+        turtle.goto(x - 5, 60)
+        turtle.write(str(i), font=(&quot;Arial&quot;, 12, &quot;bold&quot;))
+    else:
+        turtle.circle(22)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Eine mögliche Struktogramm-Lösung:</p><div class="sg"><div class="sg-loop"><div class="sg-loop-head">für i von 0 bis 11</div><div class="sg-loop-body"><div class="sg-row">x ← −300 + i · 55</div><div class="sg-if"><div class="sg-if-head"><span class="sg-cond">x &lt; 0</span><span class="sg-ja">ja</span><span class="sg-nein">nein</span></div><div class="sg-if-body"><div class="sg-branch"><div class="sg-row">farbe ← „steelblue“</div></div><div class="sg-branch"><div class="sg-row">farbe ← „darkorange“</div></div></div></div><div class="sg-row">Stift- und Füllfarbe auf farbe setzen</div><div class="sg-row">gehe zu (x, 0)</div><div class="sg-if"><div class="sg-if-head"><span class="sg-cond">i % 3 == 0</span><span class="sg-ja">ja</span><span class="sg-nein">nein</span></div><div class="sg-if-body"><div class="sg-branch"><div class="sg-row">gefüllten Kreis zeichnen</div><div class="sg-row">Nummer i darüber schreiben</div></div><div class="sg-branch"><div class="sg-row">Kreis zeichnen</div></div></div></div></div></div><div class="sg-row">Turtle ausblenden</div></div>
+            <p>Der Unterrichtsertrag dieser Aufgabe liegt im <strong>Austausch</strong>: Erst
+            wenn jemand anderes dein Struktogramm implementiert, merkst du, welche Angaben du
+            vergessen hast. Typische Lücken: Startposition, Abstand zwischen den Kreisen,
+            Radius, Was heißt „darüber“?</p>
+            <p class="hinweis">Genau das ist der Sinn von Struktogrammen — sie zwingen dazu,
+            einen Algorithmus <em>vollständig und eindeutig</em> zu beschreiben, bevor eine
+            Zeile Code entsteht.</p></div></article></section><section class="kap" id="k7"><div class="kaphead"><div class="knr">7</div><div><h3>Die lineare Datenstruktur Liste</h3><div class="meta">2-3 Unterrichtsstunden &nbsp;·&nbsp; Aufbau, Operationen und Durchlauf - alles am Turtle-Balkendiagramm.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>den allgemeinen Aufbau einer linearen Liste beschreiben</li><li>die Operationen Anfügen, Löschen, Ändern, Zurückgeben eines Elements und Zurückgeben der Stelle erklären und anwenden</li><li>die Anzahl der Elemente bestimmen</li><li>eine Liste mit einer Schleife durchlaufen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>Eine <strong>lineare Liste</strong> ist eine geordnete Folge von Elementen. Jedes Element
+hat eine feste <em>Stelle</em> (einen <em>Index</em>) — und die Zählung beginnt bei
+<strong>0</strong>.</p>
+<div class="listenbild">
+  <div class="lb-zelle"><span class="lb-idx">0</span><span class="lb-wert">80</span></div>
+  <div class="lb-zelle"><span class="lb-idx">1</span><span class="lb-wert">120</span></div>
+  <div class="lb-zelle"><span class="lb-idx">2</span><span class="lb-wert">45</span></div>
+  <div class="lb-zelle"><span class="lb-idx">3</span><span class="lb-wert">160</span></div>
+  <div class="lb-zelle"><span class="lb-idx">4</span><span class="lb-wert">95</span></div>
+</div>
+<pre class="code">hoehen = [80, 120, 45, 160, 95]
+
+hoehen[0]      # -> 80    erstes Element
+hoehen[3]      # -> 160   Element an der Stelle 3
+hoehen[-1]     # -> 95    letztes Element
+len(hoehen)    # -> 5     Anzahl der Elemente
+hoehen[len(hoehen) - 1]   # ebenfalls das letzte Element</pre>
+<table class="ref">
+<tr><th>Operation</th><th>Python</th><th>Wirkung auf [80, 120, 45]</th></tr>
+<tr><td>Anzahl bestimmen</td><td><code>len(liste)</code></td><td>→ 3</td></tr>
+<tr><td>Element zurückgeben</td><td><code>liste[1]</code></td><td>→ 120</td></tr>
+<tr><td>Stelle zurückgeben</td><td><code>liste.index(45)</code></td><td>→ 2</td></tr>
+<tr><td>hinten anfügen</td><td><code>liste.append(70)</code></td><td>[80, 120, 45, <b>70</b>]</td></tr>
+<tr><td>an Stelle einfügen</td><td><code>liste.insert(1, 70)</code></td><td>[80, <b>70</b>, 120, 45]</td></tr>
+<tr><td>Element ändern</td><td><code>liste[0] = 200</code></td><td>[<b>200</b>, 120, 45]</td></tr>
+<tr><td>nach Stelle löschen</td><td><code>del liste[1]</code></td><td>[80, 45]</td></tr>
+<tr><td>nach Wert löschen</td><td><code>liste.remove(120)</code></td><td>[80, 45]</td></tr>
+<tr><td>entnehmen und liefern</td><td><code>liste.pop()</code></td><td>liefert 45, Liste: [80, 120]</td></tr>
+<tr><td>enthalten?</td><td><code>45 in liste</code></td><td>→ True</td></tr>
+</table>
+<p><strong>Zwei Arten, eine Liste zu durchlaufen:</strong></p>
+<pre class="code">for wert in hoehen:            # nur die Werte
+    turtle.forward(wert)
+
+for i in range(len(hoehen)):   # Stelle UND Wert
+    turtle.write(str(i) + ": " + str(hoehen[i]))</pre>
+<p class="hinweis"><strong>Häufigster Laufzeitfehler:</strong>
+<code>IndexError: list index out of range</code>. Bei 5 Elementen sind nur die Stellen 0 bis 4
+gültig — <code>hoehen[5]</code> gibt es nicht. Merke: <em>letzter Index = len − 1</em>.</p>
+</div><article class="auf" id="a7-1" data-stufe="basis"><div class="aufkopf"><span class="aid">7.1</span><h5>Farbliste</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Lege eine Liste mit sechs Farbnamen an und zeichne einen Stern, bei
+            dem jede Zacke die nächste Farbe aus der Liste bekommt.</p>
+            <p>Ermittle den Drehwinkel <strong>aus der Länge der Liste</strong>, nicht aus einer
+            fest eingetippten 6 — dein Programm muss auch funktionieren, wenn du eine Farbe
+            hinzufügst oder wegnimmst.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-1-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-1-0"><span class="tnr">Tipp 1</span><code>farben = ["red", "orange", "gold", "green", "blue", "purple"]</code></div><div class="tipp verborgen" id="t7-1-1"><span class="tnr">Tipp 2</span><code>len(farben)</code> liefert die Anzahl. Der Drehwinkel ist <code>360 / len(farben)</code>.</div><div class="tipp verborgen" id="t7-1-2"><span class="tnr">Tipp 3</span>Mit <code>for i in range(len(farben)):</code> hast du sowohl den Zähler <code>i</code> als auch über <code>farben[i]</code> den Wert.</div><div class="loesung verborgen" id="l7-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+farben = [&quot;red&quot;, &quot;orange&quot;, &quot;gold&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;purple&quot;]
+
+turtle.pensize(6)
+turtle.speed(0)
+
+anzahl = len(farben)            # Anzahl der Elemente bestimmen
+winkel = 360 / anzahl
+
+for i in range(anzahl):
+    turtle.pencolor(farben[i])  # Element an der Stelle i zurueckgeben
+    turtle.forward(120)
+    turtle.backward(120)
+    turtle.right(winkel)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p>Der Schlüssel ist <code>len(farben)</code>: Das Programm passt sich
+            automatisch an die Listenlänge an. Füge eine siebte Farbe hinzu — die Grafik
+            stimmt weiterhin, ohne dass du eine Zahl änderst.</p>
+            <p>Das ist der Unterschied zwischen <em>Daten</em> (die Liste) und <em>Algorithmus</em>
+            (die Schleife). Der Algorithmus bleibt gleich, die Daten dürfen sich ändern.</p></div></article><article class="auf" id="a7-2" data-stufe="basis"><div class="aufkopf"><span class="aid">7.2</span><h5>Aufbau beschreiben</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist <code>werte = [40, 90, 25, 130, 60]</code>.</p>
+            <p>Beantworte <strong>ohne Computer</strong>:</p>
+            <ol class="kompakt">
+              <li>Wie viele Elemente hat die Liste?</li>
+              <li>Welchen Wert hat <code>werte[2]</code>?</li>
+              <li>An welcher Stelle steht die 130?</li>
+              <li>Was liefert <code>werte[len(werte) - 1]</code>?</li>
+              <li>Was passiert bei <code>werte[5]</code>?</li>
+              <li>Wie sieht die Liste nach <code>werte.append(75)</code> aus?</li>
+              <li>Und danach nach <code>del werte[0]</code>?</li>
+              <li>Und danach nach <code>werte[1] = 999</code>?</li>
+            </ol>
+            <p>Prüfe deine Antworten anschließend mit <code>print()</code>.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l7-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-2-0"><span class="tnr">Tipp 1</span>Schreibe die Liste als Kästchenreihe auf und trage die Indizes 0, 1, 2, … darunter ein.</div><div class="tipp verborgen" id="t7-2-1"><span class="tnr">Tipp 2</span>Führe die Operationen nacheinander auf deiner Skizze aus — jede verändert die Ausgangslage für die nächste.</div><div class="loesung verborgen" id="l7-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">werte = [40, 90, 25, 130, 60]
+
+print(len(werte))                 # 1) 5 Elemente
+print(werte[2])                   # 2) 25
+print(werte.index(130))           # 3) Stelle 3
+print(werte[len(werte) - 1])      # 4) 60 (das letzte Element)
+# print(werte[5])                 # 5) IndexError: list index out of range
+
+werte.append(75)
+print(werte)                      # 6) [40, 90, 25, 130, 60, 75]
+
+del werte[0]
+print(werte)                      # 7) [90, 25, 130, 60, 75]
+
+werte[1] = 999
+print(werte)                      # 8) [90, 999, 130, 60, 75]</pre></div><p>Punkt 7 ist der wichtigste: Nach dem Löschen von Stelle 0
+            <strong>rutschen alle Elemente nach vorn</strong>. Die 25 stand vorher an Stelle 2,
+            danach an Stelle 1. Genau deshalb überschreibt <code>werte[1] = 999</code> in
+            Schritt 8 die 25 und nicht die 90.</p>
+            <p class="hinweis">Diese Verschiebung ist die häufigste Fehlerquelle beim Löschen in
+            Schleifen — wer beim Durchlaufen einer Liste Elemente entfernt, überspringt
+            unbemerkt Elemente.</p></div></article><article class="auf" id="a7-3" data-stufe="standard"><div class="aufkopf"><span class="aid">7.3</span><h5>Balkendiagramm</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Stelle die Liste
+            <code>hoehen = [80, 140, 45, 190, 95, 120, 60]</code> als
+            <strong>Balkendiagramm</strong> dar.</p>
+            <p>Jeder Balken ist 40 breit, die Höhe entspricht dem Listenwert. Unter jeden Balken
+            schreibst du seine <strong>Stelle</strong> (0, 1, 2, …), über jeden Balken seinen
+            <strong>Wert</strong>.</p>
+            <p>Schreibe dafür eine Funktion <code>balken(x, hoehe, farbe)</code>.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-3-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-3-0"><span class="tnr">Tipp 1</span>Ein Balken ist ein gefülltes Rechteck: <code>begin_fill()</code> … <code>end_fill()</code>.</div><div class="tipp verborgen" id="t7-3-1"><span class="tnr">Tipp 2</span>Die x-Position des Balken Nummer <code>i</code>: <code>start_x + i * 45</code> (40 Breite + 5 Abstand).</div><div class="tipp verborgen" id="t7-3-2"><span class="tnr">Tipp 3</span>Für die Beschriftung brauchst du <code>str(i)</code> bzw. <code>str(hoehen[i])</code> — <code>write()</code> nimmt nur Text.</div><div class="tipp verborgen" id="t7-3-3"><span class="tnr">Tipp 4</span><code>turtle.write(text, align="center")</code> zentriert die Beschriftung über dem Punkt.</div><div class="loesung verborgen" id="l7-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+BREITE = 40
+LUECKE = 5
+BASIS_Y = -150
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def balken(x, hoehe, farbe):
+    &quot;&quot;&quot;Zeichnet einen gefuellten Balken mit der linken unteren Ecke bei (x, BASIS_Y).&quot;&quot;&quot;
+    gehe_zu(x, BASIS_Y)
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+
+start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
+
+for i in range(len(hoehen)):
+    x = start_x + i * (BREITE + LUECKE)
+    balken(x, hoehen[i], &quot;steelblue&quot;)
+
+    # Wert ueber den Balken
+    turtle.penup()
+    turtle.goto(x + BREITE / 2, BASIS_Y + hoehen[i] + 8)
+    turtle.write(str(hoehen[i]), align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;bold&quot;))
+
+    # Stelle unter den Balken
+    turtle.goto(x + BREITE / 2, BASIS_Y - 28)
+    turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;normal&quot;))
+
+# Grundlinie
+gehe_zu(start_x - 10, BASIS_Y)
+turtle.forward(len(hoehen) * (BREITE + LUECKE) + 10)
+
+turtle.hideturtle()
+turtle.update()
+turtle.done()</pre></div><p>Dieses Programm ist die <strong>Arbeitsgrundlage für den Rest des
+            Kapitels</strong> — hebe es gut auf. Jede Listenoperation, die du ab jetzt lernst,
+            wirst du an diesem Diagramm sichtbar machen.</p>
+            <p>Beachte die Trennung: <code>balken()</code> zeichnet, die Schleife im Hauptprogramm
+            steuert. Die Startposition wird aus <code>len(hoehen)</code> berechnet, damit das
+            Diagramm bei jeder Listenlänge zentriert bleibt.</p>
+            <p class="hinweis">Großgeschriebene Namen wie <code>BREITE</code> sind eine
+            Konvention für <em>Konstanten</em> — Werte, die sich während des Programmlaufs nicht
+            ändern sollen. Python erzwingt das nicht, aber alle halten sich daran.</p></div></article><article class="auf" id="a7-4" data-stufe="standard"><div class="aufkopf"><span class="aid">7.4</span><h5>Operationen sichtbar machen</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Erweitere dein Balkendiagramm aus 7.3. Führe nacheinander die folgenden
+            Operationen aus und zeichne das Diagramm nach <strong>jedem</strong> Schritt neu:</p>
+            <ol class="kompakt">
+              <li>hinten anfügen: 110</li>
+              <li>an Stelle 2 einfügen: 170</li>
+              <li>das Element an Stelle 0 ändern auf 30</li>
+              <li>das Element an Stelle 4 löschen</li>
+              <li>den Wert 45 löschen (nach Wert, nicht nach Stelle)</li>
+            </ol>
+            <p>Schreibe über jedes Diagramm, welche Operation gerade ausgeführt wurde, und die
+            aktuelle Anzahl der Elemente.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span>Schreibe eine Funktion <code>zeichne(liste, titel)</code>, die zuerst <code>turtle.clear()</code> aufruft und dann das ganze Diagramm neu zeichnet.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Nach jedem Neuzeichnen brauchst du eine Pause, sonst ist alles sofort vorbei: <code>import time</code> und <code>time.sleep(1.5)</code>.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span>Aufpassen bei Schritt 4 und 5: Nach dem Einfügen in Schritt 2 sind alle Stellen ab 2 um eins verschoben. Prüfe mit <code>print(liste)</code>, was tatsächlich in der Liste steht.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import time
+
+BREITE = 40
+LUECKE = 5
+BASIS_Y = -150
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def balken(x, hoehe, farbe):
+    gehe_zu(x, BASIS_Y)
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+
+def zeichne(liste, titel):
+    &quot;&quot;&quot;Zeichnet das komplette Diagramm neu.&quot;&quot;&quot;
+    turtle.clear()
+    start_x = -(len(liste) * (BREITE + LUECKE)) / 2
+
+    for i in range(len(liste)):
+        x = start_x + i * (BREITE + LUECKE)
+        balken(x, liste[i], &quot;steelblue&quot;)
+        turtle.penup()
+        turtle.goto(x + BREITE / 2, BASIS_Y + liste[i] + 8)
+        turtle.write(str(liste[i]), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;bold&quot;))
+        turtle.goto(x + BREITE / 2, BASIS_Y - 28)
+        turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;normal&quot;))
+
+    turtle.goto(0, 210)
+    turtle.write(titel, align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    turtle.goto(0, 185)
+    turtle.write(&quot;Anzahl der Elemente: &quot; + str(len(liste)),
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;normal&quot;))
+
+    turtle.update()
+    time.sleep(1.5)
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+turtle.hideturtle()
+
+hoehen = [80, 140, 45, 190, 95, 120, 60]
+zeichne(hoehen, &quot;Ausgangsliste&quot;)
+
+hoehen.append(110)
+zeichne(hoehen, &quot;append(110)  -  hinten anfuegen&quot;)
+
+hoehen.insert(2, 170)
+zeichne(hoehen, &quot;insert(2, 170)  -  an Stelle 2 einfuegen&quot;)
+
+hoehen[0] = 30
+zeichne(hoehen, &quot;hoehen[0] = 30  -  Element aendern&quot;)
+
+del hoehen[4]
+zeichne(hoehen, &quot;del hoehen[4]  -  nach Stelle loeschen&quot;)
+
+hoehen.remove(45)
+zeichne(hoehen, &quot;remove(45)  -  nach Wert loeschen&quot;)
+
+turtle.done()</pre></div><p>Der entscheidende Lerneffekt sitzt in Schritt 4 und 5:</p>
+            <ul class="kompakt">
+            <li>Nach <code>insert(2, 170)</code> lautet die Liste
+            [30, 140, 170, 45, 190, 95, 120, 60, 110]. An Stelle 4 steht jetzt die
+            <strong>190</strong>, nicht mehr die 95.</li>
+            <li><code>del liste[4]</code> löscht <em>nach der Stelle</em>,
+            <code>liste.remove(45)</code> löscht <em>nach dem Wert</em> — und zwar nur das
+            <em>erste</em> Vorkommen.</li>
+            </ul>
+            <p class="hinweis"><code>remove()</code> wirft einen <code>ValueError</code>, wenn der
+            Wert gar nicht vorkommt. Sicher ist:
+            <code>if 45 in hoehen: hoehen.remove(45)</code>.</p></div></article><article class="auf" id="a7-5" data-stufe="standard"><div class="aufkopf"><span class="aid">7.5</span><h5>Stelle zurückgeben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage per <code>numinput</code> einen Wert ab und suche ihn im
+            Balkendiagramm.</p>
+            <ul class="kompakt">
+              <li>Kommt der Wert vor: Färbe den zugehörigen Balken rot und schreibe darüber
+              „gefunden an Stelle <em>i</em>“.</li>
+              <li>Kommt er nicht vor: Schreibe „nicht in der Liste“.</li>
+            </ul>
+            <p>Löse die Aufgabe <strong>zweimal</strong>: einmal mit <code>index()</code> und
+            einmal mit einer selbst geschriebenen Suchschleife, die die Stelle zurückgibt.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-5-0"><span class="tnr">Tipp 1</span><code>liste.index(wert)</code> liefert die Stelle — stürzt aber ab, wenn der Wert fehlt. Sichere mit <code>if wert in liste:</code> ab.</div><div class="tipp verborgen" id="t7-5-1"><span class="tnr">Tipp 2</span>Eigene Suche: Laufe mit <code>for i in range(len(liste)):</code> durch und prüfe <code>if liste[i] == wert: return i</code>.</div><div class="tipp verborgen" id="t7-5-2"><span class="tnr">Tipp 3</span>Wenn die Schleife durchläuft, ohne etwas zu finden, gib <code>-1</code> zurück — das ist die übliche Kennzeichnung für „nicht gefunden“.</div><div class="loesung verborgen" id="l7-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+BREITE = 40
+LUECKE = 5
+BASIS_Y = -150
+
+hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def balken(x, hoehe, farbe):
+    gehe_zu(x, BASIS_Y)
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+
+def suche_stelle(liste, wert):
+    &quot;&quot;&quot;Liefert die Stelle des ersten Vorkommens - oder -1, falls nicht vorhanden.&quot;&quot;&quot;
+    for i in range(len(liste)):
+        if liste[i] == wert:
+            return i            # beendet die Funktion sofort
+    return -1                   # Schleife lief durch: nicht gefunden
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+turtle.hideturtle()
+
+fenster = turtle.Screen()
+gesucht = int(fenster.numinput(&quot;Suche&quot;, &quot;Welchen Wert suchen?&quot;, 190))
+
+# Variante A: eingebaute Operation
+if gesucht in hoehen:
+    stelle_a = hoehen.index(gesucht)
+else:
+    stelle_a = -1
+
+# Variante B: eigene Suchschleife
+stelle_b = suche_stelle(hoehen, gesucht)
+
+print(&quot;index():&quot;, stelle_a, &quot; eigene Suche:&quot;, stelle_b)
+
+# Diagramm zeichnen, Treffer hervorheben
+start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
+
+for i in range(len(hoehen)):
+    x = start_x + i * (BREITE + LUECKE)
+    if i == stelle_b:
+        balken(x, hoehen[i], &quot;crimson&quot;)
+    else:
+        balken(x, hoehen[i], &quot;lightsteelblue&quot;)
+    turtle.penup()
+    turtle.goto(x + BREITE / 2, BASIS_Y - 28)
+    turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;normal&quot;))
+
+turtle.goto(0, 200)
+if stelle_b == -1:
+    turtle.write(str(gesucht) + &quot; ist nicht in der Liste&quot;,
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+else:
+    turtle.write(str(gesucht) + &quot; gefunden an Stelle &quot; + str(stelle_b),
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+
+turtle.update()
+turtle.done()</pre></div><p>Die selbst geschriebene Funktion <code>suche_stelle()</code> ist
+            die <strong>lineare Suche</strong> — der einfachste Suchalgorithmus überhaupt.
+            Beide Varianten liefern dasselbe Ergebnis; <code>index()</code> ist nur die fertig
+            eingebaute Version.</p>
+            <p>Zwei Feinheiten:</p>
+            <ul class="kompakt">
+            <li><code>return</code> beendet die Funktion <em>sofort</em>. Die Schleife läuft nach
+            einem Treffer nicht weiter — deshalb wird die Stelle des <em>ersten</em> Vorkommens
+            geliefert.</li>
+            <li>Das <code>return -1</code> steht <strong>außerhalb</strong> der Schleife. Innerhalb
+            würde es schon nach dem ersten Vergleich zurückkehren — ein sehr häufiger Fehler.</li>
+            </ul></div></article><article class="auf" id="a7-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.6</span><h5>Maximum ohne max()</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Bestimme das größte Element der Liste — <strong>ohne</strong> die
+            eingebaute Funktion <code>max()</code>.</p>
+            <p>Schreibe eine Funktion <code>groesste_stelle(liste)</code>, die die <em>Stelle</em>
+            des größten Elements zurückgibt. Färbe den entsprechenden Balken grün und zeichne
+            eine gestrichelte Hilfslinie auf seiner Höhe quer durch das Diagramm.</p>
+            <p><strong>Zusatzfrage:</strong> Warum ist es besser, die <em>Stelle</em>
+            zurückzugeben statt des Werts?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-6-0"><span class="tnr">Tipp 1</span>Idee: Nimm an, das erste Element sei das größte (<code>beste = 0</code>). Vergleiche dann jedes weitere damit.</div><div class="tipp verborgen" id="t7-6-1"><span class="tnr">Tipp 2</span><code>if liste[i] > liste[beste]: beste = i</code> — du merkst dir die Stelle, nicht den Wert.</div><div class="tipp verborgen" id="t7-6-2"><span class="tnr">Tipp 3</span>Die Schleife kann bei 1 starten: <code>for i in range(1, len(liste))</code>, weil Stelle 0 schon der Startwert ist.</div><div class="tipp verborgen" id="t7-6-3"><span class="tnr">Tipp 4</span>Gestrichelte Linie: eine Schleife mit abwechselnd <code>pendown()</code> und <code>penup()</code> — wie in Aufgabe 4.2.</div><div class="loesung verborgen" id="l7-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+BREITE = 40
+LUECKE = 5
+BASIS_Y = -150
+
+hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def balken(x, hoehe, farbe):
+    gehe_zu(x, BASIS_Y)
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+
+def groesste_stelle(liste):
+    &quot;&quot;&quot;Liefert die Stelle des groessten Elements.&quot;&quot;&quot;
+    beste = 0                               # Annahme: das erste ist das groesste
+    for i in range(1, len(liste)):
+        if liste[i] &gt; liste[beste]:
+            beste = i                       # neue beste Stelle merken
+    return beste
+
+
+def gestrichelt(x1, x2, y):
+    &quot;&quot;&quot;Zeichnet eine gestrichelte waagerechte Linie.&quot;&quot;&quot;
+    gehe_zu(x1, y)
+    schritte = int((x2 - x1) / 10)
+    for i in range(schritte):
+        if i % 2 == 0:
+            turtle.pendown()
+        else:
+            turtle.penup()
+        turtle.forward(10)
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+turtle.hideturtle()
+
+max_stelle = groesste_stelle(hoehen)
+max_wert = hoehen[max_stelle]
+
+start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
+
+for i in range(len(hoehen)):
+    x = start_x + i * (BREITE + LUECKE)
+    if i == max_stelle:
+        balken(x, hoehen[i], &quot;seagreen&quot;)
+    else:
+        balken(x, hoehen[i], &quot;lightsteelblue&quot;)
+
+turtle.pencolor(&quot;seagreen&quot;)
+turtle.pensize(1)
+gestrichelt(start_x - 20, start_x + len(hoehen) * (BREITE + LUECKE) + 20,
+            BASIS_Y + max_wert)
+
+turtle.penup()
+turtle.goto(0, 200)
+turtle.pencolor(&quot;black&quot;)
+turtle.write(&quot;Maximum: &quot; + str(max_wert) + &quot; an Stelle &quot; + str(max_stelle),
+             align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+
+turtle.update()
+turtle.done()</pre></div><p>Das Muster heißt <strong>„bester Kandidat“</strong> und begegnet dir
+            in vielen Algorithmen wieder: Man merkt sich einen vorläufigen Sieger und ersetzt
+            ihn, sobald ein besserer auftaucht.</p>
+            <p><strong>Zur Zusatzfrage:</strong> Mit der Stelle kannst du beides —
+            <code>liste[stelle]</code> liefert den Wert. Umgekehrt geht es nicht zuverlässig:
+            Kommt der Maximalwert doppelt vor, weißt du nicht, welcher gemeint war. Außerdem
+            brauchst du die Stelle, um den richtigen Balken einzufärben.</p>
+            <p class="hinweis">Genau diese Funktion ist der Kern des Sortierverfahrens in
+            Aufgabe 8.2 — dort suchst du wiederholt das Minimum eines Restbereichs.</p></div></article><article class="auf" id="a7-7" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.7</span><h5>Zwei Listen parallel</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zwei Listen können zusammengehörige Daten speichern. Gegeben:</p>
+            <pre class="code">x_werte = [-250, -180, -110, -40, 30, 100, 170, 240]
+y_werte = [ -80,   40,  120,  90, -30, -110, 60, 150]</pre>
+            <p><strong>a)</strong> Zeichne die Punkte als Polygonzug (Linienplot) mit einem
+            Marker an jeder Stelle.<br>
+            <strong>b)</strong> Färbe Punkte oberhalb der x-Achse grün, Punkte unterhalb rot.<br>
+            <strong>c)</strong> Beschrifte jeden Punkt mit seiner Stelle.<br>
+            <strong>d)</strong> Prüfe zu Beginn, ob beide Listen gleich lang sind, und brich mit
+            einer Meldung ab, falls nicht.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-7-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-7-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-7-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-7" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-7-0"><span class="tnr">Tipp 1</span>Beide Listen werden mit <em>demselben</em> Index angesprochen: <code>x_werte[i]</code> und <code>y_werte[i]</code> gehören zusammen.</div><div class="tipp verborgen" id="t7-7-1"><span class="tnr">Tipp 2</span>Für die Längenprüfung: <code>if len(x_werte) != len(y_werte):</code>.</div><div class="tipp verborgen" id="t7-7-2"><span class="tnr">Tipp 3</span>Zeichne zuerst den kompletten Linienzug, dann in einer zweiten Schleife die Marker — sonst überzeichnen die Linien die Punkte.</div><div class="loesung verborgen" id="l7-7"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+x_werte = [-250, -180, -110, -40, 30, 100, 170, 240]
+y_werte = [-80, 40, 120, 90, -30, -110, 60, 150]
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.hideturtle()
+
+# d) Plausibilitaetspruefung
+if len(x_werte) != len(y_werte):
+    turtle.write(&quot;Fehler: Die Listen sind unterschiedlich lang!&quot;,
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    turtle.done()
+else:
+    anzahl = len(x_werte)
+
+    # Achsen
+    turtle.pensize(1)
+    turtle.pencolor(&quot;gray&quot;)
+    turtle.penup()
+    turtle.goto(-290, 0)
+    turtle.pendown()
+    turtle.goto(290, 0)
+    turtle.penup()
+    turtle.goto(0, -200)
+    turtle.pendown()
+    turtle.goto(0, 200)
+
+    # a) Linienzug
+    turtle.pensize(3)
+    turtle.pencolor(&quot;darkslateblue&quot;)
+    turtle.penup()
+    turtle.goto(x_werte[0], y_werte[0])
+    turtle.pendown()
+    for i in range(1, anzahl):
+        turtle.goto(x_werte[i], y_werte[i])
+
+    # b) + c) Marker und Beschriftung
+    turtle.penup()
+    for i in range(anzahl):
+        turtle.goto(x_werte[i], y_werte[i])
+
+        if y_werte[i] &gt; 0:
+            turtle.dot(14, &quot;seagreen&quot;)
+        else:
+            turtle.dot(14, &quot;crimson&quot;)
+
+        turtle.goto(x_werte[i], y_werte[i] + 14)
+        turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;bold&quot;))
+
+    turtle.update()
+    turtle.done()</pre></div><p>Zwei <strong>parallele Listen</strong> speichern eine Beziehung
+            über den gemeinsamen Index: Der Punkt Nummer <em>i</em> hat die Koordinaten
+            (<code>x_werte[i]</code>, <code>y_werte[i]</code>).</p>
+            <p>Das funktioniert, hat aber eine Schwachstelle — die beiden Listen können
+            auseinanderlaufen. Deshalb die Prüfung in Teil d). In der Praxis nimmt man dafür
+            später eine Liste von Paaren:
+            <code>punkte = [(-250, -80), (-180, 40), ...]</code>.</p>
+            <p class="hinweis">Der Linienzug beginnt bei <code>range(1, anzahl)</code>, weil der
+            erste Punkt schon angefahren wurde — sonst würde eine Linie vom Ursprung aus
+            gezeichnet.</p></div></article></section><section class="kap" id="k8"><div class="kaphead"><div class="knr">8</div><div><h3>Projekt: Suchen und Sortieren sichtbar machen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Anwendung aller Bausteine - Anregung des Rahmenplans, ohne Laufzeituntersuchungen.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>einen vorgegebenen Algorithmus auf einer linearen Liste implementieren</li><li>den Ablauf eines Algorithmus schrittweise visualisieren</li><li>alle bisherigen Kontrollstrukturen in einem größeren Programm kombinieren</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+<p>In diesem Kapitel kommt nichts grundsätzlich Neues hinzu. Alles, was du brauchst, hast du
+schon: Sequenz, Verzweigung, Wiederholung, Funktionen und Listen.</p>
+<p>Neu ist nur die <strong>Arbeitsweise</strong>: Ein Algorithmus wird vorgegeben, und du setzt
+ihn um — statt dir selbst einen auszudenken.</p>
+<div class="sg">
+  <div class="sg-row"><strong>Lineare Suche</strong> (gegebener Algorithmus)</div>
+  <div class="sg-row">i ← 0, gefunden ← falsch</div>
+  <div class="sg-loop"><div class="sg-loop-head">solange i &lt; Anzahl und nicht gefunden</div>
+    <div class="sg-loop-body">
+      <div class="sg-if">
+        <div class="sg-if-head"><span class="sg-cond">liste[i] == gesucht</span>
+        <span class="sg-ja">ja</span><span class="sg-nein">nein</span></div>
+        <div class="sg-if-body"><div class="sg-branch"><div class="sg-row">gefunden ← wahr</div></div>
+        <div class="sg-branch"><div class="sg-row">i ← i + 1</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<p><strong>Minimum-Sortieren (Selectionsort)</strong> in Worten: Suche das kleinste Element im
+noch unsortierten Rest, tausche es an den Anfang dieses Restbereichs, rücke die Grenze um
+eins weiter. Wiederhole, bis der Rest nur noch ein Element hat.</p>
+<pre class="code">liste[a], liste[b] = liste[b], liste[a]    # Tausch in einer Zeile</pre>
+<p class="hinweis">Laufzeituntersuchungen sind hier <em>nicht</em> Gegenstand. Es geht um das
+Verstehen und Implementieren eines vorgegebenen Ablaufs, nicht um Effizienz.</p>
+</div><article class="auf" id="a8-1" data-stufe="standard"><div class="aufkopf"><span class="aid">8.1</span><h5>Lineare Suche animiert</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Implementiere das Struktogramm der linearen Suche aus dem Merkkasten
+            und animiere sie:</p>
+            <ul class="kompakt">
+              <li>Der gerade geprüfte Balken wird gelb.</li>
+              <li>Bereits geprüfte Balken werden grau.</li>
+              <li>Der Treffer wird grün.</li>
+              <li>Nach jedem Schritt eine kurze Pause und eine Zählanzeige „Vergleiche: <em>n</em>“.</li>
+            </ul></div><div class="knopfleiste"><button type="button" data-ziel="t8-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-1-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l8-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-1-0"><span class="tnr">Tipp 1</span>Verwende <code>while i &lt; len(liste) and not gefunden:</code> — genau wie im Struktogramm.</div><div class="tipp verborgen" id="t8-1-1"><span class="tnr">Tipp 2</span>Zum Animieren: nach jedem Schritt <code>turtle.update()</code> und <code>time.sleep(0.4)</code>.</div><div class="tipp verborgen" id="t8-1-2"><span class="tnr">Tipp 3</span>Zeichne nicht alles neu, sondern übermale nur den aktuellen Balken mit der neuen Farbe.</div><div class="loesung verborgen" id="l8-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import time
+
+BREITE = 40
+LUECKE = 5
+BASIS_Y = -150
+
+werte = [80, 140, 45, 190, 95, 120, 60, 155]
+START_X = -(len(werte) * (BREITE + LUECKE)) / 2
+
+
+def gehe_zu(x, y):
+    turtle.penup()
+    turtle.goto(x, y)
+    turtle.setheading(0)
+    turtle.pendown()
+
+
+def balken(stelle, hoehe, farbe):
+    &quot;&quot;&quot;Zeichnet den Balken an der angegebenen Stelle.&quot;&quot;&quot;
+    x = START_X + stelle * (BREITE + LUECKE)
+    gehe_zu(x, BASIS_Y)
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+    turtle.penup()
+    turtle.goto(x + BREITE / 2, BASIS_Y - 28)
+    turtle.write(str(stelle), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;normal&quot;))
+
+
+def status(text):
+    &quot;&quot;&quot;Ueberschreibt die Statuszeile am oberen Rand.&quot;&quot;&quot;
+    turtle.penup()
+    turtle.goto(-290, 195)
+    turtle.pendown()
+    turtle.fillcolor(&quot;white&quot;)
+    turtle.pencolor(&quot;white&quot;)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(580)
+        turtle.left(90)
+        turtle.forward(40)
+        turtle.left(90)
+    turtle.end_fill()
+
+    turtle.pencolor(&quot;black&quot;)
+    turtle.penup()
+    turtle.goto(0, 205)
+    turtle.write(text, align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+turtle.hideturtle()
+
+for s in range(len(werte)):
+    balken(s, werte[s], &quot;lightsteelblue&quot;)
+turtle.update()
+
+fenster = turtle.Screen()
+gesucht = int(fenster.numinput(&quot;Lineare Suche&quot;, &quot;Welchen Wert suchen?&quot;, 95))
+
+# --- Algorithmus laut Struktogramm ---
+i = 0
+gefunden = False
+vergleiche = 0
+
+while i &lt; len(werte) and not gefunden:
+    balken(i, werte[i], &quot;gold&quot;)             # aktueller Kandidat
+    vergleiche = vergleiche + 1
+    status(&quot;Vergleiche: &quot; + str(vergleiche) + &quot;   -   pruefe Stelle &quot; + str(i))
+    turtle.update()
+    time.sleep(0.5)
+
+    if werte[i] == gesucht:
+        gefunden = True
+        balken(i, werte[i], &quot;seagreen&quot;)
+    else:
+        balken(i, werte[i], &quot;gainsboro&quot;)    # abgehakt
+        i = i + 1
+
+turtle.update()
+
+if gefunden:
+    status(str(gesucht) + &quot; gefunden an Stelle &quot; + str(i)
+           + &quot;   -   &quot; + str(vergleiche) + &quot; Vergleiche&quot;)
+else:
+    status(str(gesucht) + &quot; nicht gefunden   -   &quot;
+           + str(vergleiche) + &quot; Vergleiche&quot;)
+
+turtle.update()
+turtle.done()</pre></div><p>Die Schleifenbedingung <code>i &lt; len(werte) and not
+            gefunden</code> vereint beide Abbruchgründe: <em>Liste zu Ende</em> oder
+            <em>Treffer</em>. Sie ist eine wörtliche Übersetzung des Struktogramms.</p>
+            <p>Beachte, dass <code>i</code> nur im <code>else</code>-Zweig erhöht wird. Beim
+            Treffer bleibt <code>i</code> stehen — und genau deshalb enthält es hinterher die
+            gesuchte Stelle.</p>
+            <p class="hinweis">Warum <code>not gefunden</code> und nicht
+            <code>gefunden == False</code>? Beides ist korrekt; die erste Form ist kürzer und
+            liest sich wie der Text des Struktogramms.</p></div></article><article class="auf" id="a8-2" data-stufe="standard"><div class="aufkopf"><span class="aid">8.2</span><h5>Minimum-Sortieren visualisiert</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Implementiere das <strong>Minimum-Sortieren</strong> und zeichne die
+            Liste nach jedem Tausch neu.</p>
+            <p>Der Algorithmus ist vorgegeben:</p>
+            <ol class="kompakt">
+              <li>Für jede Stelle <em>k</em> von 0 bis Anzahl − 2:</li>
+              <li>Suche im Bereich ab <em>k</em> die Stelle des kleinsten Elements.</li>
+              <li>Tausche dieses Element mit dem an der Stelle <em>k</em>.</li>
+            </ol>
+            <p>Färbe den bereits sortierten Anfangsbereich grün, den gerade betrachteten Bereich
+            blau und das aktuelle Minimum orange.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-2-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-2-0"><span class="tnr">Tipp 1</span>Für Schritt 2 kannst du deine Funktion aus Aufgabe 7.6 anpassen: <code>kleinste_stelle(liste, ab)</code> mit einem zusätzlichen Startparameter.</div><div class="tipp verborgen" id="t8-2-1"><span class="tnr">Tipp 2</span>Tauschen geht in Python in einer Zeile: <code>liste[k], liste[m] = liste[m], liste[k]</code>.</div><div class="tipp verborgen" id="t8-2-2"><span class="tnr">Tipp 3</span>Schreibe eine Funktion <code>zeichne(liste, k, m)</code>, die alles neu malt und dabei die Farben nach <code>k</code> und <code>m</code> auswählt.</div><div class="tipp verborgen" id="t8-2-3"><span class="tnr">Tipp 4</span>Die äußere Schleife läuft bis <code>len(liste) - 1</code>: Wenn alle bis auf das letzte Element sortiert sind, ist auch das letzte am richtigen Platz.</div><div class="loesung verborgen" id="l8-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import time
+import random
+
+BREITE = 34
+LUECKE = 5
+BASIS_Y = -150
+
+werte = []
+for i in range(12):
+    werte.append(random.randint(30, 200))
+
+START_X = -(len(werte) * (BREITE + LUECKE)) / 2
+
+
+def zeichne(liste, k, m):
+    &quot;&quot;&quot;Zeichnet das Diagramm. k = Grenze des sortierten Bereichs, m = aktuelles Minimum.&quot;&quot;&quot;
+    turtle.clear()
+
+    for s in range(len(liste)):
+        if s &lt; k:
+            farbe = &quot;seagreen&quot;          # schon sortiert
+        elif s == m:
+            farbe = &quot;darkorange&quot;        # aktuelles Minimum
+        else:
+            farbe = &quot;steelblue&quot;         # noch unsortiert
+
+        x = START_X + s * (BREITE + LUECKE)
+        turtle.penup()
+        turtle.goto(x, BASIS_Y)
+        turtle.setheading(0)
+        turtle.pendown()
+        turtle.fillcolor(farbe)
+        turtle.begin_fill()
+        for i in range(2):
+            turtle.forward(BREITE)
+            turtle.left(90)
+            turtle.forward(liste[s])
+            turtle.left(90)
+        turtle.end_fill()
+
+        turtle.penup()
+        turtle.goto(x + BREITE / 2, BASIS_Y + liste[s] + 6)
+        turtle.write(str(liste[s]), align=&quot;center&quot;, font=(&quot;Arial&quot;, 9, &quot;normal&quot;))
+
+    turtle.goto(0, 205)
+    turtle.write(&quot;Minimum-Sortieren   -   sortiert bis Stelle &quot; + str(k),
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    turtle.update()
+    time.sleep(0.6)
+
+
+def kleinste_stelle(liste, ab):
+    &quot;&quot;&quot;Liefert die Stelle des kleinsten Elements ab der Stelle &#x27;ab&#x27;.&quot;&quot;&quot;
+    beste = ab
+    for i in range(ab + 1, len(liste)):
+        if liste[i] &lt; liste[beste]:
+            beste = i
+    return beste
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(1)
+turtle.hideturtle()
+
+zeichne(werte, 0, -1)
+
+# --- Minimum-Sortieren ---
+for k in range(len(werte) - 1):
+    m = kleinste_stelle(werte, k)
+    zeichne(werte, k, m)                    # Minimum hervorheben
+
+    werte[k], werte[m] = werte[m], werte[k]  # tauschen
+    zeichne(werte, k + 1, -1)               # nach dem Tausch
+
+zeichne(werte, len(werte), -1)
+
+turtle.penup()
+turtle.goto(0, 175)
+turtle.write(&quot;fertig sortiert&quot;, align=&quot;center&quot;, font=(&quot;Arial&quot;, 12, &quot;italic&quot;))
+turtle.update()
+turtle.done()</pre></div><p>Der Algorithmus besteht aus zwei ineinandergeschachtelten
+            Durchläufen — genau wie die Rosette aus Aufgabe 3.4, nur dass hier Daten statt
+            Striche verarbeitet werden.</p>
+            <p>Die Hilfsfunktion <code>kleinste_stelle(liste, ab)</code> ist eine direkte
+            Verallgemeinerung deiner Maximum-Funktion aus 7.6: Sie sucht nicht mehr in der
+            ganzen Liste, sondern nur noch im Restbereich ab <code>ab</code>.</p>
+            <p><strong>Warum läuft die äußere Schleife nur bis <code>len(werte) - 1</code>?</strong>
+            Sind die ersten <em>n</em> − 1 Elemente sortiert, muss das größte automatisch ganz
+            hinten stehen. Der letzte Durchlauf wäre reine Verschwendung.</p>
+            <p class="hinweis">Der Tausch <code>a, b = b, a</code> ist eine Python-Besonderheit.
+            In den meisten anderen Sprachen braucht man eine Hilfsvariable:
+            <code>h = liste[k]; liste[k] = liste[m]; liste[m] = h</code>. Lass die Schüler
+            beide Varianten schreiben — das schärft das Verständnis für Zuweisungen.</p></div></article><article class="auf" id="a8-3" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">8.3</span><h5>Bubblesort im Vergleich</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Implementiere zusätzlich das <strong>Bubblesort</strong>-Verfahren:</p>
+            <ol class="kompakt">
+              <li>Gehe die Liste von vorn bis zum vorletzten Element durch.</li>
+              <li>Ist ein Element größer als sein rechter Nachbar, tausche beide.</li>
+              <li>Wiederhole den Durchgang, bis in einem kompletten Durchgang kein Tausch mehr
+              nötig war.</li>
+            </ol>
+            <p>Zähle die Tausche mit und zeige sie an. Vergleiche das Verhalten mit dem
+            Minimum-Sortieren aus 8.2 — <em>beobachtend</em>, ohne Laufzeitmessung.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l8-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-3-0"><span class="tnr">Tipp 1</span>Punkt 3 verlangt eine <code>while</code>-Schleife mit einer Merkvariablen: <code>getauscht = True</code> vor der Schleife, im Durchgang auf <code>False</code> setzen und bei jedem Tausch wieder auf <code>True</code>.</div><div class="tipp verborgen" id="t8-3-1"><span class="tnr">Tipp 2</span>Der Vergleich ist <code>if liste[i] > liste[i + 1]:</code> — deshalb darf <code>i</code> nur bis <code>len(liste) - 2</code> laufen.</div><div class="tipp verborgen" id="t8-3-2"><span class="tnr">Tipp 3</span>Für die Animation reicht es, nach jedem Tausch neu zu zeichnen — sonst wird es sehr langsam.</div><div class="loesung verborgen" id="l8-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+import time
+import random
+
+BREITE = 34
+LUECKE = 5
+BASIS_Y = -150
+
+werte = []
+for i in range(12):
+    werte.append(random.randint(30, 200))
+
+START_X = -(len(werte) * (BREITE + LUECKE)) / 2
+
+
+def zeichne(liste, a, b, tausche, durchgang):
+    &quot;&quot;&quot;a und b sind die gerade verglichenen Stellen.&quot;&quot;&quot;
+    turtle.clear()
+
+    for s in range(len(liste)):
+        if s == a or s == b:
+            farbe = &quot;darkorange&quot;
+        else:
+            farbe = &quot;steelblue&quot;
+
+        x = START_X + s * (BREITE + LUECKE)
+        turtle.penup()
+        turtle.goto(x, BASIS_Y)
+        turtle.setheading(0)
+        turtle.pendown()
+        turtle.fillcolor(farbe)
+        turtle.begin_fill()
+        for i in range(2):
+            turtle.forward(BREITE)
+            turtle.left(90)
+            turtle.forward(liste[s])
+            turtle.left(90)
+        turtle.end_fill()
+
+    turtle.penup()
+    turtle.goto(0, 205)
+    turtle.write(&quot;Bubblesort   -   Durchgang &quot; + str(durchgang)
+                 + &quot;,  Tausche: &quot; + str(tausche),
+                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    turtle.update()
+    time.sleep(0.25)
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(1)
+turtle.hideturtle()
+
+tausche = 0
+durchgang = 0
+getauscht = True
+
+while getauscht:
+    getauscht = False
+    durchgang = durchgang + 1
+
+    for i in range(len(werte) - 1):
+        if werte[i] &gt; werte[i + 1]:
+            werte[i], werte[i + 1] = werte[i + 1], werte[i]
+            tausche = tausche + 1
+            getauscht = True
+            zeichne(werte, i, i + 1, tausche, durchgang)
+
+zeichne(werte, -1, -1, tausche, durchgang)
+
+turtle.penup()
+turtle.goto(0, 175)
+turtle.write(&quot;fertig nach &quot; + str(durchgang) + &quot; Durchgaengen und &quot;
+             + str(tausche) + &quot; Tauschen&quot;,
+             align=&quot;center&quot;, font=(&quot;Arial&quot;, 12, &quot;italic&quot;))
+turtle.update()
+turtle.done()</pre></div><p>Der Unterschied zum Minimum-Sortieren ist gut zu sehen:</p>
+            <ul class="kompakt">
+            <li><strong>Minimum-Sortieren</strong> braucht immer genau <em>n</em> − 1 Tausche —
+            wenige, aber viele Vergleiche.</li>
+            <li><strong>Bubblesort</strong> tauscht sehr oft; große Werte „blubbern“ sichtbar nach
+            rechts. Bei einer fast sortierten Liste ist es dagegen nach einem Durchgang fertig.</li>
+            </ul>
+            <p>Die Merkvariable <code>getauscht</code> ist das eigentlich Interessante: Sie macht
+            die Abbruchbedingung <em>datenabhängig</em> statt fest. Deshalb braucht man hier
+            <code>while</code> und nicht <code>for</code>.</p>
+            <p class="hinweis">Der Rahmenplan schließt Laufzeituntersuchungen ausdrücklich aus —
+            der Vergleich bleibt also qualitativ und beobachtend. Wer mag, kann die Tauschzahlen
+            notieren; eine O-Notation ist hier nicht das Ziel.</p></div></article><article class="auf" id="a8-4" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">8.4</span><h5>Abschlussprojekt</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Entwickle ein eigenes Turtle-Programm, das alle Bausteine der Reihe
+            verwendet. Pflichtkriterien:</p>
+            <ul class="kompakt">
+              <li>mindestens eine <strong>Liste</strong>, die die Grafik steuert,</li>
+              <li>mindestens zwei eigene <strong>Funktionen</strong>, davon eine mit Rückgabewert,</li>
+              <li>mindestens eine <strong>Verzweigung</strong> und eine <strong>Schleife</strong>,</li>
+              <li>mindestens eine <strong>Benutzereingabe</strong> mit Typkonvertierung,</li>
+              <li>ein <strong>Struktogramm</strong> des Hauptprogramms als Abgabe auf Papier.</li>
+            </ul>
+            <p><strong>Ideen:</strong> Wetterdiagramm aus Monatswerten · Stundenplan-Grafik ·
+            Notenspiegel als Säulendiagramm · Sternenhimmel aus einer Koordinatenliste ·
+            Mandala-Generator mit Farbliste · animiertes Ziffernblatt.</p>
+            <p><em>Bewertet werden:</em> Erfüllung der Kriterien, Lesbarkeit (Namen, Kommentare,
+            Zerlegung) und die Übereinstimmung von Struktogramm und Programm.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-4-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-4-0"><span class="tnr">Tipp 1</span>Fang mit dem Struktogramm an, nicht mit dem Code. Wer zuerst plant, tippt hinterher deutlich weniger um.</div><div class="tipp verborgen" id="t8-4-1"><span class="tnr">Tipp 2</span>Halte die Datenliste ganz oben im Programm — dann sieht man sofort, womit gearbeitet wird.</div><div class="tipp verborgen" id="t8-4-2"><span class="tnr">Tipp 3</span>Teste jede Funktion einzeln, sobald du sie geschrieben hast. Ein Programm, das man erst am Ende zum ersten Mal startet, ist schwer zu reparieren.</div><div class="tipp verborgen" id="t8-4-3"><span class="tnr">Tipp 4</span>Wenn du nicht weiterkommst: Vereinfache. Ein sauberes kleines Programm ist mehr wert als ein großes, das nicht läuft.</div><div class="loesung verborgen" id="l8-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+
+# ---------------------------------------------------------------
+# BEISPIELLOESUNG: Notenspiegel
+# Erfuellt alle Kriterien und dient als Orientierung, nicht als Vorlage
+# zum Abschreiben.
+# ---------------------------------------------------------------
+
+noten = [1, 2, 2, 3, 1, 4, 2, 3, 5, 2, 1, 3, 4, 2, 6, 3, 2, 1]
+
+FARBEN = [&quot;seagreen&quot;, &quot;yellowgreen&quot;, &quot;gold&quot;, &quot;orange&quot;, &quot;orangered&quot;, &quot;crimson&quot;]
+BREITE = 60
+BASIS_Y = -150
+
+
+def zaehle(liste, note):
+    &quot;&quot;&quot;Liefert zurueck, wie oft eine Note vorkommt (Funktion MIT Rueckgabewert).&quot;&quot;&quot;
+    anzahl = 0
+    for wert in liste:
+        if wert == note:
+            anzahl = anzahl + 1
+    return anzahl
+
+
+def durchschnitt(liste):
+    &quot;&quot;&quot;Liefert den Notendurchschnitt (Funktion MIT Rueckgabewert).&quot;&quot;&quot;
+    summe = 0
+    for wert in liste:
+        summe = summe + wert
+    return summe / len(liste)
+
+
+def saeule(x, hoehe, farbe, beschriftung):
+    &quot;&quot;&quot;Zeichnet eine beschriftete Saeule (Funktion OHNE Rueckgabewert).&quot;&quot;&quot;
+    turtle.penup()
+    turtle.goto(x, BASIS_Y)
+    turtle.setheading(0)
+    turtle.pendown()
+    turtle.fillcolor(farbe)
+    turtle.begin_fill()
+    for i in range(2):
+        turtle.forward(BREITE)
+        turtle.left(90)
+        turtle.forward(hoehe)
+        turtle.left(90)
+    turtle.end_fill()
+
+    turtle.penup()
+    turtle.goto(x + BREITE / 2, BASIS_Y - 30)
+    turtle.write(beschriftung, align=&quot;center&quot;, font=(&quot;Arial&quot;, 12, &quot;bold&quot;))
+
+
+turtle.speed(0)
+turtle.tracer(0)
+turtle.pensize(2)
+turtle.hideturtle()
+
+# Benutzereingabe mit Typkonvertierung
+fenster = turtle.Screen()
+skala = int(fenster.numinput(&quot;Notenspiegel&quot;, &quot;Hoehe pro Schueler (Pixel)?&quot;, 30))
+
+# Hauptschleife ueber die sechs Noten
+for note in range(1, 7):
+    haeufigkeit = zaehle(noten, note)
+    x = -300 + (note - 1) * (BREITE + 20)
+
+    # Verzweigung: leere Saeulen nur andeuten
+    if haeufigkeit == 0:
+        saeule(x, 3, &quot;lightgray&quot;, str(note))
+    else:
+        saeule(x, haeufigkeit * skala, FARBEN[note - 1], str(note))
+        turtle.penup()
+        turtle.goto(x + BREITE / 2, BASIS_Y + haeufigkeit * skala + 8)
+        turtle.write(str(haeufigkeit) + &quot;x&quot;, align=&quot;center&quot;,
+                     font=(&quot;Arial&quot;, 11, &quot;normal&quot;))
+
+# Kopfzeile mit dem Rueckgabewert der zweiten Funktion
+turtle.penup()
+turtle.goto(0, 210)
+turtle.write(&quot;Notenspiegel  -  &quot; + str(len(noten)) + &quot; Schueler,  Schnitt &quot;
+             + str(round(durchschnitt(noten), 2)),
+             align=&quot;center&quot;, font=(&quot;Arial&quot;, 15, &quot;bold&quot;))
+
+turtle.update()
+turtle.done()</pre></div><p>Diese Beispiellösung erfüllt alle Kriterien:</p>
+            <ul class="kompakt">
+            <li><strong>Liste:</strong> <code>noten</code> steuert die gesamte Grafik; die
+            zweite Liste <code>FARBEN</code> liefert die Einfärbung.</li>
+            <li><strong>Funktionen:</strong> <code>zaehle()</code> und
+            <code>durchschnitt()</code> mit Rückgabewert, <code>saeule()</code> ohne.</li>
+            <li><strong>Verzweigung:</strong> Sonderbehandlung für Noten, die nicht vorkommen.</li>
+            <li><strong>Schleifen:</strong> die Hauptschleife über die Noten 1–6 und die
+            Zählschleifen innerhalb der Funktionen.</li>
+            <li><strong>Eingabe mit Konvertierung:</strong> <code>int(numinput(...))</code>.</li>
+            </ul>
+            <p class="hinweis">Der Notendurchschnitt entsteht aus <code>summe / len(liste)</code>
+            — hier trifft die Listenoperation „Anzahl bestimmen“ auf die Division, die immer
+            einen <code>float</code> liefert. <code>round(..., 2)</code> macht daraus eine
+            lesbare Ausgabe.</p></div></article></section>
+
+<footer>
+  Statische Übungsseite – funktioniert ohne Internetverbindung und ohne Installation.
+  Der Fortschritt wird bewusst nicht gespeichert und ist nach dem Neuladen zurückgesetzt.
+  Über die Druckfunktion des Browsers entsteht ein Arbeitsheft mit allen Lösungen.
+</footer>
+</main>
+</div>
+<script>
+// ---- Python-Syntaxhervorhebung (ohne externe Bibliothek) ----
+var KW = ("and|or|not|if|elif|else|for|while|in|def|return|import|from|as|True|False|None|"
+        + "break|continue|pass|del|is|lambda|global|nonlocal|try|except|finally|raise|"
+        + "class|with|assert|yield").split("|");
+var BI = ("turtle|print|len|range|int|float|str|round|abs|type|input|random|time|list|"
+        + "max|min|sum|bool|sorted|append|insert|remove|index|pop|math").split("|");
+
+var RE = new RegExp(
+  "(#[^\\n]*)"                                            // 1 Kommentar
++ "|(\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''"
++ "|\"[^\"\\n]*\"|'[^'\\n]*')"                            // 2 String
++ "|\\b(" + KW.join("|") + ")\\b"                         // 3 Schluesselwort
++ "|\\b(" + BI.join("|") + ")\\b"                         // 4 eingebaut
++ "|\\b(\\d+\\.?\\d*)\\b",                                // 5 Zahl
+  "g");
+
+function esc(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function hervorheben(roh){
+  return esc(roh).replace(RE, function(m,k,s,kw,bi,nu){
+    if(k)  return '<span class="tok-com">'+k+'</span>';
+    if(s)  return '<span class="tok-str">'+s+'</span>';
+    if(kw) return '<span class="tok-kw">'+kw+'</span>';
+    if(bi) return '<span class="tok-bi">'+bi+'</span>';
+    if(nu) return '<span class="tok-num">'+nu+'</span>';
+    return m;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  // Codebloecke einfaerben und Kopierknopf einsetzen
+  document.querySelectorAll("pre.hl").forEach(function(pre){
+    var roh = pre.textContent;
+    pre.dataset.roh = roh;
+    pre.innerHTML = hervorheben(roh);
+    var box = pre.parentElement;
+    if(box && box.classList.contains("codebox")){
+      var b = document.createElement("button");
+      b.className = "kopieren"; b.type = "button"; b.textContent = "kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(roh).then(function(){
+          b.textContent = "kopiert!";
+          setTimeout(function(){ b.textContent = "kopieren"; }, 1400);
+        }, function(){ b.textContent = "Strg+C"; });
+      });
+      box.appendChild(b);
+    }
+  });
+  document.querySelectorAll("pre.code").forEach(function(pre){
+    pre.innerHTML = hervorheben(pre.textContent);
+  });
+
+  // Tipps und Loesungen umschalten
+  document.querySelectorAll("[data-ziel]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var ziel = document.getElementById(btn.dataset.ziel);
+      var offen = !ziel.classList.contains("verborgen");
+      ziel.classList.toggle("verborgen", offen);
+      btn.textContent = offen ? btn.dataset.zu : btn.dataset.auf;
+    });
+  });
+
+  // Erledigt-Haken
+  document.querySelectorAll(".hakenbox input").forEach(function(cb){
+    cb.addEventListener("change", function(){
+      cb.closest("article").classList.toggle("fertig", cb.checked);
+      zaehlerAktualisieren();
+    });
+  });
+
+  function zaehlerAktualisieren(){
+    var alle = document.querySelectorAll(".hakenbox input");
+    var fertig = document.querySelectorAll(".hakenbox input:checked");
+    document.getElementById("zaehler").textContent =
+      fertig.length + " von " + alle.length + " Aufgaben erledigt";
+  }
+  zaehlerAktualisieren();
+
+  // Niveaufilter
+  function filtern(){
+    var an = {};
+    document.querySelectorAll(".filter input").forEach(function(c){ an[c.value] = c.checked; });
+    document.querySelectorAll("article.auf").forEach(function(a){
+      a.classList.toggle("aus", !an[a.dataset.stufe]);
+    });
+  }
+  document.querySelectorAll(".filter input").forEach(function(c){
+    c.addEventListener("change", filtern);
+  });
+
+  // Alles auf- oder zuklappen
+  document.getElementById("allesauf").addEventListener("click", function(){
+    document.querySelectorAll(".tipp,.loesung").forEach(function(e){
+      e.classList.remove("verborgen");
+    });
+    document.querySelectorAll("[data-ziel]").forEach(function(b){
+      b.textContent = b.dataset.auf;
+    });
+  });
+  document.getElementById("alleszu").addEventListener("click", function(){
+    document.querySelectorAll(".tipp,.loesung").forEach(function(e){
+      e.classList.add("verborgen");
+    });
+    document.querySelectorAll("[data-ziel]").forEach(function(b){
+      b.textContent = b.dataset.zu;
+    });
+  });
+});
+</script>
+</body>
+</html>
