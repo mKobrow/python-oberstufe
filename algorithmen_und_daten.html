@@ -385,6 +385,9 @@ turtle.pencolor(&quot;darkred&quot;)
 
 # Startpunkt: unten LINKS  (Ecken: A unten links, B unten rechts,
 # C oben rechts, D oben links, E Dachspitze)
+turtle.penup()
+turtle.goto(-50, -100)
+turtle.pendown()
 
 turtle.setheading(0)
 turtle.forward(100)             # A -&gt; B   Boden
@@ -422,6 +425,9 @@ turtle.pencolor(&quot;teal&quot;)
 turtle.speed(3)
 
 # Beispiel: Buchstabe &quot;M&quot;
+turtle.penup()
+turtle.goto(-60, -75)
+turtle.pendown()
 
 turtle.setheading(90)
 turtle.forward(150)             # linker Senkrechtstrich
@@ -537,103 +543,148 @@ print(type(120 &gt; 4))        # &lt;class &#x27;bool&#x27;&gt;    -&gt; True
 print(type(&quot;12&quot; + &quot;0&quot;))     # &lt;class &#x27;str&#x27;&gt;     -&gt; &quot;120&quot;
 print(type(int(&quot;120&quot;) / 2)) # &lt;class &#x27;float&#x27;&gt;   -&gt; 60.0</pre></div><p>Merke: <code>/</code> erzeugt immer <code>float</code>,
             <code>//</code> bleibt bei <code>int</code>. Das <code>+</code> bei zwei Strings ist
-            keine Addition, sondern eine <em>Verkettung</em> (Konkatenation).</p></div></article><article class="auf" id="a2-3" data-stufe="standard"><div class="aufkopf"><span class="aid">2.3</span><h5>Vieleck nach Wunsch</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage den Benutzer über ein Dialogfenster nach der
-            <strong>Eckenzahl</strong> und der <strong>Seitenlänge</strong> und zeichne das
-            passende regelmäßige Vieleck.</p>
-            <p>Achte darauf, dass die Eckenzahl eine <strong>ganze Zahl</strong> sein muss —
-            konvertiere sie entsprechend.</p>
-            <p>Schreibe abschließend mit <code>turtle.write()</code> den Text
-            „<em>n-Eck, Seite s</em>“ neben die Figur.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-3-0"><span class="tnr">Tipp 1</span><code>fenster = turtle.Screen()</code>, dann <code>fenster.numinput("Vieleck", "Wie viele Ecken?", 6)</code>. Der dritte Parameter ist der Vorgabewert.</div><div class="tipp verborgen" id="t2-3-1"><span class="tnr">Tipp 2</span><code>numinput</code> liefert einen float wie <code>6.0</code>. Mit <code>ecken = int(fenster.numinput(...))</code> erhältst du eine ganze Zahl.</div><div class="tipp verborgen" id="t2-3-2"><span class="tnr">Tipp 3</span><code>turtle.write()</code> erwartet einen String. Zahlen musst du mit <code>str()</code> umwandeln und mit <code>+</code> anhängen.</div><div class="loesung verborgen" id="l2-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            keine Addition, sondern eine <em>Verkettung</em> (Konkatenation).</p></div></article><article class="auf" id="a2-3" data-stufe="standard"><div class="aufkopf"><span class="aid">2.3</span><h5>Rechteck nach Maß</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage den Benutzer über zwei Dialogfenster nach <strong>Breite</strong>
+            und <strong>Höhe</strong> und zeichne das passende Rechteck — noch ohne Schleife,
+            also mit acht einzelnen Befehlen wie in Kapitel 1.</p>
+            <p>Beschrifte es darunter mit den beiden Maßen und dem Flächeninhalt.</p>
+            <p><strong>Achtung:</strong> In der Beschriftung soll <code>200 x 120</code> stehen —
+            nicht <code>200.0 x 120.0</code>. Überlege, welche Konvertierung dafür nötig ist.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-3-0"><span class="tnr">Tipp 1</span><code>fenster = turtle.Screen()</code>, dann <code>fenster.numinput("Rechteck", "Wie breit?", 200)</code>. Der dritte Parameter ist der Vorgabewert.</div><div class="tipp verborgen" id="t2-3-1"><span class="tnr">Tipp 2</span><code>numinput</code> liefert immer einen <code>float</code> — also <code>200.0</code>, auch wenn man 200 eingetippt hat. Mit <code>int(...)</code> wird daraus wieder eine ganze Zahl.</div><div class="tipp verborgen" id="t2-3-2"><span class="tnr">Tipp 3</span><code>turtle.write()</code> erwartet <em>Text</em>. Zahlen musst du mit <code>str()</code> umwandeln und mit <code>+</code> aneinanderhängen: <code>str(int(breite)) + " x " + str(int(hoehe))</code>.</div><div class="loesung verborgen" id="l2-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
 fenster = turtle.Screen()
 
-ecken = int(fenster.numinput(&quot;Vieleck&quot;, &quot;Wie viele Ecken?&quot;, 6))
-seite = fenster.numinput(&quot;Vieleck&quot;, &quot;Wie lang ist eine Seite?&quot;, 80)
-
-winkel = 360 / ecken
+breite = fenster.numinput(&quot;Rechteck&quot;, &quot;Wie breit?&quot;, 200)
+hoehe = fenster.numinput(&quot;Rechteck&quot;, &quot;Wie hoch?&quot;, 120)
 
 turtle.pensize(3)
 turtle.pencolor(&quot;darkgreen&quot;)
 
-for i in range(ecken):
-    turtle.forward(seite)
-    turtle.right(winkel)
+# Rechteck ohne Schleife - acht Befehle wie in Kapitel 1
+turtle.forward(breite)
+turtle.left(90)
+turtle.forward(hoehe)
+turtle.left(90)
+turtle.forward(breite)
+turtle.left(90)
+turtle.forward(hoehe)
+turtle.left(90)
+
+flaeche = breite * hoehe
 
 # Beschriftung: Zahlen muessen zu Text konvertiert werden
-text = str(ecken) + &quot;-Eck, Seite &quot; + str(int(seite))
 turtle.penup()
-turtle.goto(-120, -150)
-turtle.write(text, font=(&quot;Arial&quot;, 14, &quot;normal&quot;))
+turtle.goto(0, -50)
+turtle.write(str(int(breite)) + &quot; x &quot; + str(int(hoehe)),
+             font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+turtle.goto(0, -75)
+turtle.write(&quot;Flaeche: &quot; + str(int(flaeche)) + &quot; Quadratschritte&quot;,
+             font=(&quot;Arial&quot;, 12, &quot;normal&quot;))
 
 turtle.hideturtle()
-turtle.done()</pre></div><p>Zwei Konvertierungen in einem Programm:
-            <code>int(...)</code> beim Einlesen der Eckenzahl (weil <code>range()</code> nur ganze
-            Zahlen akzeptiert) und <code>str(...)</code> bei der Ausgabe (weil
-            <code>write()</code> Text erwartet).</p>
-            <p>Der Drehwinkel <code>360 / ecken</code> darf ruhig ein float bleiben —
-            <code>right()</code> kommt damit klar.</p></div></article><article class="auf" id="a2-4" data-stufe="standard"><div class="aufkopf"><span class="aid">2.4</span><h5>Vier Fehler</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Im folgenden Programm stecken <strong>vier</strong> Fehler, die alle
-            mit Datentypen zu tun haben. Finde sie, benenne den jeweiligen Fehlertyp und
-            korrigiere sie.</p>
+turtle.done()</pre></div><p>Die Konvertierung läuft hier in <strong>zwei Richtungen</strong>:</p>
+            <ul class="kompakt">
+            <li><code>int(breite)</code> — vom <code>float</code> zur ganzen Zahl, damit in der
+            Anzeige <code>200</code> steht und nicht <code>200.0</code>.</li>
+            <li><code>str(...)</code> — von der Zahl zum Text, weil <code>write()</code> nur Text
+            annimmt.</li>
+            </ul>
+            <p>Ohne <code>str()</code> stürzt das Programm ab. Ohne <code>int()</code> läuft es
+            zwar, sieht aber unsauber aus — ein Fehler, den der Computer nicht meldet.</p>
+            <p class="hinweis">Vorsicht bei krummen Eingaben: <code>int(120.8)</code> ergibt
+            <strong>120</strong>, nicht 121 — <code>int()</code> schneidet ab. Wenn gerundet
+            werden soll, nimm <code>round(120.8)</code>.</p></div></article><article class="auf" id="a2-4" data-stufe="standard"><div class="aufkopf"><span class="aid">2.4</span><h5>Vier Fehler</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Im folgenden Programm stecken <strong>vier</strong> Fehler, die alle
+            mit Datentypen zu tun haben. <strong>Drei</strong> führen zum Absturz, <strong>einer
+            nicht</strong> — er macht die Ausgabe nur falsch.</p>
+            <p>Finde alle vier, benenne die Ursache und korrigiere sie.</p>
             <pre class="code">import turtle
 
 fenster = turtle.Screen()
-anzahl = fenster.numinput("Kreise", "Wie viele?", 5)
+seite = fenster.numinput("Quadrat", "Seitenlaenge?", 100)
+alter = fenster.textinput("Quadrat", "Wie alt bist du?")
 
-for i in range(anzahl):
-    turtle.circle(20)
-    turtle.right(360 / anzahl)
+turtle.forward(seite)
+turtle.right("90")
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
 
-turtle.write("Fertig: " + anzahl + " Kreise")
-turtle.write("Radius: " + 20)
+turtle.penup()
+turtle.goto(-100, -60)
+turtle.write("Seitenlaenge: " + seite)
+turtle.goto(-100, -85)
+turtle.write("Flaeche: " + str(seite * seite))
+turtle.goto(-100, -110)
+turtle.write("In 10 Jahren: " + str(alter + 10))
 
-turtle.done()</pre></div><div class="knopfleiste"><button type="button" data-ziel="t2-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-4-0"><span class="tnr">Tipp 1</span>Was liefert <code>numinput</code> genau — und was verlangt <code>range()</code>?</div><div class="tipp verborgen" id="t2-4-1"><span class="tnr">Tipp 2</span>Was passiert, wenn man einen String mit einer Zahl per <code>+</code> verbinden will?</div><div class="tipp verborgen" id="t2-4-2"><span class="tnr">Tipp 3</span>Achte auch darauf, ob <code>anzahl</code> überhaupt jemals 0 sein könnte — was würde dann bei <code>360 / anzahl</code> passieren?</div><div class="loesung verborgen" id="l2-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+turtle.done()</pre></div><div class="knopfleiste"><button type="button" data-ziel="t2-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t2-4-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l2-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-4-0"><span class="tnr">Tipp 1</span>Starte das Programm und lies die <strong>erste</strong> Fehlermeldung. Python nennt immer die Zeilennummer — arbeite dich von oben nach unten durch.</div><div class="tipp verborgen" id="t2-4-1"><span class="tnr">Tipp 2</span>Was liefert <code>numinput</code>, was liefert <code>textinput</code>? Die beiden Rückgabetypen sind verschieden — und einer davon überrascht.</div><div class="tipp verborgen" id="t2-4-2"><span class="tnr">Tipp 3</span>Auch Anführungszeichen um eine Zahl machen aus ihr einen Text. Schau dir die Drehbefehle genau an.</div><div class="tipp verborgen" id="t2-4-3"><span class="tnr">Tipp 4</span>Der vierte Fehler zeigt sich erst im fertigen Bild: Wie stehen die Zahlen dort geschrieben?</div><div class="loesung verborgen" id="l2-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
 fenster = turtle.Screen()
+seite = fenster.numinput(&quot;Quadrat&quot;, &quot;Seitenlaenge?&quot;, 100)
+alter = fenster.textinput(&quot;Quadrat&quot;, &quot;Wie alt bist du?&quot;)
 
-# FEHLER 1: numinput liefert float, range() braucht int -&gt; int(...)
-anzahl = int(fenster.numinput(&quot;Kreise&quot;, &quot;Wie viele?&quot;, 5))
+turtle.forward(seite)
+turtle.right(90)            # FEHLER 1: &quot;90&quot; war ein Text, keine Zahl
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
+turtle.right(90)
+turtle.forward(seite)
 
-# FEHLER 4 (Absicherung): Division durch 0 vermeiden
-if anzahl &lt; 1:
-    anzahl = 1
+turtle.penup()
+turtle.goto(-100, -60)
+# FEHLER 2: Zahl laesst sich nicht mit + an Text haengen -&gt; str(...)
+# FEHLER 4 gleich mit erledigt: int(...) statt &quot;100.0&quot;
+turtle.write(&quot;Seitenlaenge: &quot; + str(int(seite)))
 
-for i in range(anzahl):
-    turtle.circle(20)
-    turtle.right(360 / anzahl)
+turtle.goto(-100, -85)
+turtle.write(&quot;Flaeche: &quot; + str(int(seite * seite)))
 
-# FEHLER 2: str + int geht nicht -&gt; str(anzahl)
-turtle.write(&quot;Fertig: &quot; + str(anzahl) + &quot; Kreise&quot;)
+turtle.goto(-100, -110)
+# FEHLER 3: textinput liefert IMMER einen Text, nie eine Zahl
+turtle.write(&quot;In 10 Jahren: &quot; + str(int(alter) + 10))
 
-# FEHLER 3: gleicher Fehler mit einer Literal-Zahl -&gt; str(20)
-turtle.write(&quot;Radius: &quot; + str(20))
-
+turtle.hideturtle()
 turtle.done()</pre></div><ul class="kompakt">
-            <li><strong>Fehler 1</strong> — <code>TypeError: 'float' object cannot be interpreted
-            as an integer</code>: <code>range()</code> verlangt <code>int</code>.</li>
-            <li><strong>Fehler 2 und 3</strong> — <code>TypeError: can only concatenate str
-            (not "int") to str</code>: Text und Zahl lassen sich nicht mit <code>+</code>
-            verbinden.</li>
-            <li><strong>Fehler 4</strong> — <code>ZeroDivisionError</code>, sobald der Benutzer 0
-            eingibt. Ein Laufzeitfehler, den man durch eine Plausibilitätsprüfung abfängt.</li>
+            <li><strong>Fehler 1</strong> — <code>turtle.right("90")</code>. Die Turtle muss mit
+            dem Winkel <em>rechnen</em>, bekommt aber einen Text.
+            <code>TypeError: can't multiply sequence by non-int of type 'float'</code>.
+            Anführungszeichen weglassen.</li>
+            <li><strong>Fehler 2</strong> — <code>"Seitenlaenge: " + seite</code>.
+            <code>TypeError: can only concatenate str (not "float") to str</code>.
+            Zahl mit <code>str()</code> in Text umwandeln.</li>
+            <li><strong>Fehler 3</strong> — <code>alter + 10</code>. <code>textinput</code> liefert
+            immer einen <code>str</code>, also steht dort <code>"17" + 10</code>.
+            Mit <code>int(alter)</code> wird daraus eine Zahl.</li>
+            <li><strong>Fehler 4</strong> — <em>kein Absturz.</em> Im Bild steht
+            <code>Seitenlaenge: 100.0</code> und <code>Flaeche: 10000.0</code>, weil
+            <code>numinput</code> einen <code>float</code> liefert. <code>int(...)</code> vor der
+            Ausgabe behebt das.</li>
             </ul>
-            <p class="hinweis">Alternativ zur Verkettung geht auch ein f-String:
-            <code>turtle.write(f"Fertig: {anzahl} Kreise")</code> — die Konvertierung passiert
-            dann automatisch.</p></div></article><article class="auf" id="a2-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">2.5</span><h5>Skalierbares Logo</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Entwirf ein kleines Logo aus mindestens vier Teilstrecken (z. B. ein
+            <p>Zwei Richtungen, ein Prinzip: <strong>Text → Zahl</strong> mit <code>int()</code>,
+            wenn gerechnet werden soll — <strong>Zahl → Text</strong> mit <code>str()</code>,
+            wenn geschrieben werden soll.</p>
+            <p class="hinweis">Fehler 4 ist der gefährlichere: Fehler 1 bis 3 meldet Python
+            sofort, Fehler 4 muss man selbst bemerken. Solche Fehler heißen
+            <em>logische Fehler</em> — das Programm läuft, tut aber nicht das Richtige.</p></div></article><article class="auf" id="a2-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">2.5</span><h5>Skalierbares Logo</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Entwirf ein kleines Logo aus mindestens vier Teilstrecken (z. B. ein
             stilisiertes Haus, ein Pfeil, ein Blitz).</p>
             <p>Führe eine Variable <code>skala</code> ein, mit der sich die <strong>gesamte
             Grafik</strong> vergrößern oder verkleinern lässt. Bei <code>skala = 1</code> soll das
             Logo die Grundgröße haben, bei <code>skala = 2</code> die doppelte.</p>
             <p>Frage <code>skala</code> per <code>numinput</code> ab und passe zusätzlich die
-            Strichstärke proportional an — sie muss aber eine ganze Zahl und mindestens 1 sein.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l2-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-5-0"><span class="tnr">Tipp 1</span>Alle Längen mit <code>skala</code> multiplizieren: <code>turtle.forward(50 * skala)</code>. Winkel bleiben unverändert!</div><div class="tipp verborgen" id="t2-5-1"><span class="tnr">Tipp 2</span>Für die Strichstärke: <code>dicke = int(3 * skala)</code>. Mit <code>if dicke &lt; 1: dicke = 1</code> verhinderst du die Strichstärke 0.</div><div class="tipp verborgen" id="t2-5-2"><span class="tnr">Tipp 3</span>Praktischer ist es, eine Hilfsvariable <code>e = 50 * skala</code> („Einheit“) zu definieren und im Programm nur noch Vielfache von <code>e</code> zu verwenden.</div><div class="loesung verborgen" id="l2-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            Strichstärke proportional an — sie muss aber eine <strong>ganze Zahl</strong> sein.</p>
+            <p>Sorge dafür, dass der Benutzer keinen unsinnigen Faktor eingeben kann: erlaubt
+            sind nur Werte zwischen 0,5 und 3.</p></div><div class="knopfleiste"><button type="button" data-ziel="t2-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t2-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t2-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t2-5-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l2-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t2-5-0"><span class="tnr">Tipp 1</span>Alle Längen mit <code>skala</code> multiplizieren: <code>turtle.forward(50 * skala)</code>. Winkel bleiben unverändert!</div><div class="tipp verborgen" id="t2-5-1"><span class="tnr">Tipp 2</span><code>numinput</code> kennt zwei weitere Parameter: <code>numinput(titel, frage, vorgabe, minval=0.5, maxval=3)</code>. Damit lehnt der Dialog unpassende Eingaben von selbst ab.</div><div class="tipp verborgen" id="t2-5-2"><span class="tnr">Tipp 3</span>Für die Strichstärke: <code>dicke = round(3 * skala)</code>. <code>round()</code> ist hier besser als <code>int()</code> — überlege, warum.</div><div class="tipp verborgen" id="t2-5-3"><span class="tnr">Tipp 4</span>Praktischer ist es, eine Hilfsvariable <code>e = 50 * skala</code> („Einheit“) zu definieren und im Programm nur noch Vielfache von <code>e</code> zu verwenden.</div><div class="loesung verborgen" id="l2-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
 fenster = turtle.Screen()
-skala = fenster.numinput(&quot;Logo&quot;, &quot;Skalierungsfaktor (0.5 - 3)?&quot;, 1)
+
+# minval und maxval lassen unsinnige Eingaben gar nicht erst zu
+skala = fenster.numinput(&quot;Logo&quot;, &quot;Skalierungsfaktor?&quot;, 1,
+                         minval=0.5, maxval=3)
 
 e = 50 * skala                  # eine &quot;Einheit&quot; der Grafik
 
-dicke = int(3 * skala)          # float -&gt; int
-if dicke &lt; 1:                   # Strichstaerke 0 waere unsichtbar
-    dicke = 1
+dicke = round(3 * skala)        # float -&gt; int, aber gerundet
 turtle.pensize(dicke)
 turtle.pencolor(&quot;navy&quot;)
 
@@ -665,9 +716,10 @@ turtle.done()</pre></div><p>Zwei Ideen stecken darin:</p>
             <ul class="kompakt">
             <li><strong>Relative Maße.</strong> Statt absoluter Zahlen rechnest du in Vielfachen
             einer Einheit <code>e</code>. Das Bild bleibt bei jeder Skalierung proportional.</li>
-            <li><strong>Konvertierung mit Plausibilitätsprüfung.</strong> <code>int()</code>
-            schneidet ab — aus <code>3 · 0.2 = 0.6</code> würde 0. Deshalb die Absicherung auf
-            das Minimum 1.</li>
+            <li><strong>Konvertierung mit Bedacht.</strong> <code>int()</code> schneidet ab — aus
+            <code>3 · 0.5 = 1.5</code> würde 1. <code>round()</code> rundet auf 2 und trifft die
+            beabsichtigte Proportion besser. Die Untergrenze 0,5 im Dialog sorgt dafür, dass
+            die Strichstärke nie 0 werden kann — ganz ohne eine Abfrage im Programm.</li>
             </ul>
             <p>Winkel werden beim Skalieren <em>nicht</em> verändert — eine zentrale
             geometrische Einsicht: Ähnlichkeitsabbildungen sind winkeltreu.</p></div></article></section><section class="kap" id="k3"><div class="kaphead"><div class="knr">3</div><div><h3>Wiederholung - Schleifen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Zählschleife und bedingte Schleife: Wiederholungen kompakt und lesbar formulieren.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>die Kontrollstruktur Wiederholung erkennen und implementieren</li><li>die Zählschleife (for) und die bedingte Schleife (while) unterscheiden</li><li>die Schleifenvariable als Wert im Rumpf nutzen</li><li>verschachtelte Schleifen lesen und schreiben</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
@@ -726,35 +778,76 @@ turtle.done()</pre></div><p>Aus 12 Zeilen Treppe werden 5 — und die Stufenzahl
             ändern.</p></div></article><article class="auf" id="a3-2" data-stufe="basis"><div class="aufkopf"><span class="aid">3.2</span><h5>Regelmäßige Vielecke</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne nacheinander ein Dreieck, ein Viereck, ein Fünfeck und ein
             Sechseck — jeweils mit Seitenlänge 80, jeweils in einer eigenen Farbe, jeweils
             versetzt nebeneinander.</p>
-            <p>Nutze die Formel für den Drehwinkel aus Aufgabe 1.5.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-2-0"><span class="tnr">Tipp 1</span>Drehwinkel = 360 / Eckenzahl.</div><div class="tipp verborgen" id="t3-2-1"><span class="tnr">Tipp 2</span>Vier fast gleiche Schleifen untereinander sind erlaubt — eleganter ist eine äußere Schleife über <code>range(3, 7)</code>.</div><div class="tipp verborgen" id="t3-2-2"><span class="tnr">Tipp 3</span>Zum Versetzen: <code>penup()</code>, <code>goto(...)</code>, <code>pendown()</code> und <code>setheading(0)</code> zwischen den Figuren.</div><div class="loesung verborgen" id="l3-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            <p>Nutze die Formel für den Drehwinkel aus Aufgabe 1.5.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-2-0"><span class="tnr">Tipp 1</span>Drehwinkel = 360 / Eckenzahl.</div><div class="tipp verborgen" id="t3-2-1"><span class="tnr">Tipp 2</span>Vier fast gleiche Blöcke untereinander sind völlig in Ordnung — jeder besteht aus Positionieren, Farbe setzen und einer Schleife.</div><div class="tipp verborgen" id="t3-2-2"><span class="tnr">Tipp 3</span>Zum Versetzen: <code>penup()</code>, <code>goto(...)</code>, <code>pendown()</code> und <code>setheading(0)</code> zwischen den Figuren.</div><div class="loesung verborgen" id="l3-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
 turtle.pensize(3)
 turtle.speed(0)
 
-farben = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;purple&quot;]
-x = -240
+# Dreieck
+turtle.penup()
+turtle.goto(-240, 0)
+turtle.setheading(0)
+turtle.pendown()
+turtle.pencolor(&quot;red&quot;)
+for i in range(3):
+    turtle.forward(80)
+    turtle.right(360 / 3)
 
-# aeussere Schleife: n laeuft von 3 bis 6
-for n in range(3, 7):
+# Viereck
+turtle.penup()
+turtle.goto(-100, 0)
+turtle.setheading(0)
+turtle.pendown()
+turtle.pencolor(&quot;blue&quot;)
+for i in range(4):
+    turtle.forward(80)
+    turtle.right(360 / 4)
+
+# Fuenfeck
+turtle.penup()
+turtle.goto(40, 0)
+turtle.setheading(0)
+turtle.pendown()
+turtle.pencolor(&quot;green&quot;)
+for i in range(5):
+    turtle.forward(80)
+    turtle.right(360 / 5)
+
+# Sechseck
+turtle.penup()
+turtle.goto(180, 0)
+turtle.setheading(0)
+turtle.pendown()
+turtle.pencolor(&quot;purple&quot;)
+for i in range(6):
+    turtle.forward(80)
+    turtle.right(360 / 6)
+
+turtle.hideturtle()
+turtle.done()</pre></div><p><code>range(3)</code> liefert drei Durchläufe, <code>range(6)</code>
+            sechs — die Schleife ersetzt jeweils den ganzen Befehlsblock aus Kapitel 1.</p>
+            <p>Auffällig ist trotzdem: Die vier Blöcke sehen fast gleich aus. Nur zwei Zahlen
+            ändern sich — die Eckenzahl und die x-Position. Genau das lässt sich noch weiter
+            zusammenfassen, mit einer <strong>äußeren Schleife</strong>:</p>
+            <pre class="code">x = -240
+
+for n in range(3, 7):          # n nimmt die Werte 3, 4, 5, 6 an
     turtle.penup()
     turtle.goto(x, 0)
-    turtle.pendown()
     turtle.setheading(0)
-    turtle.pencolor(farben[n - 3])
+    turtle.pendown()
 
-    # innere Schleife: zeichnet das n-Eck
-    for i in range(n):
+    for i in range(n):         # innere Schleife: das n-Eck
         turtle.forward(80)
         turtle.right(360 / n)
 
-    x = x + 140
-
-turtle.hideturtle()
-turtle.done()</pre></div><p>Die äußere Schleifenvariable <code>n</code> steuert hier gleich
-            drei Dinge: die Anzahl der inneren Durchläufe, den Drehwinkel und (über
-            <code>n - 3</code>) die Farbe aus der Liste. Die Liste greift Kapitel 7 vor.</p>
-            <p><code>range(3, 7)</code> liefert 3, 4, 5, 6 — die obere Grenze ist immer
-            <em>ausgeschlossen</em>.</p></div></article><article class="auf" id="a3-3" data-stufe="standard"><div class="aufkopf"><span class="aid">3.3</span><h5>Spirale</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>eckige Spirale</strong>: Die Turtle dreht sich
+    x = x + 140</pre>
+            <p>Hier steuert die äußere Schleifenvariable <code>n</code> gleich zwei Dinge: die
+            Anzahl der inneren Durchläufe <em>und</em> den Drehwinkel. <code>range(3, 7)</code>
+            liefert 3, 4, 5, 6 — die obere Grenze ist immer <em>ausgeschlossen</em>.</p>
+            <p class="hinweis">Diese Kurzfassung zeichnet allerdings alle vier Figuren in
+            derselben Farbe. Für einen Farbwechsel pro Durchlauf bräuchte man eine
+            <em>Liste</em> von Farben — die lernst du in Kapitel 7 kennen.</p></div></article><article class="auf" id="a3-3" data-stufe="standard"><div class="aufkopf"><span class="aid">3.3</span><h5>Spirale</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zeichne eine <strong>eckige Spirale</strong>: Die Turtle dreht sich
             immer um 90°, aber jede Strecke ist 5 Schritte länger als die vorherige. Führe
             60 Durchläufe aus.</p>
             <p><strong>Experimentiere anschließend:</strong> Was passiert bei einem Drehwinkel
@@ -841,35 +934,43 @@ turtle.done()</pre></div><p><code>while</code> ist richtig, weil die <strong>Anz
             <ul class="kompakt">
               <li>eine Strecke zeichnen, die mit jedem Durchlauf länger wird,</li>
               <li>sich um 59° drehen,</li>
-              <li>ihre Farbe zyklisch aus einer Liste von mindestens fünf Farben wechseln.</li>
+              <li>ihre Farbe langsam von Blau nach Rot wandern lassen — <strong>berechnet aus der
+              Schleifenvariablen</strong>.</li>
             </ul>
             <p><strong>Zusatz:</strong> Baue mit <code>turtle.tracer(0)</code> und
             <code>turtle.update()</code> ein, dass die Grafik ohne sichtbare Animation sofort
-            fertig erscheint.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l3-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-6-0"><span class="tnr">Tipp 1</span>Zyklischer Zugriff auf eine Liste: <code>farben[i % len(farben)]</code>. Der Modulo-Operator sorgt dafür, dass der Index nie zu groß wird.</div><div class="tipp verborgen" id="t3-6-1"><span class="tnr">Tipp 2</span><code>turtle.tracer(0)</code> schaltet das Zeichnen auf dem Bildschirm ab; <code>turtle.update()</code> am Ende zeigt alles auf einmal.</div><div class="tipp verborgen" id="t3-6-2"><span class="tnr">Tipp 3</span>Für einen weichen Verlauf kannst du auch mit RGB-Werten arbeiten: <code>turtle.colormode(1.0)</code> und dann <code>turtle.pencolor(i/120, 0.2, 1 - i/120)</code>.</div><div class="loesung verborgen" id="l3-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            fertig erscheint.</p></div><div class="knopfleiste"><button type="button" data-ziel="t3-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t3-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t3-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t3-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l3-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t3-6-0"><span class="tnr">Tipp 1</span>Farben lassen sich nicht nur benennen, sondern auch aus drei Zahlen mischen: <code>turtle.colormode(1.0)</code>, danach <code>turtle.pencolor(rot, gruen, blau)</code> mit Werten zwischen 0 und 1.</div><div class="tipp verborgen" id="t3-6-1"><span class="tnr">Tipp 2</span><code>i</code> läuft von 0 bis 119. Der Ausdruck <code>i / 120</code> ergibt eine Zahl zwischen 0 und knapp 1 — genau der Anteil, den du für Rot brauchst.</div><div class="tipp verborgen" id="t3-6-2"><span class="tnr">Tipp 3</span>Wenn Rot mit <code>i / 120</code> zunimmt, muss Blau mit <code>1 - i / 120</code> abnehmen. Speichere den Anteil in einer Variablen, dann steht er nur einmal im Programm.</div><div class="tipp verborgen" id="t3-6-3"><span class="tnr">Tipp 4</span><code>turtle.tracer(0)</code> schaltet die Bildschirmaktualisierung ab; <code>turtle.update()</code> am Ende zeigt alles auf einmal.</div><div class="loesung verborgen" id="l3-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
-farben = [&quot;crimson&quot;, &quot;orange&quot;, &quot;gold&quot;, &quot;seagreen&quot;, &quot;steelblue&quot;, &quot;purple&quot;]
-
+turtle.colormode(1.0)           # Farben als drei Zahlen von 0 bis 1
 turtle.tracer(0)                # Bildschirm-Aktualisierung aus
 turtle.pensize(2)
 
 for i in range(120):
-    turtle.pencolor(farben[i % len(farben)])
+    anteil = i / 120            # waechst von 0 bis knapp 1
+    turtle.pencolor(anteil, 0.15, 1 - anteil)
+
     turtle.forward(i * 2)
     turtle.right(59)
 
 turtle.hideturtle()
 turtle.update()                 # alles auf einmal anzeigen
-turtle.done()</pre></div><p>Zwei Techniken, die dich durch den Rest des Kurses begleiten:</p>
+turtle.done()</pre></div><p>Drei Techniken stecken darin:</p>
             <ul class="kompakt">
-            <li><strong><code>i % len(farben)</code></strong> — der Modulo-Operator macht aus einem
-            unbegrenzt wachsenden Zähler einen Index, der immer im gültigen Bereich bleibt.
-            Bei 6 Farben ergibt sich die Folge 0, 1, 2, 3, 4, 5, 0, 1, 2, …</li>
+            <li><strong>Farben als Zahlen.</strong> Nach <code>colormode(1.0)</code> nimmt
+            <code>pencolor()</code> drei Werte zwischen 0 und 1 entgegen: Rot-, Grün- und
+            Blauanteil. Damit lassen sich Farben <em>berechnen</em> statt aufzuzählen.</li>
+            <li><strong>Die Schleifenvariable steuert zwei Dinge gleichzeitig</strong> — die
+            Streckenlänge <code>i * 2</code> und über <code>anteil</code> die Farbe. Genau das
+            macht Aufgabe 3.3 mit der Länge, hier kommt die Farbe dazu.</li>
             <li><strong><code>tracer(0)</code> / <code>update()</code></strong> — bei mehreren
             hundert Strichen ist die Animation nur noch lästig. Beides zusammen macht das
             Programm um Größenordnungen schneller.</li>
             </ul>
             <p>Der Winkel 59° ist bewusst kein Teiler von 360: Dadurch schließt sich das Muster
-            nie und es entsteht ein dichtes Geflecht.</p></div></article></section><section class="kap" id="k4"><div class="kaphead"><div class="knr">4</div><div><h3>Verzweigung, Vergleichs- und logische Operatoren</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Das Programm trifft Entscheidungen: Bedingungen formulieren und kombinieren.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>Bedingungen mit Vergleichsoperatoren formulieren</li><li>Bedingungen mit and, or und not verknüpfen</li><li>ein- und mehrseitige Verzweigungen implementieren</li><li>Verzweigungen im Rumpf einer Schleife einsetzen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+            nie und es entsteht ein dichtes Geflecht.</p>
+            <p class="hinweis">Statt eines weichen Verlaufs kann man auch zyklisch zwischen
+            festen Farbnamen wechseln. Dafür braucht man eine <em>Liste</em> und den
+            <em>Modulo-Operator</em> — beides kommt in Kapitel 4 und 7.</p></div></article></section><section class="kap" id="k4"><div class="kaphead"><div class="knr">4</div><div><h3>Verzweigung, Vergleichs- und logische Operatoren</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Das Programm trifft Entscheidungen: Bedingungen formulieren und kombinieren.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>Bedingungen mit Vergleichsoperatoren formulieren</li><li>Bedingungen mit and, or und not verknüpfen</li><li>ein- und mehrseitige Verzweigungen implementieren</li><li>Verzweigungen im Rumpf einer Schleife einsetzen</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
 <pre class="code">if bedingung:
     # wird ausgefuehrt, wenn die Bedingung True ist
 elif andere_bedingung:
