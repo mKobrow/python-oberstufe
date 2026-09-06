@@ -896,8 +896,7 @@ turtle.done()</pre></div><p><strong>a)</strong> 36 · 4 = <strong>144</strong>
             <p class="hinweis"><strong>Häufigster Fehler:</strong> die Zeile
             <code>turtle.right(10)</code> versehentlich zu weit einzurücken. Dann gehört sie zur
             inneren Schleife und es entsteht ein einziges verzerrtes Gekritzel. Einrückung ist in
-            Python <em>Syntax</em>, nicht Kosmetik.</p></div></article><article class="auf" id="a3-5" data-stufe="standard"><div class="aufkopf"><span class="aid">3.5</span><h5>Bedingte Schleife</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Turtle soll von der Mitte aus geradeaus laufen und dabei in
-            10er-Schritten immer schneller werden — <strong>so lange, bis sie mehr als 250
+            Python <em>Syntax</em>, nicht Kosmetik.</p></div></article><article class="auf" id="a3-5" data-stufe="standard"><div class="aufkopf"><span class="aid">3.5</span><h5>Bedingte Schleife</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Turtle soll zu Beginn 10 Schritte nach vorne gehen, sich dann um 30 Grad drehen, dann um 15 Schritte nach vorne und sich wieder um 30 Grad drehen und so weiter. Die Schritte sollen immer um 5 länger werden — <strong>so lange, bis die Turtle mehr als 250
             Schritte vom Startpunkt entfernt ist</strong>.</p>
             <p>Verwende eine <code>while</code>-Schleife und <code>turtle.distance(0, 0)</code>.</p>
             <p><strong>Frage:</strong> Warum ist hier <code>while</code> die richtige Wahl und nicht
@@ -910,7 +909,7 @@ schritt = 10
 
 while turtle.distance(0, 0) &lt; 250:
     turtle.forward(schritt)
-    turtle.right(20)
+    turtle.right(30)
     schritt = schritt + 5       # wird immer groesser
 
 turtle.pencolor(&quot;red&quot;)
