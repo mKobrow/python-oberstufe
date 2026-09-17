@@ -258,6 +258,25 @@ footer{
   nav.side{display:none}
   main{padding:20px 16px 80px}
 }
+
+/* ---------- Konsolenausgabe ---------- */
+pre.ausgabe{
+  background:#f3f6fa; color:#243447; border:1px solid var(--line);
+  border-left:4px solid var(--mut); border-radius:8px; padding:10px 14px 13px;
+  overflow-x:auto; margin:.7em 0; white-space:pre;
+  font:13px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+}
+pre.ausgabe::before{
+  content:"Konsole"; display:block; margin-bottom:7px;
+  font:700 .66rem/1 "Segoe UI",system-ui,sans-serif;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--mut);
+}
+/* ---------- Exkurs ---------- */
+.exkurs{border-left:4px solid var(--akz)}
+.exkurs > h4{color:var(--akz)}
+@media print{
+  pre.ausgabe{background:#f7f8fa; color:#1c2430; font-size:9.5pt; white-space:pre-wrap}
+}
 </style>
 </head>
 <body>
@@ -289,14 +308,14 @@ footer{
 <main>
 <header class="kopf">
   <h2>Programmieren lernen mit Python&nbsp;Turtle</h2>
-  <p>42 Aufgaben in acht Kapiteln – jeweils mit gestuften Tipps und einer vollständig
+  <p>41 Aufgaben in acht Kapiteln – jeweils mit gestuften Tipps und einer vollständig
   erläuterten Lösung. Die Aufgaben sind in drei Niveaus eingeteilt:
   <strong>Basis</strong> für den Einstieg ohne Vorkenntnisse, <strong>Standard</strong>
   als verbindliches Niveau, <strong>Erweiterung</strong> für alle, die schneller sind.
   Arbeite die Tipps der Reihe nach ab – die Lösung erst danach.</p>
   <table class="uebersicht">
     <tr><th></th><th>Kapitel</th><th>Umfang</th><th>Zeitrichtwert</th></tr>
-    <tr><td>1</td><td>Sequenz - die Turtle in Bewegung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>2</td><td>Variablen, Datentypen und Typkonvertierung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>3</td><td>Wiederholung - Schleifen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>4</td><td>Verzweigung, Vergleichs- und logische Operatoren</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>5</td><td>Funktionen - eigene Befehle bauen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>6</td><td>Struktogramme</td><td>4 Aufgaben</td><td>1 Unterrichtsstunde</td></tr><tr><td>7</td><td>Die lineare Datenstruktur Liste</td><td>7 Aufgaben</td><td>2-3 Unterrichtsstunden</td></tr><tr><td>8</td><td>Projekt: Suchen und Sortieren sichtbar machen</td><td>4 Aufgaben</td><td>2 Unterrichtsstunden</td></tr>
+    <tr><td>1</td><td>Sequenz - die Turtle in Bewegung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>2</td><td>Variablen, Datentypen und Typkonvertierung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>3</td><td>Wiederholung - Schleifen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>4</td><td>Verzweigung, Vergleichs- und logische Operatoren</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>5</td><td>Funktionen - eigene Befehle bauen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>6</td><td>Struktogramme</td><td>4 Aufgaben</td><td>1 Unterrichtsstunde</td></tr><tr><td>7</td><td>Die lineare Datenstruktur Liste</td><td>6 Aufgaben</td><td>2-3 Unterrichtsstunden</td></tr><tr><td>8</td><td>Projekt: Suchen und Sortieren sichtbar machen</td><td>4 Aufgaben</td><td>2 Unterrichtsstunden</td></tr>
   </table>
 </header>
 
@@ -1752,6 +1771,8 @@ turtle.done()</pre></div><p>Der Schlüssel ist <code>len(farben)</code>: Das Pro
               <li>Wie sieht die Liste nach <code>werte.append(75)</code> aus?</li>
               <li>Und danach nach <code>del werte[0]</code>?</li>
               <li>Und danach nach <code>werte[1] = 999</code>?</li>
+              <li>Und danach nach <code>werte.insert(1, 50)</code>?</li>
+              <li>Und danach nach <code>werte.remove(130)</code>?</li>
             </ol>
             <p>Prüfe deine Antworten anschließend mit <code>print()</code>.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l7-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-2-0"><span class="tnr">Tipp 1</span>Schreibe die Liste als Kästchenreihe auf und trage die Indizes 0, 1, 2, … darunter ein.</div><div class="tipp verborgen" id="t7-2-1"><span class="tnr">Tipp 2</span>Führe die Operationen nacheinander auf deiner Skizze aus — jede verändert die Ausgangslage für die nächste.</div><div class="loesung verborgen" id="l7-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">werte = [40, 90, 25, 130, 60]
 
@@ -1768,13 +1789,26 @@ del werte[0]
 print(werte)                      # 7) [90, 25, 130, 60, 75]
 
 werte[1] = 999
-print(werte)                      # 8) [90, 999, 130, 60, 75]</pre></div><p>Punkt 7 ist der wichtigste: Nach dem Löschen von Stelle 0
+print(werte)                      # 8) [90, 999, 130, 60, 75]
+
+werte.insert(1, 50)
+print(werte)                      # 9) [90, 50, 999, 130, 60, 75]
+
+werte.remove(130)
+print(werte)                      # 10) [90, 50, 999, 60, 75]</pre></div><p>Punkt 7 ist der wichtigste: Nach dem Löschen von Stelle 0
             <strong>rutschen alle Elemente nach vorn</strong>. Die 25 stand vorher an Stelle 2,
             danach an Stelle 1. Genau deshalb überschreibt <code>werte[1] = 999</code> in
             Schritt 8 die 25 und nicht die 90.</p>
             <p class="hinweis">Diese Verschiebung ist die häufigste Fehlerquelle beim Löschen in
             Schleifen — wer beim Durchlaufen einer Liste Elemente entfernt, überspringt
-            unbemerkt Elemente.</p></div></article><article class="auf" id="a7-3" data-stufe="standard"><div class="aufkopf"><span class="aid">7.3</span><h5>Balkendiagramm</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Stelle die Liste
+            unbemerkt Elemente.</p>
+            <p>Die letzten beiden Schritte zeigen den Unterschied zwischen den beiden
+            Löschbefehlen und dem Einfügen: <code>insert(1, 50)</code> schiebt die 50 an die
+            <em>Stelle</em> 1, alles dahinter rückt eine Position weiter.
+            <code>remove(130)</code> löscht dagegen nach dem <em>Wert</em> — und nur das erste
+            Vorkommen. Kommt der Wert gar nicht vor, bricht das Programm mit einem
+            <code>ValueError</code> ab; sicher ist
+            <code>if 130 in werte: werte.remove(130)</code>.</p></div></article><article class="auf" id="a7-3" data-stufe="standard"><div class="aufkopf"><span class="aid">7.3</span><h5>Balkendiagramm</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Stelle die Liste
             <code>hoehen = [80, 140, 45, 190, 95, 120, 60]</code> als
             <strong>Balkendiagramm</strong> dar.</p>
             <p>Jeder Balken ist 40 breit, die Höhe entspricht dem Listenwert. Unter jeden Balken
@@ -1815,135 +1849,63 @@ turtle.done()</pre></div><p>Dieses Programm ist die <strong>Arbeitsgrundlage fü
             Diagramm bei jeder Listenlänge zentriert bleibt.</p>
             <p class="hinweis">Großgeschriebene Namen wie <code>BREITE</code> sind eine
             Konvention für <em>Konstanten</em> — Werte, die sich während des Programmlaufs nicht
-            ändern sollen. Python erzwingt das nicht, aber alle halten sich daran.</p></div></article><article class="auf" id="a7-4" data-stufe="standard"><div class="aufkopf"><span class="aid">7.4</span><h5>Operationen sichtbar machen</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Erweitere dein Balkendiagramm aus 7.3. Führe nacheinander die folgenden
-            Operationen aus und zeichne das Diagramm nach <strong>jedem</strong> Schritt neu:</p>
-            <ol class="kompakt">
-              <li>hinten anfügen: 110</li>
-              <li>an Stelle 2 einfügen: 170</li>
-              <li>das Element an Stelle 0 ändern auf 30</li>
-              <li>das Element an Stelle 4 löschen</li>
-              <li>den Wert 45 löschen (nach Wert, nicht nach Stelle)</li>
-            </ol>
-            <p>Schreibe über jedes Diagramm, welche Operation gerade ausgeführt wurde, und die
-            aktuelle Anzahl der Elemente.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span>Schreibe eine Funktion <code>zeichne(liste, titel)</code>, die zuerst <code>turtle.clear()</code> aufruft und dann das ganze Diagramm neu zeichnet.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Nach jedem Neuzeichnen brauchst du eine Pause, sonst ist alles sofort vorbei: <code>import time</code> und <code>time.sleep(1.5)</code>.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span>Aufpassen bei Schritt 4 und 5: Nach dem Einfügen in Schritt 2 sind alle Stellen ab 2 um eins verschoben. Prüfe mit <code>print(liste)</code>, was tatsächlich in der Liste steht.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
-import time
+            ändern sollen. Python erzwingt das nicht, aber alle halten sich daran.</p></div></article><div class="wissen exkurs"><h4>Exkurs: Ausgabe mit print</h4>
+<p>Bis hierher hat die Turtle alles gezeichnet. Im Rest des Kapitels geht es aber nicht
+mehr um Bilder, sondern um <em>Werte</em>: Welches Element steht an welcher Stelle, welches
+ist das größte, kommt ein bestimmter Wert überhaupt vor? Dafür ist das Grafikfenster ein
+Umweg. Der direkte Weg heißt <code>print</code>.</p>
 
-BREITE = 40
-LUECKE = 5
-BASIS_Y = -150
+<p>In den Aufgaben 2.2 und 7.2 hast du den Befehl schon benutzt. Hier ist er systematisch:</p>
 
+<pre class="code">print("Hallo")                    # Text ausgeben
+print(hoehen)                     # eine ganze Liste ausgeben
+print("Anzahl:", len(hoehen))     # mehrere Werte, mit Komma getrennt
+print()                           # Leerzeile
+print("Fertig")</pre>
 
-def gehe_zu(x, y):
-    turtle.penup()
-    turtle.goto(x, y)
-    turtle.setheading(0)
-    turtle.pendown()
+<p>In der Konsole erscheint:</p>
+<pre class="ausgabe">Hallo
+[80, 140, 45, 190, 95, 120, 60]
+Anzahl: 7
 
+Fertig</pre>
 
-def balken(x, hoehe, farbe):
-    gehe_zu(x, BASIS_Y)
-    turtle.fillcolor(farbe)
-    turtle.begin_fill()
-    for i in range(2):
-        turtle.forward(BREITE)
-        turtle.left(90)
-        turtle.forward(hoehe)
-        turtle.left(90)
-    turtle.end_fill()
+<p>Der Vergleich mit <code>turtle.write()</code> zeigt, warum das hier bequemer ist:</p>
+<table class="ref">
+<tr><th></th><th><code>turtle.write(...)</code></th><th><code>print(...)</code></th></tr>
+<tr><td>Ausgabe erscheint</td><td>im Grafikfenster</td><td>in der Konsole</td></tr>
+<tr><td>Zahlen</td><td>erst mit <code>str()</code> umwandeln</td><td>gehen direkt</td></tr>
+<tr><td>mehrere Werte</td><td>mit <code>+</code> verketten</td><td>mit Komma trennen</td></tr>
+<tr><td>ganze Liste</td><td>nur umständlich</td><td><code>print(liste)</code> genügt</td></tr>
+<tr><td>Position der Ausgabe</td><td>musst du selbst festlegen</td><td>Zeile für Zeile von oben</td></tr>
+</table>
 
+<p>Dieselbe Ausgabe zweimal geschrieben:</p>
+<pre class="code">turtle.write("Anzahl: " + str(len(hoehen)))   # Grafik: Umwandlung noetig
+print("Anzahl:", len(hoehen))                 # Konsole: kein str() noetig</pre>
 
-def zeichne(liste, titel):
-    &quot;&quot;&quot;Zeichnet das komplette Diagramm neu.&quot;&quot;&quot;
-    turtle.clear()
-    start_x = -(len(liste) * (BREITE + LUECKE)) / 2
-
-    for i in range(len(liste)):
-        x = start_x + i * (BREITE + LUECKE)
-        balken(x, liste[i], &quot;steelblue&quot;)
-        turtle.penup()
-        turtle.goto(x + BREITE / 2, BASIS_Y + liste[i] + 8)
-        turtle.write(str(liste[i]), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;bold&quot;))
-        turtle.goto(x + BREITE / 2, BASIS_Y - 28)
-        turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;normal&quot;))
-
-    turtle.goto(0, 210)
-    turtle.write(titel, align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
-    turtle.goto(0, 185)
-    turtle.write(&quot;Anzahl der Elemente: &quot; + str(len(liste)),
-                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;normal&quot;))
-
-    turtle.update()
-    time.sleep(1.5)
-
-
-turtle.speed(0)
-turtle.tracer(0)
-turtle.pensize(2)
-turtle.hideturtle()
-
-hoehen = [80, 140, 45, 190, 95, 120, 60]
-zeichne(hoehen, &quot;Ausgangsliste&quot;)
-
-hoehen.append(110)
-zeichne(hoehen, &quot;append(110)  -  hinten anfuegen&quot;)
-
-hoehen.insert(2, 170)
-zeichne(hoehen, &quot;insert(2, 170)  -  an Stelle 2 einfuegen&quot;)
-
-hoehen[0] = 30
-zeichne(hoehen, &quot;hoehen[0] = 30  -  Element aendern&quot;)
-
-del hoehen[4]
-zeichne(hoehen, &quot;del hoehen[4]  -  nach Stelle loeschen&quot;)
-
-hoehen.remove(45)
-zeichne(hoehen, &quot;remove(45)  -  nach Wert loeschen&quot;)
-
-turtle.done()</pre></div><p>Der entscheidende Lerneffekt sitzt in Schritt 4 und 5:</p>
+<p class="hinweis">Ein Programm mit <code>print</code> braucht weder
+<code>import turtle</code> noch <code>turtle.done()</code>. Die folgenden Programme
+schrumpfen dadurch auf das zusammen, worum es wirklich geht — die Liste. Das
+Balkendiagramm aus 7.3 behältst du trotzdem: Für <em>Daten im Überblick</em> ist das Bild
+weiterhin die bessere Darstellung, für <em>einzelne Werte und Zwischenschritte</em> ist es
+<code>print</code>.</p>
+</div><article class="auf" id="a7-4" data-stufe="standard"><div class="aufkopf"><span class="aid">7.4</span><h5>Stelle zurückgeben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist die Liste aus Aufgabe 7.3:</p>
+            <pre class="code">hoehen = [80, 140, 45, 190, 95, 120, 60]</pre>
+            <p>Schreibe ein Programm, das einen gesuchten Wert in der Liste sucht und seine
+            <strong>Stelle</strong> auf der Konsole ausgibt. Kommt der Wert nicht vor, soll
+            auch das ausgegeben werden. Diesmal ohne Turtle — nur mit <code>print</code>.</p>
+            <p>Löse die Aufgabe <strong>zweimal</strong>:</p>
             <ul class="kompakt">
-            <li>Nach <code>insert(2, 170)</code> lautet die Liste
-            [30, 140, 170, 45, 190, 95, 120, 60, 110]. An Stelle 4 steht jetzt die
-            <strong>190</strong>, nicht mehr die 95.</li>
-            <li><code>del liste[4]</code> löscht <em>nach der Stelle</em>,
-            <code>liste.remove(45)</code> löscht <em>nach dem Wert</em> — und zwar nur das
-            <em>erste</em> Vorkommen.</li>
+              <li><strong>a)</strong> mit der eingebauten Operation <code>index()</code>,</li>
+              <li><strong>b)</strong> mit einer selbst geschriebenen Funktion
+              <code>suche_stelle(liste, wert)</code>, die die Stelle zurückgibt — oder
+              <code>-1</code>, wenn der Wert nicht vorkommt.</li>
             </ul>
-            <p class="hinweis"><code>remove()</code> wirft einen <code>ValueError</code>, wenn der
-            Wert gar nicht vorkommt. Sicher ist:
-            <code>if 45 in hoehen: hoehen.remove(45)</code>.</p></div></article><article class="auf" id="a7-5" data-stufe="standard"><div class="aufkopf"><span class="aid">7.5</span><h5>Stelle zurückgeben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Frage per <code>numinput</code> einen Wert ab und suche ihn im
-            Balkendiagramm.</p>
-            <ul class="kompakt">
-              <li>Kommt der Wert vor: Färbe den zugehörigen Balken rot und schreibe darüber
-              „gefunden an Stelle <em>i</em>“.</li>
-              <li>Kommt er nicht vor: Schreibe „nicht in der Liste“.</li>
-            </ul>
-            <p>Löse die Aufgabe <strong>zweimal</strong>: einmal mit <code>index()</code> und
-            einmal mit einer selbst geschriebenen Suchschleife, die die Stelle zurückgibt.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-5-0"><span class="tnr">Tipp 1</span><code>liste.index(wert)</code> liefert die Stelle — stürzt aber ab, wenn der Wert fehlt. Sichere mit <code>if wert in liste:</code> ab.</div><div class="tipp verborgen" id="t7-5-1"><span class="tnr">Tipp 2</span>Eigene Suche: Laufe mit <code>for i in range(len(liste)):</code> durch und prüfe <code>if liste[i] == wert: return i</code>.</div><div class="tipp verborgen" id="t7-5-2"><span class="tnr">Tipp 3</span>Wenn die Schleife durchläuft, ohne etwas zu finden, gib <code>-1</code> zurück — das ist die übliche Kennzeichnung für „nicht gefunden“.</div><div class="loesung verborgen" id="l7-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            <p>Gib beide Ergebnisse aus und prüfe, ob sie übereinstimmen. Teste mit einem
+            Wert, der vorkommt (z.&nbsp;B. 190), und mit einem, der fehlt (z.&nbsp;B. 999).</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-4-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span><code>liste.index(wert)</code> liefert die Stelle, stürzt aber mit einem <code>ValueError</code> ab, wenn der Wert fehlt. Sichere den Aufruf mit <code>if wert in liste:</code> ab.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Für die eigene Suche läufst du mit <code>for i in range(len(liste)):</code> durch und prüfst <code>if liste[i] == wert:</code>.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span><code>return i</code> beendet die Funktion <em>sofort</em> — die Schleife läuft danach nicht weiter. Genau deshalb liefert sie die Stelle des <em>ersten</em> Vorkommens.</div><div class="tipp verborgen" id="t7-4-3"><span class="tnr">Tipp 4</span>Das <code>return -1</code> gehört <strong>außerhalb</strong> der Schleife. Rückt man es ein, kehrt die Funktion schon nach dem ersten Vergleich zurück und meldet fast immer „nicht gefunden“.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
 
-BREITE = 40
-LUECKE = 5
-BASIS_Y = -150
-
-hoehen = [80, 140, 45, 190, 95, 120, 60]
-
-
-def gehe_zu(x, y):
-    turtle.penup()
-    turtle.goto(x, y)
-    turtle.setheading(0)
-    turtle.pendown()
-
-
-def balken(x, hoehe, farbe):
-    gehe_zu(x, BASIS_Y)
-    turtle.fillcolor(farbe)
-    turtle.begin_fill()
-    for i in range(2):
-        turtle.forward(BREITE)
-        turtle.left(90)
-        turtle.forward(hoehe)
-        turtle.left(90)
-    turtle.end_fill()
+gesucht = 190          # zum Testen auch einmal 999 eintragen
 
 
 def suche_stelle(liste, wert):
@@ -1954,220 +1916,200 @@ def suche_stelle(liste, wert):
     return -1                   # Schleife lief durch: nicht gefunden
 
 
-turtle.speed(0)
-turtle.tracer(0)
-turtle.pensize(2)
-turtle.hideturtle()
-
-fenster = turtle.Screen()
-gesucht = int(fenster.numinput(&quot;Suche&quot;, &quot;Welchen Wert suchen?&quot;, 190))
-
-# Variante A: eingebaute Operation
+# a) eingebaute Operation, gegen den ValueError abgesichert
 if gesucht in hoehen:
     stelle_a = hoehen.index(gesucht)
 else:
     stelle_a = -1
 
-# Variante B: eigene Suchschleife
+# b) eigene Suchschleife
 stelle_b = suche_stelle(hoehen, gesucht)
 
-print(&quot;index():&quot;, stelle_a, &quot; eigene Suche:&quot;, stelle_b)
+print(&quot;Liste:  &quot;, hoehen)
+print(&quot;gesucht:&quot;, gesucht)
+print()
+print(&quot;index()      liefert Stelle&quot;, stelle_a)
+print(&quot;eigene Suche liefert Stelle&quot;, stelle_b)
+print()
 
-# Diagramm zeichnen, Treffer hervorheben
-start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
-
-for i in range(len(hoehen)):
-    x = start_x + i * (BREITE + LUECKE)
-    if i == stelle_b:
-        balken(x, hoehen[i], &quot;crimson&quot;)
-    else:
-        balken(x, hoehen[i], &quot;lightsteelblue&quot;)
-    turtle.penup()
-    turtle.goto(x + BREITE / 2, BASIS_Y - 28)
-    turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;normal&quot;))
-
-turtle.goto(0, 200)
 if stelle_b == -1:
-    turtle.write(str(gesucht) + &quot; ist nicht in der Liste&quot;,
-                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    print(gesucht, &quot;kommt in der Liste nicht vor.&quot;)
 else:
-    turtle.write(str(gesucht) + &quot; gefunden an Stelle &quot; + str(stelle_b),
-                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
+    print(gesucht, &quot;steht an der Stelle&quot;, stelle_b,
+          &quot;- das ist das Element Nummer&quot;, stelle_b + 1)</pre></div><p>Ausgabe für <code>gesucht = 190</code>:</p><pre class="ausgabe">Liste:   [80, 140, 45, 190, 95, 120, 60]
+gesucht: 190
 
-turtle.update()
-turtle.done()</pre></div><p>Die selbst geschriebene Funktion <code>suche_stelle()</code> ist
-            die <strong>lineare Suche</strong> — der einfachste Suchalgorithmus überhaupt.
-            Beide Varianten liefern dasselbe Ergebnis; <code>index()</code> ist nur die fertig
-            eingebaute Version.</p>
-            <p>Zwei Feinheiten:</p>
+index()      liefert Stelle 3
+eigene Suche liefert Stelle 3
+
+190 steht an der Stelle 3 - das ist das Element Nummer 4</pre><p>und für <code>gesucht = 999</code>:</p><pre class="ausgabe">Liste:   [80, 140, 45, 190, 95, 120, 60]
+gesucht: 999
+
+index()      liefert Stelle -1
+eigene Suche liefert Stelle -1
+
+999 kommt in der Liste nicht vor.</pre><p>Die selbst geschriebene Funktion ist die <strong>lineare Suche</strong> —
+            der einfachste Suchalgorithmus überhaupt. Beide Wege liefern dasselbe;
+            <code>index()</code> ist nur die fertig eingebaute Fassung.</p>
+            <p>Drei Feinheiten:</p>
             <ul class="kompakt">
-            <li><code>return</code> beendet die Funktion <em>sofort</em>. Die Schleife läuft nach
-            einem Treffer nicht weiter — deshalb wird die Stelle des <em>ersten</em> Vorkommens
+            <li><code>return</code> beendet die Funktion sofort. Nach einem Treffer läuft die
+            Schleife nicht weiter — deshalb wird die Stelle des <em>ersten</em> Vorkommens
             geliefert.</li>
             <li>Das <code>return -1</code> steht <strong>außerhalb</strong> der Schleife. Innerhalb
-            würde es schon nach dem ersten Vergleich zurückkehren — ein sehr häufiger Fehler.</li>
-            </ul></div></article><article class="auf" id="a7-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.6</span><h5>Maximum ohne max()</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Bestimme das größte Element der Liste — <strong>ohne</strong> die
-            eingebaute Funktion <code>max()</code>.</p>
-            <p>Schreibe eine Funktion <code>groesste_stelle(liste)</code>, die die <em>Stelle</em>
-            des größten Elements zurückgibt. Färbe den entsprechenden Balken grün und zeichne
-            eine gestrichelte Hilfslinie auf seiner Höhe quer durch das Diagramm.</p>
+            würde die Funktion schon nach dem ersten Vergleich zurückkehren — ein sehr
+            häufiger Fehler.</li>
+            <li><strong>Stelle ist nicht Nummer.</strong> Die 190 steht an der Stelle 3, ist aber
+            das vierte Element. Die Zählung beginnt bei 0, die Alltagszählung bei 1.</li>
+            </ul>
+            <p class="hinweis">Ohne Turtle passt das ganze Programm auf einen Bildschirm, und
+            ein zweiter Testfall kostet eine geänderte Zahl statt eines neuen Bildes. Genau
+            dafür ist <code>print</code> da. Wer mag, ersetzt die feste Zeile durch
+            <code>gesucht = int(input("Welchen Wert suchen? "))</code> und fragt den Wert
+            direkt in der Konsole ab.</p></div></article><article class="auf" id="a7-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.5</span><h5>Maximum ohne max()</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Bestimme das größte Element der Liste — <strong>ohne</strong> die eingebaute
+            Funktion <code>max()</code>. Auch diese Aufgabe kommt ohne Turtle aus.</p>
+            <p><strong>a)</strong> Schreibe eine Funktion <code>groesste_stelle(liste)</code>,
+            die die <em>Stelle</em> des größten Elements zurückgibt. Gib den Wert und die Stelle
+            aus und kontrolliere dein Ergebnis anschließend mit <code>max()</code>.</p>
+            <p><strong>b)</strong> Erweitere die Funktion zu einem <strong>Suchprotokoll</strong>:
+            Bei jedem Vergleich soll eine Zeile ausgegeben werden, ob ein neues größtes Element
+            gefunden wurde oder nicht. Damit wird sichtbar, wie oft das Maximum unterwegs
+            wechselt.</p>
             <p><strong>Zusatzfrage:</strong> Warum ist es besser, die <em>Stelle</em>
-            zurückzugeben statt des Werts?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-6-0"><span class="tnr">Tipp 1</span>Idee: Nimm an, das erste Element sei das größte (<code>beste = 0</code>). Vergleiche dann jedes weitere damit.</div><div class="tipp verborgen" id="t7-6-1"><span class="tnr">Tipp 2</span><code>if liste[i] > liste[beste]: beste = i</code> — du merkst dir die Stelle, nicht den Wert.</div><div class="tipp verborgen" id="t7-6-2"><span class="tnr">Tipp 3</span>Die Schleife kann bei 1 starten: <code>for i in range(1, len(liste))</code>, weil Stelle 0 schon der Startwert ist.</div><div class="tipp verborgen" id="t7-6-3"><span class="tnr">Tipp 4</span>Gestrichelte Linie: eine Schleife mit abwechselnd <code>pendown()</code> und <code>penup()</code> — wie in Aufgabe 4.2.</div><div class="loesung verborgen" id="l7-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
-
-BREITE = 40
-LUECKE = 5
-BASIS_Y = -150
-
-hoehen = [80, 140, 45, 190, 95, 120, 60]
-
-
-def gehe_zu(x, y):
-    turtle.penup()
-    turtle.goto(x, y)
-    turtle.setheading(0)
-    turtle.pendown()
-
-
-def balken(x, hoehe, farbe):
-    gehe_zu(x, BASIS_Y)
-    turtle.fillcolor(farbe)
-    turtle.begin_fill()
-    for i in range(2):
-        turtle.forward(BREITE)
-        turtle.left(90)
-        turtle.forward(hoehe)
-        turtle.left(90)
-    turtle.end_fill()
+            zurückzugeben statt des Werts?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-5-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-5-0"><span class="tnr">Tipp 1</span>Idee „bester Kandidat“: Nimm an, das erste Element sei das größte (<code>beste = 0</code>), und vergleiche dann jedes weitere damit.</div><div class="tipp verborgen" id="t7-5-1"><span class="tnr">Tipp 2</span><code>if liste[i] &gt; liste[beste]: beste = i</code> — du merkst dir die <em>Stelle</em>, nicht den Wert.</div><div class="tipp verborgen" id="t7-5-2"><span class="tnr">Tipp 3</span>Die Schleife darf bei 1 starten: <code>for i in range(1, len(liste)):</code>, weil die Stelle 0 schon der Startwert ist.</div><div class="tipp verborgen" id="t7-5-3"><span class="tnr">Tipp 4</span>Für b) ist die Reihenfolge entscheidend: Die Ausgabezeile muss <strong>vor</strong> <code>beste = i</code> stehen. Danach ist der alte Vergleichswert bereits überschrieben.</div><div class="loesung verborgen" id="l7-5"><h6>Lösung und Erläuterung</h6><p><strong>a)</strong> Maximum bestimmen:</p><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
 
 
 def groesste_stelle(liste):
     &quot;&quot;&quot;Liefert die Stelle des groessten Elements.&quot;&quot;&quot;
-    beste = 0                               # Annahme: das erste ist das groesste
+    beste = 0                          # Annahme: das erste ist das groesste
     for i in range(1, len(liste)):
         if liste[i] &gt; liste[beste]:
-            beste = i                       # neue beste Stelle merken
+            beste = i                  # neue beste Stelle merken
     return beste
 
 
-def gestrichelt(x1, x2, y):
-    &quot;&quot;&quot;Zeichnet eine gestrichelte waagerechte Linie.&quot;&quot;&quot;
-    gehe_zu(x1, y)
-    schritte = int((x2 - x1) / 10)
-    for i in range(schritte):
-        if i % 2 == 0:
-            turtle.pendown()
+stelle = groesste_stelle(hoehen)
+
+print(&quot;Liste:&quot;, hoehen)
+print(&quot;groesstes Element:&quot;, hoehen[stelle], &quot;an der Stelle&quot;, stelle)
+print(&quot;Kontrolle mit max():&quot;, max(hoehen))</pre></div><pre class="ausgabe">Liste: [80, 140, 45, 190, 95, 120, 60]
+groesstes Element: 190 an der Stelle 3
+Kontrolle mit max(): 190</pre><p><strong>b)</strong> mit Suchprotokoll:</p><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+
+def groesste_stelle(liste):
+    &quot;&quot;&quot;Liefert die Stelle des groessten Elements und zeigt jeden Vergleich.&quot;&quot;&quot;
+    beste = 0
+    print(&quot;Start: Stelle 0 mit dem Wert&quot;, liste[0], &quot;gilt als groesstes Element&quot;)
+
+    for i in range(1, len(liste)):
+        if liste[i] &gt; liste[beste]:
+            # Ausgabe VOR der Zuweisung - sonst ist der Vergleichswert weg
+            print(&quot;Stelle&quot;, i, &quot;- Wert&quot;, liste[i], &quot;ist groesser als&quot;, liste[beste],
+                  &quot;-&gt; neues groesstes Element&quot;)
+            beste = i
         else:
-            turtle.penup()
-        turtle.forward(10)
+            print(&quot;Stelle&quot;, i, &quot;- Wert&quot;, liste[i], &quot;ist nicht groesser als&quot;, liste[beste])
+
+    return beste
 
 
-turtle.speed(0)
-turtle.tracer(0)
-turtle.pensize(2)
-turtle.hideturtle()
+stelle = groesste_stelle(hoehen)
 
-max_stelle = groesste_stelle(hoehen)
-max_wert = hoehen[max_stelle]
+print()
+print(&quot;Ergebnis: groesstes Element&quot;, hoehen[stelle], &quot;an der Stelle&quot;, stelle)</pre></div><pre class="ausgabe">Start: Stelle 0 mit dem Wert 80 gilt als groesstes Element
+Stelle 1 - Wert 140 ist groesser als 80 -&gt; neues groesstes Element
+Stelle 2 - Wert 45 ist nicht groesser als 140
+Stelle 3 - Wert 190 ist groesser als 140 -&gt; neues groesstes Element
+Stelle 4 - Wert 95 ist nicht groesser als 190
+Stelle 5 - Wert 120 ist nicht groesser als 190
+Stelle 6 - Wert 60 ist nicht groesser als 190
 
-start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
-
-for i in range(len(hoehen)):
-    x = start_x + i * (BREITE + LUECKE)
-    if i == max_stelle:
-        balken(x, hoehen[i], &quot;seagreen&quot;)
-    else:
-        balken(x, hoehen[i], &quot;lightsteelblue&quot;)
-
-turtle.pencolor(&quot;seagreen&quot;)
-turtle.pensize(1)
-gestrichelt(start_x - 20, start_x + len(hoehen) * (BREITE + LUECKE) + 20,
-            BASIS_Y + max_wert)
-
-turtle.penup()
-turtle.goto(0, 200)
-turtle.pencolor(&quot;black&quot;)
-turtle.write(&quot;Maximum: &quot; + str(max_wert) + &quot; an Stelle &quot; + str(max_stelle),
-             align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
-
-turtle.update()
-turtle.done()</pre></div><p>Das Muster heißt <strong>„bester Kandidat“</strong> und begegnet dir
-            in vielen Algorithmen wieder: Man merkt sich einen vorläufigen Sieger und ersetzt
-            ihn, sobald ein besserer auftaucht.</p>
-            <p><strong>Zur Zusatzfrage:</strong> Mit der Stelle kannst du beides —
+Ergebnis: groesstes Element 190 an der Stelle 3</pre><p>Das Muster heißt <strong>„bester Kandidat“</strong> und begegnet dir in vielen
+            Algorithmen wieder: Man merkt sich einen vorläufigen Sieger und ersetzt ihn,
+            sobald ein besserer auftaucht.</p>
+            <p>Das Protokoll aus Teil b) zeigt etwas, das ein fertiges Ergebnis verschweigt:
+            Bei sieben Elementen wird sechsmal verglichen, das Maximum wechselt dabei aber nur
+            <strong>zweimal</strong>. Sechs Vergleiche, zwei Wechsel — der Rest ist Prüfarbeit.
+            Genau solche Zwischenschritte lassen sich mit <code>print</code> sichtbar machen und
+            mit einem Bild eben nicht.</p>
+            <p><strong>Zur Zusatzfrage:</strong> Mit der Stelle hast du beides —
             <code>liste[stelle]</code> liefert den Wert. Umgekehrt geht es nicht zuverlässig:
-            Kommt der Maximalwert doppelt vor, weißt du nicht, welcher gemeint war. Außerdem
-            brauchst du die Stelle, um den richtigen Balken einzufärben.</p>
+            Kommt der Maximalwert doppelt vor, weißt du nicht, welches Vorkommen gemeint war.
+            Und für alles, was an der Position hängt (löschen, tauschen, einfärben), brauchst du
+            ohnehin die Stelle.</p>
             <p class="hinweis">Genau diese Funktion ist der Kern des Sortierverfahrens in
-            Aufgabe 8.2 — dort suchst du wiederholt das Minimum eines Restbereichs.</p></div></article><article class="auf" id="a7-7" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.7</span><h5>Zwei Listen parallel</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Zwei Listen können zusammengehörige Daten speichern. Gegeben:</p>
-            <pre class="code">x_werte = [-250, -180, -110, -40, 30, 100, 170, 240]
-y_werte = [ -80,   40,  120,  90, -30, -110, 60, 150]</pre>
-            <p><strong>a)</strong> Zeichne die Punkte als Polygonzug (Linienplot) mit einem
-            Marker an jeder Stelle.<br>
-            <strong>b)</strong> Färbe Punkte oberhalb der x-Achse grün, Punkte unterhalb rot.<br>
-            <strong>c)</strong> Beschrifte jeden Punkt mit seiner Stelle.<br>
-            <strong>d)</strong> Prüfe zu Beginn, ob beide Listen gleich lang sind, und brich mit
-            einer Meldung ab, falls nicht.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-7-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-7-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-7-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-7" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-7-0"><span class="tnr">Tipp 1</span>Beide Listen werden mit <em>demselben</em> Index angesprochen: <code>x_werte[i]</code> und <code>y_werte[i]</code> gehören zusammen.</div><div class="tipp verborgen" id="t7-7-1"><span class="tnr">Tipp 2</span>Für die Längenprüfung: <code>if len(x_werte) != len(y_werte):</code>.</div><div class="tipp verborgen" id="t7-7-2"><span class="tnr">Tipp 3</span>Zeichne zuerst den kompletten Linienzug, dann in einer zweiten Schleife die Marker — sonst überzeichnen die Linien die Punkte.</div><div class="loesung verborgen" id="l7-7"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            Aufgabe 8.2 — dort suchst du wiederholt das Minimum eines Restbereichs.</p></div></article><article class="auf" id="a7-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.6</span><h5>Alle Fundstellen</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Suche aus Aufgabe 7.4 liefert nur die <strong>erste</strong> Fundstelle.
+            Bei Daten, in denen Werte mehrfach vorkommen, reicht das nicht. Gegeben ist der
+            Notenspiegel einer Klassenarbeit:</p>
+            <pre class="code">noten = [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]</pre>
+            <p><strong>a)</strong> Schreibe eine Funktion <code>alle_stellen(liste, wert)</code>,
+            die eine <strong>neue Liste</strong> mit <em>allen</em> Stellen zurückgibt, an denen
+            der Wert steht. Kommt er nicht vor, ist die zurückgegebene Liste leer.</p>
+            <p><strong>b)</strong> Gib für jede Note von 1 bis 6 aus, an welchen Stellen sie
+            steht und wie oft sie vorkommt. Noten, die nicht vorkommen, sollen das auch
+            melden.</p>
+            <p><strong>c)</strong> Bestimme im selben Durchlauf die häufigste Note und gib sie
+            am Ende aus.</p>
+            <p><strong>Prüffrage:</strong> Zwei Noten kommen gleich oft vor. Welche meldet dein
+            Programm — und warum?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-6-0"><span class="tnr">Tipp 1</span>Die Funktion legt am Anfang eine leere Liste an: <code>gefunden = []</code>. Bei jedem Treffer hängst du die Stelle mit <code>gefunden.append(i)</code> an und gibst die Liste ganz am Ende zurück.</div><div class="tipp verborgen" id="t7-6-1"><span class="tnr">Tipp 2</span>Anders als in Aufgabe 7.4 darf hier <strong>kein</strong> <code>return</code> mitten in der Schleife stehen — sonst brichst du nach dem ersten Treffer ab. Die Schleife muss vollständig durchlaufen.</div><div class="tipp verborgen" id="t7-6-2"><span class="tnr">Tipp 3</span>Die Anzahl musst du nicht mitzählen: <code>len(stellen)</code> liefert sie. Eine leere Liste hat die Länge 0 — damit erkennst du auch „kommt nicht vor“.</div><div class="tipp verborgen" id="t7-6-3"><span class="tnr">Tipp 4</span>Für c) nimmst du wieder das Muster „bester Kandidat“ aus Aufgabe 7.5: zwei Variablen für die bisher beste Note und ihre Anzahl, und in der Schleife <code>if anzahl &gt; beste_anzahl:</code>.</div><div class="loesung verborgen" id="l7-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">noten = [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]
 
-x_werte = [-250, -180, -110, -40, 30, 100, 170, 240]
-y_werte = [-80, 40, 120, 90, -30, -110, 60, 150]
 
-turtle.speed(0)
-turtle.tracer(0)
-turtle.hideturtle()
+def alle_stellen(liste, wert):
+    &quot;&quot;&quot;Liefert eine neue Liste mit allen Stellen, an denen wert steht.&quot;&quot;&quot;
+    gefunden = []                       # leere Ergebnisliste
+    for i in range(len(liste)):
+        if liste[i] == wert:
+            gefunden.append(i)          # Stelle anhaengen, NICHT abbrechen
+    return gefunden                     # erst nach der ganzen Schleife
 
-# d) Plausibilitaetspruefung
-if len(x_werte) != len(y_werte):
-    turtle.write(&quot;Fehler: Die Listen sind unterschiedlich lang!&quot;,
-                 align=&quot;center&quot;, font=(&quot;Arial&quot;, 14, &quot;bold&quot;))
-    turtle.done()
-else:
-    anzahl = len(x_werte)
 
-    # Achsen
-    turtle.pensize(1)
-    turtle.pencolor(&quot;gray&quot;)
-    turtle.penup()
-    turtle.goto(-290, 0)
-    turtle.pendown()
-    turtle.goto(290, 0)
-    turtle.penup()
-    turtle.goto(0, -200)
-    turtle.pendown()
-    turtle.goto(0, 200)
+print(&quot;Noten:&quot;, noten)
+print()
 
-    # a) Linienzug
-    turtle.pensize(3)
-    turtle.pencolor(&quot;darkslateblue&quot;)
-    turtle.penup()
-    turtle.goto(x_werte[0], y_werte[0])
-    turtle.pendown()
-    for i in range(1, anzahl):
-        turtle.goto(x_werte[i], y_werte[i])
+beste_note = 0
+beste_anzahl = 0
 
-    # b) + c) Marker und Beschriftung
-    turtle.penup()
-    for i in range(anzahl):
-        turtle.goto(x_werte[i], y_werte[i])
+for note in range(1, 7):
+    stellen = alle_stellen(noten, note)
+    anzahl = len(stellen)
 
-        if y_werte[i] &gt; 0:
-            turtle.dot(14, &quot;seagreen&quot;)
-        else:
-            turtle.dot(14, &quot;crimson&quot;)
+    if anzahl == 0:
+        print(&quot;Note&quot;, note, &quot;kommt nicht vor&quot;)
+    else:
+        print(&quot;Note&quot;, note, &quot;steht an den Stellen&quot;, stellen, &quot;- Anzahl:&quot;, anzahl)
 
-        turtle.goto(x_werte[i], y_werte[i] + 14)
-        turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 10, &quot;bold&quot;))
+    if anzahl &gt; beste_anzahl:
+        beste_anzahl = anzahl
+        beste_note = note
 
-    turtle.update()
-    turtle.done()</pre></div><p>Zwei <strong>parallele Listen</strong> speichern eine Beziehung
-            über den gemeinsamen Index: Der Punkt Nummer <em>i</em> hat die Koordinaten
-            (<code>x_werte[i]</code>, <code>y_werte[i]</code>).</p>
-            <p>Das funktioniert, hat aber eine Schwachstelle — die beiden Listen können
-            auseinanderlaufen. Deshalb die Prüfung in Teil d). In der Praxis nimmt man dafür
-            später eine Liste von Paaren:
-            <code>punkte = [(-250, -80), (-180, 40), ...]</code>.</p>
-            <p class="hinweis">Der Linienzug beginnt bei <code>range(1, anzahl)</code>, weil der
-            erste Punkt schon angefahren wurde — sonst würde eine Linie vom Ursprung aus
-            gezeichnet.</p></div></article></section><section class="kap" id="k8"><div class="kaphead"><div class="knr">8</div><div><h3>Projekt: Suchen und Sortieren sichtbar machen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Anwendung aller Bausteine - Anregung des Rahmenplans, ohne Laufzeituntersuchungen.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>einen vorgegebenen Algorithmus auf einer linearen Liste implementieren</li><li>den Ablauf eines Algorithmus schrittweise visualisieren</li><li>alle bisherigen Kontrollstrukturen in einem größeren Programm kombinieren</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
+print()
+print(&quot;Haeufigste Note:&quot;, beste_note, &quot;mit&quot;, beste_anzahl, &quot;Vorkommen&quot;)</pre></div><pre class="ausgabe">Noten: [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]
+
+Note 1 steht an den Stellen [1, 7] - Anzahl: 2
+Note 2 steht an den Stellen [2, 5, 9] - Anzahl: 3
+Note 3 steht an den Stellen [0, 3, 6] - Anzahl: 3
+Note 4 steht an den Stellen [8] - Anzahl: 1
+Note 5 steht an den Stellen [4] - Anzahl: 1
+Note 6 kommt nicht vor
+
+Haeufigste Note: 2 mit 3 Vorkommen</pre><p>Neu ist hier, dass eine Funktion nicht nur einen einzelnen Wert zurückgibt,
+            sondern eine <strong>ganze Liste</strong> — die sie selbst Stück für Stück mit
+            <code>append()</code> aufbaut. Das ist eines der meistgenutzten Muster überhaupt:
+            leere Liste anlegen, durchlaufen, Passendes anhängen, am Ende zurückgeben.</p>
+            <p>Der entscheidende Unterschied zu Aufgabe 7.4 steckt im <code>return</code>. Dort
+            stand es <em>innerhalb</em> der Schleife und hat sie beim ersten Treffer beendet.
+            Hier steht es <em>hinter</em> der Schleife — sonst käme nie mehr als eine Stelle
+            zusammen.</p>
+            <p><strong>Zur Prüffrage:</strong> Note 2 und Note 3 kommen beide dreimal vor,
+            gemeldet wird die <strong>2</strong>. Grund ist das strenge <code>&gt;</code> in
+            <code>if anzahl &gt; beste_anzahl:</code>: Bei Gleichstand ist die Bedingung falsch,
+            der bisherige Sieger bleibt stehen. Da die Schleife bei 1 beginnt, gewinnt die
+            <em>kleinere</em> Note. Mit <code>&gt;=</code> würde die 3 gemeldet.</p>
+            <p class="hinweis">Gleichstände sind bei solchen Auswertungen die Regel, nicht die
+            Ausnahme. Ein Programm, das nur einen Sieger ausgibt, verschweigt sie — ehrlicher
+            wäre, alle Noten mit der höchsten Anzahl zu melden. Wer mag: Das lässt sich mit
+            <code>alle_stellen</code> und einer zweiten Liste lösen.</p></div></article></section><section class="kap" id="k8"><div class="kaphead"><div class="knr">8</div><div><h3>Projekt: Suchen und Sortieren sichtbar machen</h3><div class="meta">2 Unterrichtsstunden &nbsp;·&nbsp; Anwendung aller Bausteine - Anregung des Rahmenplans, ohne Laufzeituntersuchungen.</div></div></div><div class="ziele"><h4>Ziele dieses Kapitels</h4><ul><li>einen vorgegebenen Algorithmus auf einer linearen Liste implementieren</li><li>den Ablauf eines Algorithmus schrittweise visualisieren</li><li>alle bisherigen Kontrollstrukturen in einem größeren Programm kombinieren</li></ul></div><div class="wissen"><h4>Das brauchst du</h4>
 <p>In diesem Kapitel kommt nichts grundsätzlich Neues hinzu. Alles, was du brauchst, hast du
 schon: Sequenz, Verzweigung, Wiederholung, Funktionen und Listen.</p>
 <p>Neu ist nur die <strong>Arbeitsweise</strong>: Ein Algorithmus wird vorgegeben, und du setzt
@@ -2314,7 +2256,7 @@ turtle.done()</pre></div><p>Die Schleifenbedingung <code>i &lt; len(werte) and n
               <li>Tausche dieses Element mit dem an der Stelle <em>k</em>.</li>
             </ol>
             <p>Färbe den bereits sortierten Anfangsbereich grün, den gerade betrachteten Bereich
-            blau und das aktuelle Minimum orange.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-2-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-2-0"><span class="tnr">Tipp 1</span>Für Schritt 2 kannst du deine Funktion aus Aufgabe 7.6 anpassen: <code>kleinste_stelle(liste, ab)</code> mit einem zusätzlichen Startparameter.</div><div class="tipp verborgen" id="t8-2-1"><span class="tnr">Tipp 2</span>Tauschen geht in Python in einer Zeile: <code>liste[k], liste[m] = liste[m], liste[k]</code>.</div><div class="tipp verborgen" id="t8-2-2"><span class="tnr">Tipp 3</span>Schreibe eine Funktion <code>zeichne(liste, k, m)</code>, die alles neu malt und dabei die Farben nach <code>k</code> und <code>m</code> auswählt.</div><div class="tipp verborgen" id="t8-2-3"><span class="tnr">Tipp 4</span>Die äußere Schleife läuft bis <code>len(liste) - 1</code>: Wenn alle bis auf das letzte Element sortiert sind, ist auch das letzte am richtigen Platz.</div><div class="loesung verborgen" id="l8-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            blau und das aktuelle Minimum orange.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-2-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-2-0"><span class="tnr">Tipp 1</span>Für Schritt 2 kannst du deine Funktion aus Aufgabe 7.5 anpassen: <code>kleinste_stelle(liste, ab)</code> mit einem zusätzlichen Startparameter.</div><div class="tipp verborgen" id="t8-2-1"><span class="tnr">Tipp 2</span>Tauschen geht in Python in einer Zeile: <code>liste[k], liste[m] = liste[m], liste[k]</code>.</div><div class="tipp verborgen" id="t8-2-2"><span class="tnr">Tipp 3</span>Schreibe eine Funktion <code>zeichne(liste, k, m)</code>, die alles neu malt und dabei die Farben nach <code>k</code> und <code>m</code> auswählt.</div><div class="tipp verborgen" id="t8-2-3"><span class="tnr">Tipp 4</span>Die äußere Schleife läuft bis <code>len(liste) - 1</code>: Wenn alle bis auf das letzte Element sortiert sind, ist auch das letzte am richtigen Platz.</div><div class="loesung verborgen" id="l8-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 import time
 
 BREITE = 34
