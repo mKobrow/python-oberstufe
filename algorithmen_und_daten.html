@@ -1782,58 +1782,31 @@ print(werte)                      # 8) [90, 999, 130, 60, 75]</pre></div><p>Punk
             <strong>Wert</strong>.</p>
             <p>Schreibe dafür eine Funktion <code>balken(x, hoehe, farbe)</code>.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-3-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-3-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-3-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-3-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-3" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-3-0"><span class="tnr">Tipp 1</span>Ein Balken ist ein gefülltes Rechteck: <code>begin_fill()</code> … <code>end_fill()</code>.</div><div class="tipp verborgen" id="t7-3-1"><span class="tnr">Tipp 2</span>Die x-Position des Balken Nummer <code>i</code>: <code>start_x + i * 45</code> (40 Breite + 5 Abstand).</div><div class="tipp verborgen" id="t7-3-2"><span class="tnr">Tipp 3</span>Für die Beschriftung brauchst du <code>str(i)</code> bzw. <code>str(hoehen[i])</code> — <code>write()</code> nimmt nur Text.</div><div class="tipp verborgen" id="t7-3-3"><span class="tnr">Tipp 4</span><code>turtle.write(text, align="center")</code> zentriert die Beschriftung über dem Punkt.</div><div class="loesung verborgen" id="l7-3"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 
+def balken(x, hoehe, farbe):
+    turtle.penup()
+    turtle.goto(40*x+10, -20)
+    turtle.write(x)
+    turtle.goto(40*x+10, hoehe + 10)
+    turtle.write(hoehe)
+    turtle.goto(40*x, 0)
+    turtle.pendown()
+    
+    turtle.fillcolor(farbe)
+    
+    turtle.begin_fill()
+    turtle.goto(40*x, hoehe)
+    turtle.goto(40*x+40, hoehe)
+    turtle.goto(40*x+40, 0)
+    turtle.goto(40*x, 0)
+    turtle.end_fill()
+    
+    
+
 hoehen = [80, 140, 45, 190, 95, 120, 60]
 
-BREITE = 40
-LUECKE = 5
-BASIS_Y = -150
-
-
-def gehe_zu(x, y):
-    turtle.penup()
-    turtle.goto(x, y)
-    turtle.setheading(0)
-    turtle.pendown()
-
-
-def balken(x, hoehe, farbe):
-    &quot;&quot;&quot;Zeichnet einen gefuellten Balken mit der linken unteren Ecke bei (x, BASIS_Y).&quot;&quot;&quot;
-    gehe_zu(x, BASIS_Y)
-    turtle.fillcolor(farbe)
-    turtle.begin_fill()
-    for i in range(2):
-        turtle.forward(BREITE)
-        turtle.left(90)
-        turtle.forward(hoehe)
-        turtle.left(90)
-    turtle.end_fill()
-
-
-turtle.speed(0)
-turtle.tracer(0)
-turtle.pensize(2)
-
-start_x = -(len(hoehen) * (BREITE + LUECKE)) / 2
-
 for i in range(len(hoehen)):
-    x = start_x + i * (BREITE + LUECKE)
-    balken(x, hoehen[i], &quot;steelblue&quot;)
+    balken(i, hoehen[i], "lightblue")
 
-    # Wert ueber den Balken
-    turtle.penup()
-    turtle.goto(x + BREITE / 2, BASIS_Y + hoehen[i] + 8)
-    turtle.write(str(hoehen[i]), align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;bold&quot;))
-
-    # Stelle unter den Balken
-    turtle.goto(x + BREITE / 2, BASIS_Y - 28)
-    turtle.write(str(i), align=&quot;center&quot;, font=(&quot;Arial&quot;, 11, &quot;normal&quot;))
-
-# Grundlinie
-gehe_zu(start_x - 10, BASIS_Y)
-turtle.forward(len(hoehen) * (BREITE + LUECKE) + 10)
-
-turtle.hideturtle()
-turtle.update()
 turtle.done()</pre></div><p>Dieses Programm ist die <strong>Arbeitsgrundlage für den Rest des
             Kapitels</strong> — hebe es gut auf. Jede Listenoperation, die du ab jetzt lernst,
             wirst du an diesem Diagramm sichtbar machen.</p>
