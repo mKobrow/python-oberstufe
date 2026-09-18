@@ -232,6 +232,17 @@ footer{
   margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
   font-size:.82rem; color:var(--mut);
 }
+footer .herkunft{
+  display:inline-block; margin:0 0 10px; padding:7px 14px;
+  background:var(--panel); border:1px solid var(--line); border-radius:99px;
+  color:var(--ink);
+}
+footer .herkunft strong{font-weight:700}
+@media print{
+  footer{display:block; margin-top:22px}
+  footer .herkunft{border:none; background:none; padding:0; display:block}
+  footer .seitenhinweis{display:none}
+}
 
 /* ---------- Druck ---------- */
 @media print{
@@ -2556,9 +2567,13 @@ turtle.done()</pre></div><p>Diese Beispiellösung erfüllt alle Kriterien:</p>
             lesbare Ausgabe.</p></div></article></section>
 
 <footer>
-  Statische Übungsseite – funktioniert ohne Internetverbindung und ohne Installation.
-  Der Fortschritt wird bewusst nicht gespeichert und ist nach dem Neuladen zurückgesetzt.
-  Über die Druckfunktion des Browsers entsteht ein Arbeitsheft mit allen Lösungen.
+  <p class="herkunft"><strong>Hinweis zur Entstehung:</strong> Die Aufgaben, Tipps und
+  Lösungen dieser Seite wurden mit Unterstützung von Claude (Anthropic) erstellt und
+  anschließend fachlich überarbeitet. Stand: September 2026.</p>
+  <p class="seitenhinweis">Statische Übungsseite – funktioniert ohne Internetverbindung und
+  ohne Installation. Der Fortschritt wird bewusst nicht gespeichert und ist nach dem
+  Neuladen zurückgesetzt. Über die Druckfunktion des Browsers entsteht ein Arbeitsheft
+  mit allen Lösungen.</p>
 </footer>
 </main>
 </div>
