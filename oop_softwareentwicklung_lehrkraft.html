@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OOP WarnowBank – Ablaufplan</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --ink:#1c2430; --mut:#5d6b7e;
+  --line:#dde3ec; --akz:#2f5d8c; --akz-hell:#eaf1f8;
+  --basis:#2e7d5b; --standard:#2f5d8c; --erw:#8a4b9c;
+  --codebg:#1e2733; --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.65 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+a{color:var(--akz)}
+
+/* ---------- Layout ---------- */
+.wrap{display:flex; align-items:flex-start; max-width:1500px; margin:0 auto}
+nav.side{
+  position:sticky; top:0; flex:0 0 268px; height:100vh; overflow-y:auto;
+  background:var(--panel); border-right:1px solid var(--line); padding:22px 18px 40px;
+}
+main{flex:1 1 auto; min-width:0; padding:34px 42px 120px; max-width:1050px}
+
+nav.side h1{font-size:1.05rem; line-height:1.35; margin:0 0 4px}
+nav.side .sub{font-size:.78rem; color:var(--mut); margin:0 0 18px}
+nav.side ol{list-style:none; margin:0; padding:0; counter-reset:k}
+nav.side li{margin:0 0 2px}
+nav.side a.kaplink{
+  display:flex; gap:9px; align-items:baseline; padding:7px 9px; border-radius:7px;
+  text-decoration:none; color:var(--ink); font-size:.88rem; line-height:1.3;
+}
+nav.side a.kaplink:hover{background:var(--akz-hell)}
+nav.side a.kaplink .nr{
+  flex:0 0 20px; font-weight:700; color:var(--akz); font-variant-numeric:tabular-nums;
+}
+nav.side .navtitel{font-size:.7rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--mut); margin:22px 0 8px; font-weight:700}
+
+.filter{display:flex; flex-direction:column; gap:5px}
+.filter label{display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer;
+  padding:4px 6px; border-radius:6px}
+.filter label:hover{background:var(--akz-hell)}
+.filter input{accent-color:var(--akz); width:15px; height:15px}
+.werkzeug{margin-top:16px; display:flex; flex-direction:column; gap:6px}
+.werkzeug button{
+  font:inherit; font-size:.83rem; padding:7px 10px; border:1px solid var(--line);
+  background:#fff; border-radius:7px; cursor:pointer; text-align:left; color:var(--ink);
+}
+.werkzeug button:hover{background:var(--akz-hell); border-color:var(--akz)}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:26px 30px; margin-bottom:26px;
+}
+header.kopf h2{margin:0 0 6px; font-size:1.6rem; letter-spacing:-.01em}
+header.kopf p{margin:0; color:var(--mut)}
+.uebersicht{
+  width:100%; border-collapse:collapse; margin-top:20px; font-size:.87rem;
+}
+.uebersicht th,.uebersicht td{
+  text-align:left; padding:7px 10px; border-bottom:1px solid var(--line);
+}
+.uebersicht th{font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color:var(--mut)}
+.uebersicht td:first-child{font-weight:700; color:var(--akz); width:34px}
+.uebersicht td:last-child{white-space:nowrap; color:var(--mut); text-align:right}
+
+/* ---------- Kapitel ---------- */
+section.kap{margin:0 0 46px; scroll-margin-top:18px}
+.kaphead{
+  display:flex; align-items:flex-start; gap:16px; padding:0 4px 14px;
+  border-bottom:3px solid var(--akz); margin-bottom:20px;
+}
+.kaphead .knr{
+  flex:0 0 auto; font-size:2.1rem; font-weight:800; color:var(--akz); line-height:1;
+  letter-spacing:-.03em;
+}
+.kaphead h3{margin:0 0 3px; font-size:1.3rem}
+.kaphead .meta{font-size:.83rem; color:var(--mut)}
+
+.ziele{
+  background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--basis);
+  border-radius:var(--radius); padding:15px 20px; margin:0 0 18px;
+}
+.ziele h4,.wissen h4{
+  margin:0 0 8px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--mut);
+}
+.ziele ul{margin:0; padding-left:20px}
+.ziele li{margin:2px 0}
+
+.wissen{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px 22px; margin:0 0 26px;
+}
+.wissen p{margin:.6em 0}
+.wissen > :last-child{margin-bottom:0}
+
+/* ---------- Aufgabenkarte ---------- */
+article.auf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  margin:0 0 16px; overflow:hidden; scroll-margin-top:18px;
+}
+article.auf.aus{display:none}
+.aufkopf{display:flex; align-items:center; gap:12px; padding:14px 20px; border-bottom:1px solid var(--line)}
+.aufkopf .aid{
+  font-weight:800; color:var(--akz); font-variant-numeric:tabular-nums; font-size:.95rem;
+  flex:0 0 auto;
+}
+.aufkopf h5{margin:0; font-size:1.02rem; flex:1 1 auto; font-weight:600}
+.badge{
+  flex:0 0 auto; font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px; color:#fff;
+}
+.st-basis{background:var(--basis)} .st-standard{background:var(--standard)} .st-erw{background:var(--erw)}
+.hakenbox{flex:0 0 auto; display:flex; align-items:center; cursor:pointer}
+.hakenbox input{width:17px; height:17px; accent-color:var(--basis); cursor:pointer}
+article.auf.fertig .aufkopf{background:#f2f9f5}
+article.auf.fertig .aufkopf h5{text-decoration:line-through; text-decoration-color:#a9c9b8}
+
+.aufkoerper{padding:16px 20px 6px}
+.aufkoerper p{margin:.55em 0}
+.aufkoerper > :first-child{margin-top:0}
+ul.kompakt,ol.kompakt{margin:.5em 0; padding-left:22px}
+ul.kompakt li,ol.kompakt li{margin:3px 0}
+
+.knopfleiste{display:flex; flex-wrap:wrap; gap:8px; padding:6px 20px 16px}
+.knopfleiste button{
+  font:inherit; font-size:.84rem; padding:7px 14px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; color:var(--ink);
+}
+.knopfleiste button:hover{border-color:var(--akz); background:var(--akz-hell)}
+.knopfleiste button.loesknopf{border-color:var(--akz); color:var(--akz); font-weight:600}
+.knopfleiste button[disabled]{opacity:.4; cursor:default}
+.knopfleiste button[disabled]:hover{border-color:var(--line); background:#fff}
+
+.tipp{
+  margin:0 20px 12px; padding:12px 16px; border-radius:8px;
+  background:#fffaf0; border:1px solid #f0e0c0; border-left:4px solid #d9a441; font-size:.93rem;
+}
+.tipp .tnr{font-weight:700; color:#a9741d; margin-right:6px}
+.loesung{
+  margin:0 20px 18px; padding:16px 18px; border-radius:8px;
+  background:#f7faf8; border:1px solid #d8e6de; border-left:4px solid var(--basis);
+}
+.loesung h6{
+  margin:0 0 10px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--basis);
+}
+.loesung p{margin:.55em 0} .loesung > :last-child{margin-bottom:0}
+.verborgen{display:none}
+
+/* ---------- Code ---------- */
+pre.code,pre.hl{
+  background:var(--codebg); color:#e6edf3; padding:14px 16px; border-radius:8px;
+  overflow-x:auto; font:13.5px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+  margin:.7em 0; white-space:pre; tab-size:4;
+}
+code{
+  background:#eef2f7; padding:1px 5px; border-radius:4px;
+  font:.88em/1.4 "Cascadia Code",Consolas,Menlo,monospace; color:#25405c;
+}
+pre code{background:none; padding:0; color:inherit; font-size:inherit}
+.codebox{position:relative}
+.codebox .kopieren{
+  position:absolute; top:8px; right:8px; font:inherit; font-size:.74rem; padding:4px 9px;
+  border:1px solid #3d4b5c; background:#2b3542; color:#c3ceda; border-radius:6px; cursor:pointer;
+}
+.codebox .kopieren:hover{background:#3a4756; color:#fff}
+.tok-kw{color:#ff8fbf} .tok-bi{color:#8fd3ff} .tok-str{color:#b9e88a}
+.tok-num{color:#f2c97d} .tok-com{color:#7f8ea3; font-style:italic}
+
+/* ---------- Tabellen im Merkkasten ---------- */
+table.ref{border-collapse:collapse; width:100%; margin:.9em 0; font-size:.88rem; background:#fff}
+table.ref th,table.ref td{border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top}
+table.ref th{background:var(--akz-hell); font-weight:700; font-size:.8rem}
+p.hinweis{
+  background:#fffaf0; border-left:4px solid #d9a441; padding:10px 14px; border-radius:0 7px 7px 0;
+  font-size:.93rem;
+}
+
+/* ---------- Struktogramme ---------- */
+.sg{
+  border:2px solid #33404f; display:inline-block; min-width:330px; max-width:100%;
+  background:#fff; font-size:.87rem; margin:.9em 0; vertical-align:top;
+}
+.sg-row{border-bottom:1px solid #33404f; padding:6px 11px}
+.sg-loop{border-bottom:1px solid #33404f}
+.sg-loop-head{padding:6px 11px; font-style:italic; background:#f4f7fb; border-bottom:1px solid #33404f}
+.sg-loop-body{margin-left:20px; border-left:1px solid #33404f}
+.sg-if{border-bottom:1px solid #33404f}
+.sg-if-head{
+  position:relative; height:56px; border-bottom:1px solid #33404f; background:
+   linear-gradient(to bottom left,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     left/50% 100% no-repeat,
+   linear-gradient(to bottom right,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     right/50% 100% no-repeat;
+}
+.sg-cond{
+  position:absolute; top:2px; left:50%; transform:translateX(-50%);
+  background:#fff; padding:0 6px; white-space:nowrap; font-weight:600;
+}
+.sg-ja{position:absolute; bottom:2px; left:8px; font-size:.8rem; color:#2e7d5b}
+.sg-nein{position:absolute; bottom:2px; right:8px; font-size:.8rem; color:#a5453d}
+.sg-if-body{display:flex}
+.sg-branch{flex:1 1 50%; min-width:0; display:flex; flex-direction:column}
+.sg-branch > :last-child{flex:1 1 auto}
+.sg-branch:first-child{border-right:1px solid #33404f}
+.sg > :last-child,.sg-loop-body > :last-child,.sg-branch > :last-child{border-bottom:none}
+.sg-legende{display:flex; flex-wrap:wrap; gap:26px; align-items:flex-start; margin:1em 0}
+.sg-legende .sg{min-width:220px}
+.sg-titel{font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--mut);
+  margin:0 0 4px; font-weight:700}
+
+/* ---------- Listenbild ---------- */
+.listenbild{display:flex; gap:0; margin:1.1em 0; flex-wrap:wrap}
+.lb-zelle{
+  border:2px solid #33404f; border-right-width:1px; border-left-width:1px;
+  min-width:74px; text-align:center; background:#fff;
+}
+.lb-zelle:first-child{border-left-width:2px} .lb-zelle:last-child{border-right-width:2px}
+.lb-idx{display:block; font-size:.72rem; background:#eef2f7; color:var(--mut);
+  border-bottom:1px solid #cfd8e3; padding:2px}
+.lb-wert{display:block; padding:8px 4px; font-weight:700; font-family:Consolas,Menlo,monospace}
+
+/* ---------- Fuss ---------- */
+footer{
+  margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:.82rem; color:var(--mut);
+}
+footer .herkunft{
+  display:inline-block; margin:0 0 10px; padding:7px 14px;
+  background:var(--panel); border:1px solid var(--line); border-radius:99px;
+  color:var(--ink);
+}
+footer .herkunft strong{font-weight:700}
+@media print{
+  footer{display:block; margin-top:22px}
+  footer .herkunft{border:none; background:none; padding:0; display:block}
+  footer .seitenhinweis{display:none}
+}
+
+/* ---------- Druck ---------- */
+@media print{
+  nav.side{display:none}
+  main{max-width:none; padding:0}
+  body{background:#fff; font-size:11pt}
+  .knopfleiste,.hakenbox{display:none !important}
+  .verborgen{display:block !important}
+  article.auf{border:1px solid #ccd4de}
+  .aufkopf,.tipp,.ziele{break-inside:avoid; page-break-inside:avoid}
+  .aufkopf,.kaphead,.loesung h6{break-after:avoid; page-break-after:avoid}
+  pre.code,pre.hl,.sg,table.ref{break-inside:avoid; page-break-inside:avoid}
+  section.kap{page-break-before:always}
+  section.kap:first-of-type{page-break-before:auto}
+  header.kopf .uebersicht{display:none}
+  pre.code,pre.hl{background:#f3f5f8; color:#1c2430; border:1px solid #ccd4de;
+    white-space:pre-wrap; font-size:9.5pt}
+  .tok-kw,.tok-bi,.tok-str,.tok-num{color:#1c2430}
+  .tok-com{color:#667}
+  .codebox .kopieren{display:none}
+  header.kopf{border:none; padding:0}
+}
+@media(max-width:940px){
+  nav.side{display:none}
+  main{padding:20px 16px 80px}
+}
+
+/* ---------- Konsolenausgabe ---------- */
+pre.ausgabe{
+  background:#f3f6fa; color:#243447; border:1px solid var(--line);
+  border-left:4px solid var(--mut); border-radius:8px; padding:10px 14px 13px;
+  overflow-x:auto; margin:.7em 0; white-space:pre;
+  font:13px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+}
+pre.ausgabe::before{
+  content:"Konsole"; display:block; margin-bottom:7px;
+  font:700 .66rem/1 "Segoe UI",system-ui,sans-serif;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--mut);
+}
+/* ---------- Exkurs ---------- */
+.exkurs{border-left:4px solid var(--akz)}
+.exkurs > h4{color:var(--akz)}
+@media print{
+  pre.ausgabe{background:#f7f8fa; color:#1c2430; font-size:9.5pt; white-space:pre-wrap}
+}
+
+/* ---------- Ergaenzungen OOP-Kurs ---------- */
+kbd{font:.85em Consolas,Menlo,monospace; border:1px solid #c5cfdb; border-bottom-width:2px;
+  border-radius:4px; padding:0 5px; background:#fff}
+.def{
+  background:#fff; border:1px solid #ecd2cd; border-left:4px solid #b4473c;
+  border-radius:var(--radius); padding:13px 20px; margin:0 0 14px;
+}
+.defkopf{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.defbeg{font-weight:700; color:#b4473c; font-size:1.02rem}
+.defmark{font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:#a07a74; margin-left:auto}
+.def p{margin:.35em 0} .def > :last-child{margin-bottom:0}
+
+.etappe{
+  margin:34px 0 18px; padding:14px 20px 12px; border-radius:var(--radius);
+  background:var(--akz); color:#fff; scroll-margin-top:18px;
+}
+.etkopf{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.etnr{font-weight:800; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; opacity:.85}
+.ettitel{font-weight:700; font-size:1.08rem}
+.etzeit{margin-left:auto; font-size:.8rem; padding:2px 10px; border-radius:99px;
+  background:rgba(255,255,255,.18); white-space:nowrap}
+.etappe ul{margin:8px 0 0; padding-left:20px; font-size:.93rem}
+.etappe li{margin:1px 0}
+
+.stopp{
+  margin:20px 0 10px; padding:14px 20px 12px; border-radius:var(--radius);
+  background:#fff6f1; border:2px solid #d2603a;
+}
+.stkopf{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.stschild{
+  background:#d2603a; color:#fff; font-weight:800; font-size:.74rem; letter-spacing:.1em;
+  text-transform:uppercase; padding:5px 10px;
+  clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);
+}
+.sttitel{font-weight:700; color:#8f3a1d}
+.stopp .etzeit{background:#f6dccf; color:#8f3a1d}
+.stopp p{margin:.4em 0; font-size:.93rem}
+.stopp ul{margin:.3em 0 0; padding-left:20px; font-size:.93rem}
+
+.anf{
+  background:#fffdf6; border:1px solid #e8dfc2; border-radius:8px; padding:14px 20px;
+  margin:0 0 20px; font-size:.95rem;
+}
+.anfkopf{font-weight:700; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+  color:#8a6d1f; margin-bottom:6px}
+.anf p{margin:.45em 0} .anf ol{margin:.3em 0; padding-left:22px} .anf li{margin:3px 0}
+
+.phasen{display:flex; flex-wrap:wrap; gap:4px; margin:1em 0}
+.phasen span{
+  flex:1 1 110px; background:var(--akz-hell); color:var(--akz); font-weight:700; font-size:.88rem;
+  text-align:center; padding:10px 18px 9px; line-height:1.25;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);
+}
+.phasen span:first-child{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+.phasen small{display:block; font-weight:400; font-size:.74rem; color:var(--mut); margin-top:2px}
+
+figure.uml{margin:1em 0; overflow-x:auto}
+figure.uml svg{max-width:100%; height:auto; display:block}
+.umlcap{font-size:.8rem; color:var(--mut); margin-top:6px}
+
+nav.side ol.etl{margin:0 0 6px 29px}
+nav.side ol.etl a{display:block; font-size:.78rem; color:var(--mut); text-decoration:none;
+  padding:1px 6px; border-radius:5px}
+nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
+.uebersicht tr.spaeter td{color:#9aa6b5}
+.uebersicht tr.spaeter td:first-child{color:#9aa6b5}
+
+@media print{
+  .etappe{background:#fff; color:var(--ink); border:2px solid var(--akz)}
+  .etappe .etzeit{background:none; border:1px solid var(--line)}
+  .etappe,.stopp,.def,.anf,figure.uml{break-inside:avoid; page-break-inside:avoid}
+}
+
+table.plan{width:100%; border-collapse:collapse; background:#fff; font-size:.88rem; margin:0 0 20px}
+table.plan th,table.plan td{border:1px solid var(--line); padding:8px 10px; vertical-align:top; text-align:left}
+table.plan th{background:var(--akz-hell); font-size:.74rem; text-transform:uppercase; letter-spacing:.05em}
+table.ablauf td:nth-child(2),table.ablauf td:nth-child(3),table.plan td.std{text-align:center; white-space:nowrap; font-variant-numeric:tabular-nums}
+table.plan td.std{color:var(--mut)}
+table.plan tr.ph-E td:first-child{color:var(--akz)}
+table.plan tr.ph-S{background:#fff9f6}
+table.plan tr.ph-S p{margin:.25em 0} table.plan tr.ph-S ul{margin:.2em 0 .4em; padding-left:18px}
+table.plan .stschild{display:inline-block; margin-bottom:4px}
+table.plan tr.spaeter td{color:#9aa6b5}
+table.ablauf td:first-child{width:118px}
+@media print{ table.plan{font-size:9pt} table.plan tr{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="side">
+  <h1>Ablaufplan für die Lehrkraft</h1>
+  <p class="sub">Objektorientierte Softwareentwicklung<br>Projekt WarnowBank</p>
+  <div class="navtitel">Inhalt</div>
+  <ol>
+    <li><a class="kaplink" href="#ueberblick"><span class="nr">·</span><span>Überblick und Gesamtplan</span></a></li>
+    <li><a class="kaplink" href="#sicherung"><span class="nr">·</span><span>Sicherungskonzept</span></a></li>
+    <li><a class="kaplink" href="#k1"><span class="nr">1</span><span>Vom Bankvorgang zur Anforderung</span></a></li><li><a class="kaplink" href="#k2"><span class="nr">2</span><span>Objekte und ihre Zustände</span></a></li><li><a class="kaplink" href="#k3"><span class="nr">3</span><span>Vom Objekt zur Klasse</span></a></li><li><a class="kaplink" href="#k4"><span class="nr">4</span><span>Die erste Klasse in Python</span></a></li><li><a class="kaplink" href="#k5"><span class="nr">5</span><span>Methoden: Anfragen und Aufträge</span></a></li>
+    <li><a class="kaplink" href="#staende"><span class="nr">·</span><span>Code-Stände</span></a></li>
+  </ol>
+</nav>
+<main>
+<header class="kopf" id="ueberblick">
+  <h2>Ablaufplan und Sicherungskonzept</h2>
+  <p>Begleitplan zur Kursseite <a href="oop_softwareentwicklung.html">Objektorientierte
+  Softwareentwicklung mit Python</a>. Rahmenplan Informatik MV (2019), Thema
+  <em>Objektorientierte Softwareentwicklung</em>: GK ca. 32 Std. (Modellierung 16, Programmierung 16),
+  LK ca. 54 Std. (27/27). Modellierung und Programmierung sind verschränkt; der Arbeitsbereich
+  <em>Entwicklung von Software</em> läuft integrativ mit.</p>
+  <p style="margin-top:.6em"><strong>Annahmen:</strong> Unterrichtsstunden à 45 min, GK 3 und LK 5
+  Wochenstunden. Die Spalten „Std.“ zeigen, in welcher Stunde des Bausteins eine Phase liegt –
+  Phasen, die über eine Stundengrenze reichen, lassen sich in Doppelstunden durchziehen oder am
+  Stopp davor teilen. Die Zeiten der Kursseite und dieses Plans sind identisch.</p>
+  <table class="plan" style="margin-top:18px">
+    <tr><th></th><th>Baustein</th><th>GK Std.</th><th>LK Std.</th><th>GK Woche</th><th>LK Woche</th><th>Stand</th></tr>
+    <tr><td>1</td><td>Vom Bankvorgang zur Anforderung</td><td>3</td><td>4</td><td>1</td><td>1</td><td>ausgearbeitet</td></tr><tr><td>2</td><td>Objekte und ihre Zustände</td><td>3</td><td>4</td><td>2</td><td>1–2</td><td>ausgearbeitet</td></tr><tr><td>3</td><td>Vom Objekt zur Klasse</td><td>2</td><td>3</td><td>3</td><td>2–3</td><td>ausgearbeitet</td></tr><tr><td>4</td><td>Die erste Klasse in Python</td><td>4</td><td>6</td><td>3–4</td><td>3–4</td><td>ausgearbeitet</td></tr><tr><td>5</td><td>Methoden: Anfragen und Aufträge</td><td>4</td><td>6</td><td>5–6</td><td>4–5</td><td>ausgearbeitet</td></tr><tr class="spaeter"><td>6</td><td>Datenkapselung<br><small>Dieb, private Attribute, get/set, Implementationsdiagramm</small></td><td>3</td><td>5</td><td>6–7</td><td>5–6</td><td>folgt</td></tr><tr class="spaeter"><td>7</td><td>Objekte arbeiten zusammen<br><small>Assoziation implementieren, Objektkommunikation, Sequenzdiagramme</small></td><td>4</td><td>7</td><td>7–8</td><td>6–7</td><td>folgt</td></tr><tr class="spaeter"><td>8</td><td>Die Bank verwaltet Konten<br><small>Objekte in Listen, Klassendokumentation</small></td><td>4</td><td>7</td><td>8–9</td><td>8–9</td><td>folgt</td></tr><tr class="spaeter"><td>9</td><td>Softwareentwicklung im Überblick<br><small>Vorgehensmodell, 3-Schicht-Architektur, Qualitätskriterien, GUI</small></td><td>3</td><td>6</td><td>10</td><td>9–10</td><td>folgt</td></tr><tr class="spaeter"><td>10</td><td>Girokonto und Sparkonto<br><small>Vererbung; LK: Polymorphie und Aggregation</small></td><td>2</td><td>6</td><td>11</td><td>10–11</td><td>folgt</td></tr><tr><td></td><td><strong>Summe</strong></td><td><strong>32</strong></td><td><strong>54</strong></td><td>11 Wochen</td><td>11 Wochen</td><td></td></tr>
+  </table>
+</header>
+
+<section class="kap" id="sicherung">
+<div class="kaphead"><div class="knr">S</div><div><h3>Sicherungskonzept</h3>
+<div class="meta">Wie Selbstlernphasen und gemeinsame Sicherung zusammengehen</div></div></div>
+<div class="wissen">
+<h4>Der Rhythmus</h4>
+<p>Jede Etappe beginnt mit einer Ansage der Lehrkraft nach dem Muster der blauen Etappenbalken:
+<em>„Die nächsten 30 Minuten: Wissenskasten lesen, Aufgaben 2.1 und 2.2. Wer fertig ist, macht 2.6.
+Dann Stopp.“</em> Ein sichtbarer Timer am Board hilft. Der Stopp-Kasten sagt den Schülerinnen und
+Schülern, was sie für die Besprechung vorbereiten sollen. Die Zeiten sind auf die Pflichtaufgaben
+bemessen. Schnelle Schülerinnen und Schüler arbeiten an den Erweiterungen, langsame bearbeiten
+Basisaufgaben und sehen sich die Lösungen erklärend an.</p>
+<h4 style="margin-top:16px">Fünf Formen der Sicherung</h4>
+<table class="ref">
+<tr><th>Form</th><th>Einsatz</th><th>So geht's</th></tr>
+<tr><td><strong>Dokumentenkamera / Bildschirmfreigabe</strong></td><td>Diagramme (2.A, 2.C, 3.A)</td><td>Eine Schülerlösung zeigen, möglichst eine mit typischem Fehler. Der Kurs sucht Abweichungen von der Konvention, bevor die Musterlösung kommt.</td></tr>
+<tr><td><strong>Gemeinsames Tafelbild</strong></td><td>Ergebnisse, die später weiterverwendet werden (1.C, 2.B, 3.B)</td><td>Die Lehrkraft schreibt, die Schülerinnen und Schüler diktieren. Das Ergebnis wird verbindlich, z.&nbsp;B. Anforderung V2 oder das Entwurfsdiagramm. Foto ins Kursnetz.</td></tr>
+<tr><td><strong>Live-Coding in Thonny</strong></td><td>Programmierung (4.A, 4.C, 5.C)</td><td>Erst Vorhersage einholen (Handzeichen), dann ausführen. Fehler bewusst provozieren.</td></tr>
+<tr><td><strong>Glossar im Hefter</strong></td><td>jede Sicherung mit Definitionen</td><td>Die Schülerinnen und Schüler übernehmen die rot umrandeten Definitionen während der Etappe. Im Stopp wird nur geprüft und ergänzt, nicht abgeschrieben. Das Glossar ist das Lernmaterial für die Klausur.</td></tr>
+<tr><td><strong>Kurz-Check</strong></td><td>Ende eines Bausteins (4.D, 5.D)</td><td>Drei Fragen, Antwort auf Zettel. Dient der Selbsteinschätzung und als Rückmeldung für die Lehrkraft.</td></tr>
+</table>
+<h4 style="margin-top:16px">Code-Stände synchronisieren</h4>
+<p>Nach den Sicherungen 4.B, 5.B und 5.D gibt die Lehrkraft einen gemeinsamen Stand von
+<code>bank.py</code> über den Austauschordner aus (siehe <a href="#staende">Code-Stände</a>).
+So arbeiten auch Schülerinnen und Schüler, die gefehlt haben oder nicht fertig wurden, mit einem
+lauffähigen Programm weiter. Ihre eigene Datei behalten sie zum Vergleich.</p>
+</div>
+</section>
+
+<section class="kap" id="k1"><div class="kaphead"><div class="knr">1</div><div><h3>Vom Bankvorgang zur Anforderung</h3><div class="meta">GK 3 Std. (135 min) · LK 4 Std. (180 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-L"><td><strong>Einstieg</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td>Szenario WarnowBank vorstellen, Kursseite öffnen, Arbeitsweise mit Etappen, Stopps und Glossar erklären. Hefter: Glossarseite anlegen.</td></tr><tr class="ph-E"><td><strong>Etappe 1.A</strong></td><td>20</td><td>25</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Der Weg zur Software</em>; Aufgaben 1.1 (Partnerarbeit), 1.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 1.A</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Zuruf, Lehrkraft notiert die Schrittfolge an der Tafel; eine Partnergruppe beginnt, andere ergänzen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Daten werden <em>gespeichert</em>, welche nur <em>für einen Vorgang</em> eingegeben?</li><li>Was fehlt in der Anforderung?</li></ul><p><strong>Ergebnis:</strong> Tafel: Schrittfolge mit zwei Spalten „gespeichert“ (PIN, Kontostand, Dispo) und „eingegeben“ (PIN-Eingabe, Betrag). Diese Unterscheidung später für Attribut/Parameter wieder aufgreifen.</p><p><strong>Stolpersteine:</strong> Prüfungen im Hintergrund (PIN, Deckung) werden oft vergessen.</p><p><strong>Glossar/Hefter:</strong> Phasenkette, Definition <em>Anforderungsdefinition</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 1.B</strong></td><td>30</td><td>35</td><td class="std">1–2</td><td class="std">2</td><td>Wissen <em>Verb-Substantiv-Methode</em>; Aufgabe 1.3</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 1.B</strong></td><td>15</td><td>15</td><td class="std">2</td><td class="std">2–3</td><td><p><strong>Form:</strong> Kandidatentabelle gemeinsam am Board füllen; Strittiges per Handzeichen abstimmen und begründen lassen.</p><p><strong>Leitfragen:</strong></p><ul><li>Ist die PIN ein Objekt? Ist der Geldautomat eins?</li><li>Woran erkennt man, dass ein Kandidat eigenständig ist?</li></ul><p><strong>Ergebnis:</strong> Festlegung für den Kurs: Objekte <strong>Kunde</strong> und <strong>Konto</strong>; Geldautomat und Karte vorerst nicht. Verben den beiden Objekten zugeordnet.</p><p><strong>Stolpersteine:</strong> „Bank“ wird gern als Objekt gewählt. Hinweis: Die Bank ist (vorerst) das ganze System – sie kommt in Baustein 8 als Verwaltungsklasse zurück.</p><p><strong>Glossar/Hefter:</strong> Definition <em>Verb-Substantiv-Methode</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 1.C</strong></td><td>25</td><td>45</td><td class="std">2–3</td><td class="std">3–4</td><td>Aufgabe 1.4; Erweiterung 1.5 (LK verbindlich)</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 1.C</strong></td><td>25</td><td>40</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Rückfragen sammeln, Lehrkraft spielt „die Bank“ und beantwortet sie. Ergebnis: Kursfassung (Version 2).</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Festlegungen braucht der Programmierer unbedingt?</li><li>LK: Was haben Giro- und Sparkonto gemeinsam?</li></ul><p><strong>Ergebnis:</strong> Anforderungsdefinition Version 2 – sie steht auf der Kursseite zu Beginn von Baustein 2. Weichen Kursentscheidungen ab (z.&nbsp;B. anderer Dispo), dies im Glossar vermerken; die Seite arbeitet mit 500&nbsp;€.</p><p><strong>Stolpersteine:</strong> Zu allgemeine Fragen („Was soll das Programm können?“). Auf präzise, beantwortbare Rückfragen drängen.</p><p><strong>Glossar/Hefter:</strong> Anforderung V2 (ausgedruckt einkleben oder abfotografieren)</p></td></tr></table></section><section class="kap" id="k2"><div class="kaphead"><div class="knr">2</div><div><h3>Objekte und ihre Zustände</h3><div class="meta">GK 3 Std. (135 min) · LK 4 Std. (180 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 2.A</strong></td><td>25</td><td>30</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Objekte darstellen</em>; Aufgaben 2.1, 2.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.A</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Eine Schülerlösung zu 2.2 unter der Dokumentenkamera; Kurs sucht Abweichungen von der UML-Konvention.</p><p><strong>Leitfragen:</strong></p><ul><li>Text oder Zahl – woran sieht man das im Diagramm?</li><li>Was ist der Zustand eines Objekts?</li></ul><p><strong>Ergebnis:</strong> Konventionen: abgerundetes Rechteck, <code>bezeichner : Klasse</code> unterstrichen, Texte in Anführungszeichen, keine Einheiten.</p><p><strong>Stolpersteine:</strong> Fehlender Unterstrich, Einheit „€“ im Wert, PIN als Zahl (0815 → 815).</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Objekt</em>, <em>Attribut</em>, <em>Objektdiagramm</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 2.B</strong></td><td>35</td><td>45</td><td class="std">1–2</td><td class="std">1–2</td><td>Wissen <em>Abläufe simulieren</em>; Aufgabe 2.3</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.B</strong></td><td>20</td><td>20</td><td class="std">2</td><td class="std">2–3</td><td><p><strong>Form:</strong> Zustandsfolge an der Tafel als Zeitleiste (Zustand 1–4); Schülerinnen und Schüler ändern nur die betroffenen Werte.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Prüfung muss die Software vor jeder Abhebung machen?</li><li>Welche Attribute ändern sich nie?</li></ul><p><strong>Ergebnis:</strong> Bedingung in Worten: Kontostand nach Abhebung ≥ −Dispo. Wird in 5.3 als Verzweigung programmiert – Tafelbild aufheben.</p><p><strong>Stolpersteine:</strong> Bei der Überweisung wird das Zielkonto vergessen; bei C wird der Zustand „trotzdem“ geändert.</p><p><strong>Glossar/Hefter:</strong> Zustandsfolge als Beispiel</p></td></tr><tr class="ph-E"><td><strong>Etappe 2.C</strong></td><td>30</td><td>50</td><td class="std">3</td><td class="std">3–4</td><td>Wissen <em>Objektreferenzen</em>; Aufgaben 2.4, 2.5; Erweiterung 2.6 (LK verbindlich)</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.C</strong></td><td>15</td><td>25</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Fehlerliste 2.5 im Plenum (schnell), dann Diagramm 2.4 vergleichen.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum zeigt der Pfeil vom Konto zum Kunden?</li><li>LK: Worin unterscheiden sich <code>inhaber</code> und <code>akt_konto</code>?</li></ul><p><strong>Ergebnis:</strong> Referenz = Wert ist ein Objekt; Darstellung als Pfeil; Richtung folgt aus der Anforderung.</p><p><strong>Stolpersteine:</strong> Kunde wird doppelt gezeichnet; <code>inhaber = "Lehmann"</code> als Text.</p><p><strong>Glossar/Hefter:</strong> Definition <em>Objektreferenz</em></p></td></tr></table></section><section class="kap" id="k3"><div class="kaphead"><div class="knr">3</div><div><h3>Vom Objekt zur Klasse</h3><div class="meta">GK 2 Std. (90 min) · LK 3 Std. (135 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 3.A</strong></td><td>25</td><td>30</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Klassen entwickeln</em>; Aufgaben 3.1, 3.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 3.A</strong></td><td>10</td><td>15</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Kurzer Vergleich 3.1 an der Tafel; 3.2c als Murmelphase (1 min), dann Plenum.</p><p><strong>Leitfragen:</strong></p><ul><li>Was ist der Unterschied zwischen <code>Konto</code> und <code>konto1</code>?</li></ul><p><strong>Ergebnis:</strong> Klasse = Bauplan mit Datentypen; Objekt = Exemplar mit Werten.</p><p><strong>Stolpersteine:</strong> Klassenname unterstrichen oder mit Doppelpunkt; Werte statt Datentypen.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Klasse</em>, <em>Entwurfsdiagramm</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 3.B</strong></td><td>35</td><td>45</td><td class="std">1–2</td><td class="std">2</td><td>Aufgaben 3.3, 3.4; Wissen <em>Assoziationen</em>; Aufgabe 3.5; Erweiterung 3.6 (LK verbindlich)</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 3.B</strong></td><td>20</td><td>45</td><td class="std">2</td><td class="std">3</td><td><p><strong>Form:</strong> <strong>Große Sicherung:</strong> gemeinsames Entwurfsdiagramm an der Tafel entwickeln, Methoden aus der Tabelle 3.3 übernehmen. Strittig: Kontonummer Zahl oder Text – kurz diskutieren, dann festlegen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Methode ergibt sich aus Satz 6?</li><li>Warum steht <code>inhaber</code> nicht im Attributbereich?</li><li>LK: Welche Multiplizität hat <code>akt_konto</code>?</li></ul><p><strong>Ergebnis:</strong> Modell Konto/Kunde mit Assoziation <code>inhaber</code>, Multiplizität 1 (steht auf der Kursseite zu Beginn von Baustein 4). LK zusätzlich: Analogie zum ER-Modell (1:n) ansprechen.</p><p><strong>Stolpersteine:</strong> Methoden mit Parametern im Entwurf; <code>inhaber</code> doppelt (als Attribut und Pfeil).</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Assoziation</em>, <em>Multiplizität</em>; Entwurfsdiagramm</p></td></tr></table></section><section class="kap" id="k4"><div class="kaphead"><div class="knr">4</div><div><h3>Die erste Klasse in Python</h3><div class="meta">GK 4 Std. (180 min) · LK 6 Std. (270 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 4.A</strong></td><td>30</td><td>35</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Klassen in Python</em> (Thonny, F5, Shell, Variablenansicht); Aufgaben 4.1, 4.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.A</strong></td><td>15</td><td>15</td><td class="std">1</td><td class="std">1–2</td><td><p><strong>Form:</strong> Live in Thonny am Board: Klasse ausführen, in der Shell Objekt erzeugen, Objektinspektor öffnen. Ein Schüler erklärt Zeile für Zeile, was beim Konstruktoraufruf passiert.</p><p><strong>Leitfragen:</strong></p><ul><li>Wofür steht <code>self</code>?</li><li>Warum wird <code>self</code> beim Erzeugen nicht mitgeschrieben?</li><li>Warum ist <code>a == b</code> falsch?</li></ul><p><strong>Ergebnis:</strong> Code der Klasse Kunde mit Pfeilen: Parameter → Attribut. Objekt hat Identität.</p><p><strong>Stolpersteine:</strong> Datei nicht mit F5 ausgeführt, daher <code>NameError: name 'Kunde' is not defined</code> in der Shell.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Konstruktor</em>, <em>Instanziierung</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 4.B</strong></td><td>35</td><td>45</td><td class="std">2</td><td class="std">2–3</td><td>Aufgaben 4.3, 4.4</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.B</strong></td><td>10</td><td>15</td><td class="std">2</td><td class="std">3</td><td><p><strong>Form:</strong> Fehler A–D zügig im Plenum; danach <strong>Code-Stand 4.B</strong> über den Austauschordner verteilen, damit alle gleich weiterarbeiten.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Fehlermeldung gehört zu welchem Fehler?</li></ul><p><strong>Ergebnis:</strong> Merkliste „typische Fehler“: _init_, self vergessen (2×), Parameter fehlt.</p><p><strong>Stolpersteine:</strong> Fehler B wird oft für richtig gehalten, weil er erst beim Zugriff auffällt.</p><p><strong>Glossar/Hefter:</strong> Merkliste typischer Fehler</p></td></tr><tr class="ph-E"><td><strong>Etappe 4.C</strong></td><td>30</td><td>50</td><td class="std">3</td><td class="std">3–4</td><td>Wissen <em>Variablen speichern Referenzen</em>; Aufgabe 4.5</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.C</strong></td><td>15</td><td>20</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Vorhersage zuerst (Handzeichen: Wert von <code>konto1.kontostand</code>?), dann in Thonny mit Heap-Ansicht live prüfen.</p><p><strong>Leitfragen:</strong></p><ul><li>Wie viele Objekte gibt es? Wie viele Variablen?</li><li>Was passiert mit einem Objekt, auf das nichts mehr zeigt?</li></ul><p><strong>Ergebnis:</strong> Variablen speichern Referenzen; Zuweisung kopiert die Referenz, nicht das Objekt.</p><p><strong>Stolpersteine:</strong> Vorstellung, <code>konto3 = konto1</code> erzeuge eine Kopie.</p><p><strong>Glossar/Hefter:</strong> Diagramm aus 4.5</p></td></tr><tr class="ph-E"><td><strong>Etappe 4.D</strong></td><td>30</td><td>60</td><td class="std">4</td><td class="std">5–6</td><td>Aufgabe 4.6; Erweiterung 4.7 (LK verbindlich)</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.D</strong></td><td>15</td><td>30</td><td class="std">4</td><td class="std">6</td><td><p><strong>Form:</strong> Kurz-Check (3 Fragen, Antwort auf Zettel oder per Handzeichen), dann LK: Objektdiagramm zu 4.7 an der Tafel.</p><p><strong>Leitfragen:</strong></p><ul><li>Kurz-Check: (1) Was ist der Unterschied zwischen <code>Konto</code>, <code>konto1</code> und <code>konto1.kontostand</code>? (2) Was macht der Konstruktor? (3) Wie schreibt man in Python den Wahrheitswert „falsch“?</li></ul><p><strong>Ergebnis:</strong> Selbsteinschätzung; wer unsicher ist, wiederholt 4.1–4.3 mit Lösung.</p><p><strong>Stolpersteine:</strong> <code>"False"</code> als Text statt <code>False</code>.</p><p><strong>Glossar/Hefter:</strong> –</p></td></tr></table></section><section class="kap" id="k5"><div class="kaphead"><div class="knr">5</div><div><h3>Methoden: Anfragen und Aufträge</h3><div class="meta">GK 4 Std. (180 min) · LK 6 Std. (270 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 5.A</strong></td><td>30</td><td>35</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Anfragen und Aufträge</em>; Aufgaben 5.1, 5.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.A</strong></td><td>15</td><td>15</td><td class="std">1</td><td class="std">1–2</td><td><p><strong>Form:</strong> Tabelle Anfrage/Auftrag gemeinsam an der Tafel; Gegenüberstellung <code>return</code> vs. <code>print</code> mit Live-Beispiel (<code>x = kunde1.get_name()</code> gegen eine print-Variante).</p><p><strong>Leitfragen:</strong></p><ul><li>Was gibt <code>print(kunde2.set_name("Krüger"))</code> aus – und warum?</li><li>Warum nutzt eine Anfrage <code>return</code>?</li></ul><p><strong>Ergebnis:</strong> Anfrage: Rückgabe, Zustand unverändert; Auftrag: keine Rückgabe, Zustand ändert sich. get/set-Konvention.</p><p><strong>Stolpersteine:</strong> Aufruf ohne Klammern (<code>kunde1.get_name</code>) liefert die Methode statt des Werts.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Methode</em>, <em>Parameter und Rückgabe</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 5.B</strong></td><td>35</td><td>50</td><td class="std">2</td><td class="std">2–3</td><td>Aufgaben 5.3, 5.4</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.B</strong></td><td>15</td><td>20</td><td class="std">2–3</td><td class="std">3</td><td><p><strong>Form:</strong> Bedingung von <code>abheben</code> mit dem Tafelbild aus Sicherung 2.B vergleichen. Danach <strong>Code-Stand 5.B</strong> verteilen.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum <code>&gt;=</code> und nicht <code>&gt;</code>?</li><li>Warum liefert <code>pin_pruefen(815)</code> False?</li></ul><p><strong>Ergebnis:</strong> Modell (Bedingung in Worten) → Code (Verzweigung) – der Weg von der Simulation zur Implementierung wird sichtbar.</p><p><strong>Stolpersteine:</strong> Zahl 500 statt <code>self.dispo</code>; Bedingung mit dem alten Kontostand statt dem neuen.</p><p><strong>Glossar/Hefter:</strong> –</p></td></tr><tr class="ph-E"><td><strong>Etappe 5.C</strong></td><td>25</td><td>40</td><td class="std">3</td><td class="std">3–4</td><td>Aufgabe 5.5; Wissen <em>Systematisch testen</em>; Aufgabe 5.6</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.C</strong></td><td>15</td><td>20</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Testtabelle gemeinsam; Testfall 5 live vorführen („Abheben macht reich“), Korrektur gemeinsam entwickeln.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum erwartete Ergebnisse <em>vor</em> dem Test notieren?</li><li>Welche Sonderfälle gehören in jede Testtabelle?</li></ul><p><strong>Ergebnis:</strong> Testtabelle: Normalfall, Grenzwert, knapp darüber, 0, unzulässig. Korrigierte Methoden mit <code>if – elif – else</code>.</p><p><strong>Stolpersteine:</strong> Erwartung wird nach dem Test „angepasst“.</p><p><strong>Glossar/Hefter:</strong> Testtabelle als Muster</p></td></tr><tr class="ph-E"><td><strong>Etappe 5.D</strong></td><td>30</td><td>60</td><td class="std">4</td><td class="std">5–6</td><td>Aufgabe 5.7; Erweiterung 5.8 (LK verbindlich); Kasten <em>Ein Problem bleibt</em></td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.D</strong></td><td>15</td><td>30</td><td class="std">4</td><td class="std">6</td><td><p><strong>Form:</strong> Kontoauszug kurz vergleichen; dann <em>Ein Problem bleibt</em> live vorführen und als Problemfrage für Baustein 6 stehen lassen. <strong>Code-Stand 5.D</strong> verteilen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Attribute dürfen von außen gelesen, welche verändert werden?</li><li>LK: Wie kommunizieren zwei Konten bei einer Überweisung?</li></ul><p><strong>Ergebnis:</strong> Problemfrage Datenkapselung; LK: Objektkommunikation über Parameterreferenz (Vorbereitung Sequenzdiagramm).</p><p><strong>Stolpersteine:</strong> Buchung wird auch bei abgelehnter Abhebung eingetragen.</p><p><strong>Glossar/Hefter:</strong> Problemfrage notieren</p></td></tr></table></section>
+
+<section class="kap" id="staende">
+<div class="kaphead"><div class="knr">C</div><div><h3>Code-Stände für den Austauschordner</h3>
+<div class="meta">Getestet mit Python 3.13; die Dateien liegen auch im Ordner <code>oop_staende/</code></div></div></div>
+<h4 style="margin:18px 0 4px">Stand nach Sicherung 4.B</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Sicherung 4.B
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0</pre></div><h4 style="margin:18px 0 4px">Stand nach Sicherung 5.B</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Sicherung 5.B
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+    def get_kundennummer(self):
+        return self.kundennummer
+
+    def get_name(self):
+        return self.name
+
+    def get_vorname(self):
+        return self.vorname
+
+    def get_geburtsdatum(self):
+        return self.geburtsdatum
+
+    def set_name(self, neuer_name):
+        self.name = neuer_name
+
+    def daten_drucken(self):
+        print("Kundennummer:", self.kundennummer)
+        print("Name:", self.vorname, self.name)
+        print("Geboren am:", self.geburtsdatum)
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0
+
+    def get_kontonummer(self):
+        return self.kontonummer
+
+    def get_kontostand(self):
+        return self.kontostand
+
+    def pin_pruefen(self, eingabe):
+        return eingabe == self.pin
+
+    def einzahlen(self, betrag):
+        self.kontostand = self.kontostand + betrag
+
+    def abheben(self, betrag):
+        if self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+        else:
+            print("Abhebung abgelehnt: Der Dispo reicht nicht aus.")</pre></div><h4 style="margin:18px 0 4px">Stand nach Abschluss Baustein 5 (Sicherung 5.D)</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Abschluss von Baustein 5
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+    def get_kundennummer(self):
+        return self.kundennummer
+
+    def get_name(self):
+        return self.name
+
+    def get_vorname(self):
+        return self.vorname
+
+    def get_geburtsdatum(self):
+        return self.geburtsdatum
+
+    def set_name(self, neuer_name):
+        self.name = neuer_name
+
+    def daten_drucken(self):
+        print("Kundennummer:", self.kundennummer)
+        print("Name:", self.vorname, self.name)
+        print("Geboren am:", self.geburtsdatum)
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0
+        self.buchungen = []
+
+    def get_kontonummer(self):
+        return self.kontonummer
+
+    def get_kontostand(self):
+        return self.kontostand
+
+    def pin_pruefen(self, eingabe):
+        return eingabe == self.pin
+
+    def einzahlen(self, betrag):
+        if betrag &gt; 0:
+            self.kontostand = self.kontostand + betrag
+            self.buchungen.append(betrag)
+        else:
+            print("Einzahlung abgelehnt: Der Betrag muss positiv sein.")
+
+    def abheben(self, betrag):
+        if betrag &lt;= 0:
+            print("Abhebung abgelehnt: Der Betrag muss positiv sein.")
+        elif self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+            self.buchungen.append(-betrag)
+        else:
+            print("Abhebung abgelehnt: Der Dispo reicht nicht aus.")
+
+    def ueberweisen(self, betrag, zielkonto):
+        if betrag &lt;= 0:
+            print("Überweisung abgelehnt: Der Betrag muss positiv sein.")
+        elif self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+            self.buchungen.append(-betrag)
+            zielkonto.einzahlen(betrag)
+        else:
+            print("Überweisung abgelehnt: Der Dispo reicht nicht aus.")
+
+    def auszug_drucken(self):
+        print("Kontoauszug für Konto", self.kontonummer)
+        for buchung in self.buchungen:
+            print(buchung, "€")
+        print("Kontostand:", self.kontostand, "€")
+
+
+# Testablauf aus Aufgabe 2.3
+kunde1 = Kunde(4711, "Lehmann", "Jan", "14.05.1988")
+konto1 = Konto(987654321, "1234")
+konto2 = Konto(65193275, "0815")
+konto1.einzahlen(2020)
+konto2.einzahlen(340)
+konto1.abheben(50)
+konto1.ueberweisen(120, konto2)
+konto1.abheben(2400)
+konto1.auszug_drucken()</pre></div>
+</section>
+</main>
+</div>
+<script>
+// ---- Python-Syntaxhervorhebung (ohne externe Bibliothek) ----
+var KW = ("and|or|not|if|elif|else|for|while|in|def|return|import|from|as|True|False|None|"
+        + "break|continue|pass|del|is|lambda|global|nonlocal|try|except|finally|raise|"
+        + "class|with|assert|yield|self").split("|");
+var BI = ("turtle|print|len|range|int|float|str|round|abs|type|input|random|time|list|"
+        + "max|min|sum|bool|sorted|append|insert|remove|index|pop|math").split("|");
+
+var RE = new RegExp(
+  "(#[^\\n]*)"                                            // 1 Kommentar
++ "|(\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''"
++ "|\"[^\"\\n]*\"|'[^'\\n]*')"                            // 2 String
++ "|\\b(" + KW.join("|") + ")\\b"                         // 3 Schluesselwort
++ "|\\b(" + BI.join("|") + ")\\b"                         // 4 eingebaut
++ "|\\b(\\d+\\.?\\d*)\\b",                                // 5 Zahl
+  "g");
+
+function esc(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function hervorheben(roh){
+  return esc(roh).replace(RE, function(m,k,s,kw,bi,nu){
+    if(k)  return '<span class="tok-com">'+k+'</span>';
+    if(s)  return '<span class="tok-str">'+s+'</span>';
+    if(kw) return '<span class="tok-kw">'+kw+'</span>';
+    if(bi) return '<span class="tok-bi">'+bi+'</span>';
+    if(nu) return '<span class="tok-num">'+nu+'</span>';
+    return m;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  // Codebloecke einfaerben und Kopierknopf einsetzen
+  document.querySelectorAll("pre.hl").forEach(function(pre){
+    var roh = pre.textContent;
+    pre.dataset.roh = roh;
+    pre.innerHTML = hervorheben(roh);
+    var box = pre.parentElement;
+    if(box && box.classList.contains("codebox")){
+      var b = document.createElement("button");
+      b.className = "kopieren"; b.type = "button"; b.textContent = "kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(roh).then(function(){
+          b.textContent = "kopiert!";
+          setTimeout(function(){ b.textContent = "kopieren"; }, 1400);
+        }, function(){ b.textContent = "Strg+C"; });
+      });
+      box.appendChild(b);
+    }
+  });
+  document.querySelectorAll("pre.code").forEach(function(pre){
+    pre.innerHTML = hervorheben(pre.textContent);
+  });
+
+});
+</script>
+</body>
+</html>
