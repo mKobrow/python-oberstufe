@@ -387,6 +387,9 @@ nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
 
   <div class="navtitel">Fortschritt</div>
   <p class="sub" id="zaehler" style="margin:0"></p>
+  <div class="werkzeug" style="margin-top:8px">
+    <button type="button" id="fortschrittweg">Fortschritt zurücksetzen</button>
+  </div>
 </nav>
 
 <main>
@@ -1343,8 +1346,9 @@ Wie man Attribute vor solchen Zugriffen schützt, ist Thema des nächsten Bauste
   Entwurfsdiagramme zur Implementation orientiert sich an gängigen Lehrwerken für die
   Sekundarstufe&nbsp;II. Stand: Oktober 2026.</p>
   <p class="seitenhinweis">Statische Übungsseite – funktioniert ohne Internetverbindung und
-  ohne Installation. Der Fortschritt wird bewusst nicht gespeichert und ist nach dem
-  Neuladen zurückgesetzt. Über die Druckfunktion des Browsers entsteht ein Arbeitsheft
+  ohne Installation. Erledigte Aufgaben werden nur in diesem
+  Browser auf diesem Gerät gespeichert. An einem anderen Rechner oder nach dem Löschen der
+  Browserdaten beginnt die Liste leer. Über die Druckfunktion des Browsers entsteht ein Arbeitsheft
   mit allen Lösungen.</p>
 </footer>
 </main>
@@ -1414,13 +1418,44 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   });
 
-  // Erledigt-Haken
+  // Erledigt-Haken – im localStorage dieses Browsers gespeichert.
+  // Schluessel je Seite, da alle Seiten unter github.io denselben Speicher teilen.
+  var SPEICHER = "fortschritt:" + location.pathname;
+  function laden(){
+    try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; }
+    catch(e){ return {}; }
+  }
+  function speichern(stand){
+    try { localStorage.setItem(SPEICHER, JSON.stringify(stand)); } catch(e){}
+  }
+  var stand = laden();
   document.querySelectorAll(".hakenbox input").forEach(function(cb){
+    var art = cb.closest("article");
+    if(stand[art.id]){
+      cb.checked = true;
+      art.classList.add("fertig");
+    }
     cb.addEventListener("change", function(){
-      cb.closest("article").classList.toggle("fertig", cb.checked);
+      art.classList.toggle("fertig", cb.checked);
+      if(cb.checked){ stand[art.id] = 1; } else { delete stand[art.id]; }
+      speichern(stand);
       zaehlerAktualisieren();
     });
   });
+
+  var weg = document.getElementById("fortschrittweg");
+  if(weg){
+    weg.addEventListener("click", function(){
+      if(!confirm("Alle Haken auf dieser Seite entfernen?")) return;
+      stand = {};
+      try { localStorage.removeItem(SPEICHER); } catch(e){}
+      document.querySelectorAll(".hakenbox input").forEach(function(cb){
+        cb.checked = false;
+        cb.closest("article").classList.remove("fertig");
+      });
+      zaehlerAktualisieren();
+    });
+  }
 
   function zaehlerAktualisieren(){
     var alle = document.querySelectorAll(".hakenbox input");
