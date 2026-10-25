@@ -353,6 +353,30 @@ nav.side ol.etl{margin:0 0 6px 29px}
 nav.side ol.etl a{display:block; font-size:.78rem; color:var(--mut); text-decoration:none;
   padding:1px 6px; border-radius:5px}
 nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
+/* ---------- Seitenweise Anzeige ---------- */
+main.paged > header.kopf, main.paged > section.kap{display:none}
+main.paged > header.kopf.aktiv, main.paged > section.kap.aktiv{display:block}
+.uebersicht a.bslink{color:var(--ink); text-decoration:none; font-weight:600}
+.uebersicht a.bslink:hover{color:var(--akz); text-decoration:underline}
+a.losknopf{display:inline-block; background:var(--akz); color:#fff; text-decoration:none;
+  font-weight:700; padding:10px 18px; border-radius:8px}
+a.losknopf:hover{background:#244a70}
+.blaettern{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin:36px 0 0; padding-top:18px; border-top:1px solid var(--line)}
+.blaettern a{display:block; max-width:48%; padding:10px 16px; border:1px solid var(--line);
+  border-radius:8px; background:var(--panel); text-decoration:none; color:var(--ink); font-size:.9rem}
+.blaettern a:hover{border-color:var(--akz); background:var(--akz-hell)}
+.blaettern a small{display:block; color:var(--mut); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em}
+.blaettern .weiter{margin-left:auto; text-align:right}
+.oben{display:flex; gap:14px; font-size:.84rem; margin:0 0 14px}
+.oben a{color:var(--mut); text-decoration:none} .oben a:hover{color:var(--akz)}
+nav.side a.kaplink.aktiv{background:var(--akz-hell)}
+nav.side.paged ol.etl{display:none}
+nav.side.paged li.aktiv ol.etl{display:block}
+@media print{
+  main.paged > header.kopf, main.paged > section.kap{display:block}
+  .blaettern,.oben{display:none}
+}
 .knopfleiste .imkurs{align-self:center; font-size:.82rem; color:var(--mut); font-style:italic; margin-left:4px}
 .uebersicht tr.spaeter td{color:#9aa6b5}
 .uebersicht tr.spaeter td:first-child{color:#9aa6b5}
@@ -394,7 +418,7 @@ nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
 </nav>
 
 <main>
-<header class="kopf">
+<header class="kopf" id="start">
   <h2>Objektorientierte Softwareentwicklung mit Python</h2>
   <p>In diesem Kurs entwickeln Sie die Kontoverwaltung der WarnowBank Rostock – von der ersten
   Idee über Objekt- und Klassendiagramme bis zum fertigen Python-Programm. Sie arbeiten
@@ -409,8 +433,9 @@ nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
   am Stopp gemeinsam besprochen wird, haben keine Lösung auf dieser Seite.</p>
   <table class="uebersicht">
     <tr><th></th><th>Baustein</th><th>Umfang</th><th>Zeitrichtwert</th></tr>
-    <tr><td>0</td><td>Gute Software – warum objektorientiert?</td><td>3 Aufgaben</td><td>GK 1 · LK 1 Std.</td></tr><tr><td>1</td><td>Vom Bankvorgang zur Anforderung</td><td>5 Aufgaben</td><td>GK 3 · LK 4 Std.</td></tr><tr><td>2</td><td>Objekte und ihre Zustände</td><td>6 Aufgaben</td><td>GK 3 · LK 4 Std.</td></tr><tr><td>3</td><td>Vom Objekt zur Klasse</td><td>6 Aufgaben</td><td>GK 2 · LK 3 Std.</td></tr><tr><td>4</td><td>Die erste Klasse in Python</td><td>7 Aufgaben</td><td>GK 4 · LK 6 Std.</td></tr><tr><td>5</td><td>Methoden: Anfragen und Aufträge</td><td>8 Aufgaben</td><td>GK 4 · LK 6 Std.</td></tr><tr class="spaeter"><td>6</td><td>Datenkapselung <small>(Dieb, private Attribute, get/set, Implementationsdiagramm)</small></td><td>in Vorbereitung</td><td>GK 3 · LK 5 Std.</td></tr><tr class="spaeter"><td>7</td><td>Objekte arbeiten zusammen <small>(Assoziation implementieren, Objektkommunikation, Sequenzdiagramme)</small></td><td>in Vorbereitung</td><td>GK 4 · LK 7 Std.</td></tr><tr class="spaeter"><td>8</td><td>Die Bank verwaltet Konten <small>(Objekte in Listen, Klassendokumentation)</small></td><td>in Vorbereitung</td><td>GK 4 · LK 7 Std.</td></tr><tr class="spaeter"><td>9</td><td>Softwareentwicklung im Überblick <small>(Vorgehensmodell, 3-Schicht-Architektur, Qualität bewerten, GUI)</small></td><td>in Vorbereitung</td><td>GK 2 · LK 5 Std.</td></tr><tr class="spaeter"><td>10</td><td>Girokonto und Sparkonto <small>(Vererbung; LK: Polymorphie und Aggregation)</small></td><td>in Vorbereitung</td><td>GK 2 · LK 6 Std.</td></tr>
+    <tr><td>0</td><td><a class="bslink" href="#k0">Gute Software – warum objektorientiert?</a></td><td>3 Aufgaben</td><td>GK 1 · LK 1 Std.</td></tr><tr><td>1</td><td><a class="bslink" href="#k1">Vom Bankvorgang zur Anforderung</a></td><td>5 Aufgaben</td><td>GK 3 · LK 4 Std.</td></tr><tr><td>2</td><td><a class="bslink" href="#k2">Objekte und ihre Zustände</a></td><td>6 Aufgaben</td><td>GK 3 · LK 4 Std.</td></tr><tr><td>3</td><td><a class="bslink" href="#k3">Vom Objekt zur Klasse</a></td><td>6 Aufgaben</td><td>GK 2 · LK 3 Std.</td></tr><tr><td>4</td><td><a class="bslink" href="#k4">Die erste Klasse in Python</a></td><td>7 Aufgaben</td><td>GK 4 · LK 6 Std.</td></tr><tr><td>5</td><td><a class="bslink" href="#k5">Methoden: Anfragen und Aufträge</a></td><td>8 Aufgaben</td><td>GK 4 · LK 6 Std.</td></tr><tr class="spaeter"><td>6</td><td>Datenkapselung <small>(Dieb, private Attribute, get/set, Implementationsdiagramm)</small></td><td>in Vorbereitung</td><td>GK 3 · LK 5 Std.</td></tr><tr class="spaeter"><td>7</td><td>Objekte arbeiten zusammen <small>(Assoziation implementieren, Objektkommunikation, Sequenzdiagramme)</small></td><td>in Vorbereitung</td><td>GK 4 · LK 7 Std.</td></tr><tr class="spaeter"><td>8</td><td>Die Bank verwaltet Konten <small>(Objekte in Listen, Klassendokumentation)</small></td><td>in Vorbereitung</td><td>GK 4 · LK 7 Std.</td></tr><tr class="spaeter"><td>9</td><td>Softwareentwicklung im Überblick <small>(Vorgehensmodell, 3-Schicht-Architektur, Qualität bewerten, GUI)</small></td><td>in Vorbereitung</td><td>GK 2 · LK 5 Std.</td></tr><tr class="spaeter"><td>10</td><td>Girokonto und Sparkonto <small>(Vererbung; LK: Polymorphie und Aggregation)</small></td><td>in Vorbereitung</td><td>GK 2 · LK 6 Std.</td></tr>
   </table>
+  <p style="margin:18px 0 0"><a class="losknopf" href="#k0">Mit Baustein 0 beginnen →</a></p>
 </header>
 
 <section class="kap" id="k0"><div class="kaphead"><div class="knr">0</div><div><h3>Gute Software – warum objektorientiert?</h3><div class="meta">GK 1 · LK 1 Unterrichtsstunden &nbsp;·&nbsp; Qualitätskriterien recherchieren und ein Programm ohne Objekte bewerten</div></div></div><div class="ziele"><h4>Ziele dieses Bausteins</h4><ul><li>Qualitätskriterien für Software recherchieren und mit eigenen Worten erläutern</li><li>die Kriterien Korrektheit, Robustheit, Wiederverwendbarkeit und Effizienz an Beispielen erläutern</li><li>ein vorgegebenes Programm anhand von Qualitätskriterien bewerten</li><li>begründen, welche Probleme die objektorientierte Programmierung lösen soll</li></ul></div><div class="etappe" id="e0-A"><div class="etkopf"><span class="etnr">Etappe 0.A</span><span class="ettitel">Was ist gute Software?</span><span class="etzeit">ca. 20 min · LK 15 min</span></div><ul><li>Aufgabe 0.1 (Recherche, Partnerarbeit)</li></ul></div><article class="auf" id="a0-1" data-stufe="basis"><div class="aufkopf"><span class="aid">0.1</span><h5>Qualitätskriterien recherchieren</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper">
@@ -1413,6 +1438,55 @@ document.addEventListener("DOMContentLoaded", function(){
       b.textContent = b.dataset.zu;
     });
   });
+});
+</script>
+<script>// ---- Seitenweise Anzeige: Startseite und je Baustein eine Seite ----
+// Ohne JavaScript (und beim Drucken) bleibt alles auf einer Seite sichtbar.
+document.addEventListener("DOMContentLoaded", function(){
+  var main = document.querySelector("main");
+  var nav = document.querySelector("nav.side");
+  var seiten = [document.getElementById("start")]
+    .concat(Array.prototype.slice.call(document.querySelectorAll("main > section.kap")));
+  main.classList.add("paged");
+  nav.classList.add("paged");
+
+  function titel(s){
+    if(s.id === "start") return "Übersicht";
+    return "Baustein " + s.querySelector(".knr").textContent + ": " + s.querySelector("h3").textContent;
+  }
+
+  // Blaetterleiste und Kopfzeile in jede Bausteinseite einsetzen
+  seiten.forEach(function(s, i){
+    if(s.id === "start") return;
+    var oben = document.createElement("div");
+    oben.className = "oben";
+    oben.innerHTML = '<a href="#start">← Übersicht</a>';
+    s.insertBefore(oben, s.firstChild);
+    var leiste = document.createElement("div");
+    leiste.className = "blaettern";
+    var zurueck = seiten[i - 1], weiter = seiten[i + 1];
+    leiste.innerHTML =
+      '<a href="#' + zurueck.id + '"><small>zurück</small>← ' + titel(zurueck) + '</a>'
+      + (weiter ? '<a class="weiter" href="#' + weiter.id + '"><small>weiter</small>'
+                  + titel(weiter) + ' →</a>' : '');
+    s.appendChild(leiste);
+  });
+
+  function zeige(){
+    var ziel = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+    var seite = ziel ? ziel.closest("main > section.kap, main > header.kopf") : null;
+    if(!seite) seite = seiten[0];
+    seiten.forEach(function(s){ s.classList.toggle("aktiv", s === seite); });
+    nav.querySelectorAll(":scope > ol > li").forEach(function(li){
+      var a = li.querySelector("a.kaplink");
+      var an = a && a.getAttribute("href") === "#" + seite.id;
+      li.classList.toggle("aktiv", !!an);
+      if(a) a.classList.toggle("aktiv", !!an);
+    });
+    if(ziel && ziel !== seite){ ziel.scrollIntoView(); } else { window.scrollTo(0, 0); }
+  }
+  window.addEventListener("hashchange", zeige);
+  zeige();
 });
 </script>
 </body>
