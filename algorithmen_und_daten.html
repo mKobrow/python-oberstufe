@@ -329,7 +329,7 @@ pre.ausgabe::before{
   Arbeite die Tipps der Reihe nach ab – die Lösung erst danach.</p>
   <table class="uebersicht">
     <tr><th></th><th>Kapitel</th><th>Umfang</th><th>Zeitrichtwert</th></tr>
-    <tr><td>1</td><td>Sequenz - die Turtle in Bewegung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>2</td><td>Variablen, Datentypen und Typkonvertierung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>3</td><td>Wiederholung - Schleifen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>4</td><td>Verzweigung, Vergleichs- und logische Operatoren</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>5</td><td>Funktionen - eigene Befehle bauen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>6</td><td>Struktogramme</td><td>4 Aufgaben</td><td>1 Unterrichtsstunde</td></tr><tr><td>7</td><td>Die lineare Datenstruktur Liste</td><td>6 Aufgaben</td><td>2-3 Unterrichtsstunden</td></tr><tr><td>8</td><td>Projekt: Suchen und Sortieren sichtbar machen</td><td>4 Aufgaben</td><td>2 Unterrichtsstunden</td></tr>
+    <tr><td>1</td><td>Sequenz - die Turtle in Bewegung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>2</td><td>Variablen, Datentypen und Typkonvertierung</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>3</td><td>Wiederholung - Schleifen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>4</td><td>Verzweigung, Vergleichs- und logische Operatoren</td><td>5 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>5</td><td>Funktionen - eigene Befehle bauen</td><td>6 Aufgaben</td><td>2 Unterrichtsstunden</td></tr><tr><td>6</td><td>Struktogramme</td><td>4 Aufgaben</td><td>1 Unterrichtsstunde</td></tr><tr><td>7</td><td>Die lineare Datenstruktur Liste</td><td>8 Aufgaben</td><td>2-3 Unterrichtsstunden</td></tr><tr><td>8</td><td>Projekt: Suchen und Sortieren sichtbar machen</td><td>4 Aufgaben</td><td>2 Unterrichtsstunden</td></tr>
   </table>
 </header>
 
@@ -1904,7 +1904,85 @@ schrumpfen dadurch auf das zusammen, worum es wirklich geht — die Liste. Das
 Balkendiagramm aus 7.3 behältst du trotzdem: Für <em>Daten im Überblick</em> ist das Bild
 weiterhin die bessere Darstellung, für <em>einzelne Werte und Zwischenschritte</em> ist es
 <code>print</code>.</p>
-</div><article class="auf" id="a7-4" data-stufe="standard"><div class="aufkopf"><span class="aid">7.4</span><h5>Stelle zurückgeben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist die Liste aus Aufgabe 7.3:</p>
+</div><article class="auf" id="a7-4" data-stufe="basis"><div class="aufkopf"><span class="aid">7.4</span><h5>Liste ausgeben</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist die Liste aus Aufgabe 7.3:</p>
+            <pre class="code">hoehen = [80, 140, 45, 190, 95, 120, 60]</pre>
+            <p>Diesmal ohne Turtle — nur mit <code>print</code>.</p>
+            <p><strong>a)</strong> Gib die Liste <strong>als Ganzes</strong> mit einem einzigen
+            <code>print</code>-Befehl auf der Konsole aus.</p>
+            <p><strong>b)</strong> Teile jedes Element der Liste durch 2 und gib das Ergebnis aus —
+            jedes in einer eigenen Zeile. Verwende dafür eine <code>for</code>-Schleife, die die
+            Liste durchläuft. Die Liste selbst soll dabei unverändert bleiben.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span>Für a) genügt <code>print(hoehen)</code> — die eckigen Klammern und Kommas setzt Python von selbst.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Für b) läufst du mit <code>for wert in hoehen:</code> durch die Liste. In jedem Durchlauf steht in <code>wert</code> das nächste Element.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span>Das <code>print</code> gehört <strong>eingerückt</strong> in den Schleifenrumpf — sonst wird nur ein einziges Ergebnis ausgegeben.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+# a) die ganze Liste ausgeben
+print(hoehen)
+print()
+
+# b) jedes Element halbieren und ausgeben
+for wert in hoehen:
+    print(wert / 2)
+
+print()
+print(&quot;Liste danach:&quot;, hoehen)    # unveraendert</pre></div><pre class="ausgabe">[80, 140, 45, 190, 95, 120, 60]
+
+40.0
+70.0
+22.5
+95.0
+47.5
+60.0
+30.0
+
+Liste danach: [80, 140, 45, 190, 95, 120, 60]</pre><p>In a) reicht ein einziger Befehl, weil <code>print</code> eine Liste
+            komplett ausgeben kann. Für b) muss jedes Element <em>einzeln</em> angefasst werden —
+            dafür ist die Schleife da.</p>
+            <p>Zwei Beobachtungen:</p>
+            <ul class="kompakt">
+            <li>Alle Ergebnisse haben eine Nachkommastelle, auch <code>40.0</code>. Der Operator
+            <code>/</code> liefert in Python <strong>immer</strong> einen <code>float</code> —
+            selbst wenn die Division aufgeht. Nur bei 45 und 95 entsteht tatsächlich ein Rest.</li>
+            <li>Die Liste ist hinterher unverändert. <code>wert / 2</code> berechnet nur einen neuen
+            Wert und gibt ihn aus; in die Liste zurückgeschrieben wird nichts.</li>
+            </ul>
+            <p class="hinweis">Wer die Ergebnisse lieber in einer Zeile möchte, schreibt
+            <code>print(wert / 2, end=" ")</code>. Und mit <code>wert // 2</code> (ganzzahlige
+            Division) erhältst du <code>int</code>-Werte — dann wird aus 22.5 allerdings 22.</p></div></article><article class="auf" id="a7-5" data-stufe="basis"><div class="aufkopf"><span class="aid">7.5</span><h5>Summe berechnen</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist wieder die Liste</p>
+            <pre class="code">hoehen = [80, 140, 45, 190, 95, 120, 60]</pre>
+            <p>Berechne die <strong>Summe aller Listenelemente</strong> unter Verwendung einer
+            <code>for</code>-Schleife und gib sie auf der Konsole aus.</p>
+            <p>Die eingebaute Funktion <code>sum()</code> ist für die Berechnung tabu. Du darfst
+            sie aber am Ende benutzen, um dein Ergebnis zu kontrollieren.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-5-0"><span class="tnr">Tipp 1</span>Du brauchst eine Variable, in der sich die Summe nach und nach aufbaut. Sie startet <strong>vor</strong> der Schleife bei 0: <code>summe = 0</code>.</div><div class="tipp verborgen" id="t7-5-1"><span class="tnr">Tipp 2</span>In jedem Schleifendurchlauf kommt das aktuelle Element dazu: <code>summe = summe + wert</code>.</div><div class="tipp verborgen" id="t7-5-2"><span class="tnr">Tipp 3</span>Das <code>print</code> für das Ergebnis steht <strong>nach</strong> der Schleife, also nicht eingerückt. Eingerückt würdest du jede Zwischensumme ausgeben.</div><div class="loesung verborgen" id="l7-5"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+
+summe = 0                    # Startwert VOR der Schleife
+
+for wert in hoehen:
+    summe = summe + wert     # aktuelles Element dazuzaehlen
+
+print(&quot;Summe:&quot;, summe)        # erst NACH der Schleife
+print(&quot;Kontrolle mit sum():&quot;, sum(hoehen))</pre></div><pre class="ausgabe">Summe: 730
+Kontrolle mit sum(): 730</pre><p>So wächst die Variable <code>summe</code> Durchlauf für Durchlauf:</p>
+<table class="ref">
+<tr><th>Durchlauf</th><th><code>wert</code></th><th><code>summe</code> danach</th></tr>
+<tr><td>vorher</td><td>–</td><td>0</td></tr>
+<tr><td>1</td><td>80</td><td>80</td></tr>
+<tr><td>2</td><td>140</td><td>220</td></tr>
+<tr><td>3</td><td>45</td><td>265</td></tr>
+<tr><td>4</td><td>190</td><td>455</td></tr>
+<tr><td>5</td><td>95</td><td>550</td></tr>
+<tr><td>6</td><td>120</td><td>670</td></tr>
+<tr><td>7</td><td>60</td><td>730</td></tr>
+</table>
+            <p>Das Muster heißt <strong>Aufsummieren</strong>: Startwert vor der Schleife,
+            Aktualisierung im Rumpf, Ergebnis nach der Schleife. Es begegnet dir immer wieder —
+            beim Zählen, beim Mittelwert, beim Zusammensetzen von Texten.</p>
+            <p>Die zwei häufigsten Fehler:</p>
+            <ul class="kompakt">
+            <li><code>summe = 0</code> steht <strong>in</strong> der Schleife: Die Summe wird bei
+            jedem Durchlauf zurückgesetzt, am Ende steht nur das letzte Element (60) da.</li>
+            <li>Das <code>print</code> ist eingerückt: Statt eines Ergebnisses erscheinen sieben
+            Zwischensummen.</li>
+            </ul>
+            <p class="hinweis">Mit <code>summe / len(hoehen)</code> erhältst du in einer weiteren
+            Zeile den Durchschnitt der Liste (hier etwa 104.29).</p></div></article><article class="auf" id="a7-6" data-stufe="standard"><div class="aufkopf"><span class="aid">7.6</span><h5>Stelle zurückgeben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist die Liste aus Aufgabe 7.3:</p>
             <pre class="code">hoehen = [80, 140, 45, 190, 95, 120, 60]</pre>
             <p>Schreibe ein Programm, das einen gesuchten Wert in der Liste sucht und seine
             <strong>Stelle</strong> auf der Konsole ausgibt. Kommt der Wert nicht vor, soll
@@ -1917,7 +1995,7 @@ weiterhin die bessere Darstellung, für <em>einzelne Werte und Zwischenschritte<
               <code>-1</code>, wenn der Wert nicht vorkommt.</li>
             </ul>
             <p>Gib beide Ergebnisse aus und prüfe, ob sie übereinstimmen. Teste mit einem
-            Wert, der vorkommt (z.&nbsp;B. 190), und mit einem, der fehlt (z.&nbsp;B. 999).</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-4-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span><code>liste.index(wert)</code> liefert die Stelle, stürzt aber mit einem <code>ValueError</code> ab, wenn der Wert fehlt. Sichere den Aufruf mit <code>if wert in liste:</code> ab.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Für die eigene Suche läufst du mit <code>for i in range(len(liste)):</code> durch und prüfst <code>if liste[i] == wert:</code>.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span><code>return i</code> beendet die Funktion <em>sofort</em> — die Schleife läuft danach nicht weiter. Genau deshalb liefert sie die Stelle des <em>ersten</em> Vorkommens.</div><div class="tipp verborgen" id="t7-4-3"><span class="tnr">Tipp 4</span>Das <code>return -1</code> gehört <strong>außerhalb</strong> der Schleife. Rückt man es ein, kehrt die Funktion schon nach dem ersten Vergleich zurück und meldet fast immer „nicht gefunden“.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+            Wert, der vorkommt (z.&nbsp;B. 190), und mit einem, der fehlt (z.&nbsp;B. 999).</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-6-0"><span class="tnr">Tipp 1</span><code>liste.index(wert)</code> liefert die Stelle, stürzt aber mit einem <code>ValueError</code> ab, wenn der Wert fehlt. Sichere den Aufruf mit <code>if wert in liste:</code> ab.</div><div class="tipp verborgen" id="t7-6-1"><span class="tnr">Tipp 2</span>Für die eigene Suche läufst du mit <code>for i in range(len(liste)):</code> durch und prüfst <code>if liste[i] == wert:</code>.</div><div class="tipp verborgen" id="t7-6-2"><span class="tnr">Tipp 3</span><code>return i</code> beendet die Funktion <em>sofort</em> — die Schleife läuft danach nicht weiter. Genau deshalb liefert sie die Stelle des <em>ersten</em> Vorkommens.</div><div class="tipp verborgen" id="t7-6-3"><span class="tnr">Tipp 4</span>Das <code>return -1</code> gehört <strong>außerhalb</strong> der Schleife. Rückt man es ein, kehrt die Funktion schon nach dem ersten Vergleich zurück und meldet fast immer „nicht gefunden“.</div><div class="loesung verborgen" id="l7-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
 
 gesucht = 190          # zum Testen auch einmal 999 eintragen
 
@@ -1980,7 +2058,7 @@ eigene Suche liefert Stelle -1
             ein zweiter Testfall kostet eine geänderte Zahl statt eines neuen Bildes. Genau
             dafür ist <code>print</code> da. Wer mag, ersetzt die feste Zeile durch
             <code>gesucht = int(input("Welchen Wert suchen? "))</code> und fragt den Wert
-            direkt in der Konsole ab.</p></div></article><article class="auf" id="a7-5" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.5</span><h5>Maximum ohne max()</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Bestimme das größte Element der Liste — <strong>ohne</strong> die eingebaute
+            direkt in der Konsole ab.</p></div></article><article class="auf" id="a7-7" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.7</span><h5>Maximum ohne max()</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Bestimme das größte Element der Liste — <strong>ohne</strong> die eingebaute
             Funktion <code>max()</code>. Auch diese Aufgabe kommt ohne Turtle aus.</p>
             <p><strong>a)</strong> Schreibe eine Funktion <code>groesste_stelle(liste)</code>,
             die die <em>Stelle</em> des größten Elements zurückgibt. Gib den Wert und die Stelle
@@ -1990,7 +2068,7 @@ eigene Suche liefert Stelle -1
             gefunden wurde oder nicht. Damit wird sichtbar, wie oft das Maximum unterwegs
             wechselt.</p>
             <p><strong>Zusatzfrage:</strong> Warum ist es besser, die <em>Stelle</em>
-            zurückzugeben statt des Werts?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-5-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-5-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-5-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-5-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-5" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-5-0"><span class="tnr">Tipp 1</span>Idee „bester Kandidat“: Nimm an, das erste Element sei das größte (<code>beste = 0</code>), und vergleiche dann jedes weitere damit.</div><div class="tipp verborgen" id="t7-5-1"><span class="tnr">Tipp 2</span><code>if liste[i] &gt; liste[beste]: beste = i</code> — du merkst dir die <em>Stelle</em>, nicht den Wert.</div><div class="tipp verborgen" id="t7-5-2"><span class="tnr">Tipp 3</span>Die Schleife darf bei 1 starten: <code>for i in range(1, len(liste)):</code>, weil die Stelle 0 schon der Startwert ist.</div><div class="tipp verborgen" id="t7-5-3"><span class="tnr">Tipp 4</span>Für b) ist die Reihenfolge entscheidend: Die Ausgabezeile muss <strong>vor</strong> <code>beste = i</code> stehen. Danach ist der alte Vergleichswert bereits überschrieben.</div><div class="loesung verborgen" id="l7-5"><h6>Lösung und Erläuterung</h6><p><strong>a)</strong> Maximum bestimmen:</p><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+            zurückzugeben statt des Werts?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-7-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-7-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-7-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-7-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-7" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-7-0"><span class="tnr">Tipp 1</span>Idee „bester Kandidat“: Nimm an, das erste Element sei das größte (<code>beste = 0</code>), und vergleiche dann jedes weitere damit.</div><div class="tipp verborgen" id="t7-7-1"><span class="tnr">Tipp 2</span><code>if liste[i] &gt; liste[beste]: beste = i</code> — du merkst dir die <em>Stelle</em>, nicht den Wert.</div><div class="tipp verborgen" id="t7-7-2"><span class="tnr">Tipp 3</span>Die Schleife darf bei 1 starten: <code>for i in range(1, len(liste)):</code>, weil die Stelle 0 schon der Startwert ist.</div><div class="tipp verborgen" id="t7-7-3"><span class="tnr">Tipp 4</span>Für b) ist die Reihenfolge entscheidend: Die Ausgabezeile muss <strong>vor</strong> <code>beste = i</code> stehen. Danach ist der alte Vergleichswert bereits überschrieben.</div><div class="loesung verborgen" id="l7-7"><h6>Lösung und Erläuterung</h6><p><strong>a)</strong> Maximum bestimmen:</p><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
 
 
 def groesste_stelle(liste):
@@ -2053,7 +2131,7 @@ Ergebnis: groesstes Element 190 an der Stelle 3</pre><p>Das Muster heißt <stron
             Und für alles, was an der Position hängt (löschen, tauschen, einfärben), brauchst du
             ohnehin die Stelle.</p>
             <p class="hinweis">Genau diese Funktion ist der Kern des Sortierverfahrens in
-            Aufgabe 8.2 — dort suchst du wiederholt das Minimum eines Restbereichs.</p></div></article><article class="auf" id="a7-6" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.6</span><h5>Alle Fundstellen</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Suche aus Aufgabe 7.4 liefert nur die <strong>erste</strong> Fundstelle.
+            Aufgabe 8.2 — dort suchst du wiederholt das Minimum eines Restbereichs.</p></div></article><article class="auf" id="a7-8" data-stufe="erweiterung"><div class="aufkopf"><span class="aid">7.8</span><h5>Alle Fundstellen</h5><span class="badge st-erw">Erweiterung</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Die Suche aus Aufgabe 7.6 liefert nur die <strong>erste</strong> Fundstelle.
             Bei Daten, in denen Werte mehrfach vorkommen, reicht das nicht. Gegeben ist der
             Notenspiegel einer Klassenarbeit:</p>
             <pre class="code">noten = [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]</pre>
@@ -2066,7 +2144,7 @@ Ergebnis: groesstes Element 190 an der Stelle 3</pre><p>Das Muster heißt <stron
             <p><strong>c)</strong> Bestimme im selben Durchlauf die häufigste Note und gib sie
             am Ende aus.</p>
             <p><strong>Prüffrage:</strong> Zwei Noten kommen gleich oft vor. Welche meldet dein
-            Programm — und warum?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-6-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-6-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-6-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-6-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-6" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-6-0"><span class="tnr">Tipp 1</span>Die Funktion legt am Anfang eine leere Liste an: <code>gefunden = []</code>. Bei jedem Treffer hängst du die Stelle mit <code>gefunden.append(i)</code> an und gibst die Liste ganz am Ende zurück.</div><div class="tipp verborgen" id="t7-6-1"><span class="tnr">Tipp 2</span>Anders als in Aufgabe 7.4 darf hier <strong>kein</strong> <code>return</code> mitten in der Schleife stehen — sonst brichst du nach dem ersten Treffer ab. Die Schleife muss vollständig durchlaufen.</div><div class="tipp verborgen" id="t7-6-2"><span class="tnr">Tipp 3</span>Die Anzahl musst du nicht mitzählen: <code>len(stellen)</code> liefert sie. Eine leere Liste hat die Länge 0 — damit erkennst du auch „kommt nicht vor“.</div><div class="tipp verborgen" id="t7-6-3"><span class="tnr">Tipp 4</span>Für c) nimmst du wieder das Muster „bester Kandidat“ aus Aufgabe 7.5: zwei Variablen für die bisher beste Note und ihre Anzahl, und in der Schleife <code>if anzahl &gt; beste_anzahl:</code>.</div><div class="loesung verborgen" id="l7-6"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">noten = [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]
+            Programm — und warum?</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-8-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-8-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-8-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t7-8-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l7-8" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-8-0"><span class="tnr">Tipp 1</span>Die Funktion legt am Anfang eine leere Liste an: <code>gefunden = []</code>. Bei jedem Treffer hängst du die Stelle mit <code>gefunden.append(i)</code> an und gibst die Liste ganz am Ende zurück.</div><div class="tipp verborgen" id="t7-8-1"><span class="tnr">Tipp 2</span>Anders als in Aufgabe 7.6 darf hier <strong>kein</strong> <code>return</code> mitten in der Schleife stehen — sonst brichst du nach dem ersten Treffer ab. Die Schleife muss vollständig durchlaufen.</div><div class="tipp verborgen" id="t7-8-2"><span class="tnr">Tipp 3</span>Die Anzahl musst du nicht mitzählen: <code>len(stellen)</code> liefert sie. Eine leere Liste hat die Länge 0 — damit erkennst du auch „kommt nicht vor“.</div><div class="tipp verborgen" id="t7-8-3"><span class="tnr">Tipp 4</span>Für c) nimmst du wieder das Muster „bester Kandidat“ aus Aufgabe 7.7: zwei Variablen für die bisher beste Note und ihre Anzahl, und in der Schleife <code>if anzahl &gt; beste_anzahl:</code>.</div><div class="loesung verborgen" id="l7-8"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">noten = [3, 1, 2, 3, 5, 2, 3, 1, 4, 2]
 
 
 def alle_stellen(liste, wert):
@@ -2111,7 +2189,7 @@ Haeufigste Note: 2 mit 3 Vorkommen</pre><p>Neu ist hier, dass eine Funktion nich
             sondern eine <strong>ganze Liste</strong> — die sie selbst Stück für Stück mit
             <code>append()</code> aufbaut. Das ist eines der meistgenutzten Muster überhaupt:
             leere Liste anlegen, durchlaufen, Passendes anhängen, am Ende zurückgeben.</p>
-            <p>Der entscheidende Unterschied zu Aufgabe 7.4 steckt im <code>return</code>. Dort
+            <p>Der entscheidende Unterschied zu Aufgabe 7.6 steckt im <code>return</code>. Dort
             stand es <em>innerhalb</em> der Schleife und hat sie beim ersten Treffer beendet.
             Hier steht es <em>hinter</em> der Schleife — sonst käme nie mehr als eine Stelle
             zusammen.</p>
@@ -2270,7 +2348,7 @@ turtle.done()</pre></div><p>Die Schleifenbedingung <code>i &lt; len(werte) and n
               <li>Tausche dieses Element mit dem an der Stelle <em>k</em>.</li>
             </ol>
             <p>Färbe den bereits sortierten Anfangsbereich grün, den gerade betrachteten Bereich
-            blau und das aktuelle Minimum orange.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-2-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-2-0"><span class="tnr">Tipp 1</span>Für Schritt 2 kannst du deine Funktion aus Aufgabe 7.5 anpassen: <code>kleinste_stelle(liste, ab)</code> mit einem zusätzlichen Startparameter.</div><div class="tipp verborgen" id="t8-2-1"><span class="tnr">Tipp 2</span>Tauschen geht in Python in einer Zeile: <code>liste[k], liste[m] = liste[m], liste[k]</code>.</div><div class="tipp verborgen" id="t8-2-2"><span class="tnr">Tipp 3</span>Schreibe eine Funktion <code>zeichne(liste, k, m)</code>, die alles neu malt und dabei die Farben nach <code>k</code> und <code>m</code> auswählt.</div><div class="tipp verborgen" id="t8-2-3"><span class="tnr">Tipp 4</span>Die äußere Schleife läuft bis <code>len(liste) - 1</code>: Wenn alle bis auf das letzte Element sortiert sind, ist auch das letzte am richtigen Platz.</div><div class="loesung verborgen" id="l8-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
+            blau und das aktuelle Minimum orange.</p></div><div class="knopfleiste"><button type="button" data-ziel="t8-2-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t8-2-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t8-2-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" data-ziel="t8-2-3" data-auf="Tipp 4 verbergen" data-zu="Tipp 4">Tipp 4</button><button type="button" class="loesknopf" data-ziel="l8-2" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t8-2-0"><span class="tnr">Tipp 1</span>Für Schritt 2 kannst du deine Funktion aus Aufgabe 7.7 anpassen: <code>kleinste_stelle(liste, ab)</code> mit einem zusätzlichen Startparameter.</div><div class="tipp verborgen" id="t8-2-1"><span class="tnr">Tipp 2</span>Tauschen geht in Python in einer Zeile: <code>liste[k], liste[m] = liste[m], liste[k]</code>.</div><div class="tipp verborgen" id="t8-2-2"><span class="tnr">Tipp 3</span>Schreibe eine Funktion <code>zeichne(liste, k, m)</code>, die alles neu malt und dabei die Farben nach <code>k</code> und <code>m</code> auswählt.</div><div class="tipp verborgen" id="t8-2-3"><span class="tnr">Tipp 4</span>Die äußere Schleife läuft bis <code>len(liste) - 1</code>: Wenn alle bis auf das letzte Element sortiert sind, ist auch das letzte am richtigen Platz.</div><div class="loesung verborgen" id="l8-2"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">import turtle
 import time
 
 BREITE = 34
@@ -2353,7 +2431,7 @@ turtle.done()</pre></div><p>Der Algorithmus besteht aus zwei ineinandergeschacht
             Durchläufen — genau wie die Rosette aus Aufgabe 3.4, nur dass hier Daten statt
             Striche verarbeitet werden.</p>
             <p>Die Hilfsfunktion <code>kleinste_stelle(liste, ab)</code> ist eine direkte
-            Verallgemeinerung deiner Maximum-Funktion aus 7.6: Sie sucht nicht mehr in der
+            Verallgemeinerung deiner Maximum-Funktion aus 7.7: Sie sucht nicht mehr in der
             ganzen Liste, sondern nur noch im Restbereich ab <code>ab</code>.</p>
             <p><strong>Warum läuft die äußere Schleife nur bis <code>len(werte) - 1</code>?</strong>
             Sind die ersten <em>n</em> − 1 Elemente sortiert, muss das größte automatisch ganz
