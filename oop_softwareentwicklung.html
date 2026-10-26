@@ -353,6 +353,18 @@ nav.side ol.etl{margin:0 0 6px 29px}
 nav.side ol.etl a{display:block; font-size:.78rem; color:var(--mut); text-decoration:none;
   padding:1px 6px; border-radius:5px}
 nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
+/* ---------- Etappen aufdecken ---------- */
+main .zu{display:none !important}
+main.alleoffen .zu:not(.aufdecken){display:block !important}
+main.alleoffen .aufdecken{display:none !important}
+.aufdecken{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 30px}
+.aufdecken button{font:inherit; font-weight:700; font-size:.92rem; padding:10px 18px;
+  border-radius:8px; border:none; background:var(--akz); color:#fff; cursor:pointer}
+.aufdecken button:hover{background:#244a70}
+.aufdecken span{font-size:.84rem; color:var(--mut)}
+nav.side ol.etl a.gesperrt{opacity:.45}
+body.alleoffen nav.side ol.etl a.gesperrt{opacity:1}
+@media print{ main .zu{display:block !important} .aufdecken{display:none !important} }
 /* ---------- Seitenweise Anzeige ---------- */
 main.paged > header.kopf, main.paged > section.kap{display:none}
 main.paged > header.kopf.aktiv, main.paged > section.kap.aktiv{display:block}
@@ -405,6 +417,11 @@ nav.side.paged li.aktiv ol.etl{display:block}
     <label><input type="checkbox" value="erweiterung" checked> Erweiterung</label>
   </div>
 
+  <div class="navtitel">Etappen</div>
+  <div class="filter">
+    <label><input type="checkbox" id="allesaufdecken"> Alle Etappen sofort zeigen</label>
+  </div>
+
   <div class="werkzeug">
     <button type="button" id="allesauf">Alle Tipps und Lösungen zeigen</button>
     <button type="button" id="alleszu">Alle wieder verbergen</button>
@@ -426,7 +443,8 @@ nav.side.paged li.aktiv ol.etl{display:block}
   Aufgaben. Am Ende jeder Etappe steht ein <strong>Stopp</strong>: Dort warten Sie, bis der Kurs
   die Ergebnisse gemeinsam bespricht.</p>
   <p style="margin-top:.6em">Rot umrandete <strong>Definitionen</strong> übernehmen Sie in Ihr
-  Glossar im Hefter. <strong>Basis</strong>- und <strong>Standard</strong>aufgaben sind für alle
+  Glossar im Hefter. Die nächste Etappe eines Bausteins erscheint erst, wenn Sie sie am Stopp
+  freigeben. <strong>Basis</strong>- und <strong>Standard</strong>aufgaben sind für alle
   verbindlich, <strong>Erweiterungen</strong> sind für alle, die schneller fertig sind – im
   <strong>Leistungskurs</strong> sind sie verbindlich. Nutzen Sie die Tipps der Reihe nach.
   Bei Programmieraufgaben finden Sie danach eine Lösung zum Vergleich. Aufgaben, deren Ergebnis
@@ -1440,6 +1458,94 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
+<script>// ---- Etappen nach und nach aufdecken ----
+// Jeder Baustein zeigt zunaechst nur Etappe A bis zu ihrem Stopp. Am Stopp gibt
+// ein Knopf die naechste Etappe frei. Der Stand wird pro Seite gespeichert.
+document.addEventListener("DOMContentLoaded", function(){
+  var main = document.querySelector("main");
+  var SCHLUESSEL = "aufgedeckt:" + location.pathname;
+  var stand;
+  try { stand = JSON.parse(localStorage.getItem(SCHLUESSEL)) || {}; } catch(e){ stand = {}; }
+  function sichern(){ try { localStorage.setItem(SCHLUESSEL, JSON.stringify(stand)); } catch(e){} }
+
+  var bausteine = [];   // {sec, gruppen:[[elemente]], knoepfe:[]}
+  document.querySelectorAll("main > section.kap").forEach(function(sec){
+    var gruppen = [[]], erste = true;
+    Array.prototype.forEach.call(sec.children, function(el){
+      if(el.classList.contains("etappe")){
+        if(erste){ erste = false; } else { gruppen.push([]); }
+      }
+      gruppen[gruppen.length - 1].push(el);
+    });
+    var b = {sec: sec, gruppen: gruppen, knoepfe: []};
+    gruppen.forEach(function(g, i){
+      g.forEach(function(el){ el.dataset.gruppe = i; });
+      if(i === gruppen.length - 1) return;
+      var naechste = gruppen[i + 1][0].querySelector(".etnr");
+      var titel = gruppen[i + 1][0].querySelector(".ettitel");
+      var k = document.createElement("div");
+      k.className = "aufdecken";
+      k.innerHTML = '<button type="button">Weiter mit ' + naechste.textContent + ": "
+                  + titel.textContent + ' ↓</button>'
+                  + '<span>Erst nach der gemeinsamen Besprechung weiterarbeiten.</span>';
+      k.querySelector("button").addEventListener("click", function(){
+        setzen(b, i + 2);
+        gruppen[i + 1][0].scrollIntoView({behavior: "smooth"});
+      });
+      g[g.length - 1].after(k);
+      b.knoepfe.push(k);
+    });
+    bausteine.push(b);
+  });
+
+  function setzen(b, n){
+    n = Math.max(1, Math.min(n, b.gruppen.length));
+    stand[b.sec.id] = n;
+    sichern();
+    zeichnen(b);
+  }
+  function zeichnen(b){
+    var n = stand[b.sec.id] || 1;
+    b.gruppen.forEach(function(g, i){
+      g.forEach(function(el){ el.classList.toggle("zu", i >= n); });
+    });
+    b.knoepfe.forEach(function(k, i){ k.classList.toggle("zu", i !== n - 1); });
+    var nav = document.querySelector('nav.side a.kaplink[href="#' + b.sec.id + '"]');
+    if(nav){
+      nav.parentElement.querySelectorAll("ol.etl a").forEach(function(a, i){
+        a.classList.toggle("gesperrt", i >= n);
+      });
+    }
+  }
+  bausteine.forEach(zeichnen);
+
+  // Wird ein verdecktes Element direkt angesteuert (Link), alles bis dahin aufdecken
+  window.aufdecken = function(ziel){
+    if(!ziel || !ziel.closest) return;
+    var sec = ziel.closest("main > section.kap");
+    if(!sec) return;
+    var el = ziel;
+    while(el && el.parentElement !== sec) el = el.parentElement;
+    if(!el || el.dataset.gruppe === undefined) return;
+    var b = bausteine.filter(function(x){ return x.sec === sec; })[0];
+    var g = +el.dataset.gruppe + 1;
+    if(g > (stand[sec.id] || 1)) setzen(b, g);
+  };
+
+  // Schalter: alles sofort anzeigen
+  var schalter = document.getElementById("allesaufdecken");
+  var an = false;
+  try { an = localStorage.getItem("allesaufdecken:" + location.pathname) === "1"; } catch(e){}
+  schalter.checked = an;
+  main.classList.toggle("alleoffen", an);
+  document.body.classList.toggle("alleoffen", an);
+  schalter.addEventListener("change", function(){
+    main.classList.toggle("alleoffen", schalter.checked);
+    document.body.classList.toggle("alleoffen", schalter.checked);
+    try { localStorage.setItem("allesaufdecken:" + location.pathname, schalter.checked ? "1" : "0"); } catch(e){}
+  });
+});
+</script>
 <script>// ---- Seitenweise Anzeige: Startseite und je Baustein eine Seite ----
 // Ohne JavaScript (und beim Drucken) bleibt alles auf einer Seite sichtbar.
 document.addEventListener("DOMContentLoaded", function(){
@@ -1483,6 +1589,7 @@ document.addEventListener("DOMContentLoaded", function(){
       li.classList.toggle("aktiv", !!an);
       if(a) a.classList.toggle("aktiv", !!an);
     });
+    if(ziel && ziel !== seite && window.aufdecken) window.aufdecken(ziel);
     if(ziel && ziel !== seite){ ziel.scrollIntoView(); } else { window.scrollTo(0, 0); }
   }
   window.addEventListener("hashchange", zeige);

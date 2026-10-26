@@ -353,6 +353,42 @@ nav.side ol.etl{margin:0 0 6px 29px}
 nav.side ol.etl a{display:block; font-size:.78rem; color:var(--mut); text-decoration:none;
   padding:1px 6px; border-radius:5px}
 nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
+/* ---------- Etappen aufdecken ---------- */
+main .zu{display:none !important}
+main.alleoffen .zu:not(.aufdecken){display:block !important}
+main.alleoffen .aufdecken{display:none !important}
+.aufdecken{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 30px}
+.aufdecken button{font:inherit; font-weight:700; font-size:.92rem; padding:10px 18px;
+  border-radius:8px; border:none; background:var(--akz); color:#fff; cursor:pointer}
+.aufdecken button:hover{background:#244a70}
+.aufdecken span{font-size:.84rem; color:var(--mut)}
+nav.side ol.etl a.gesperrt{opacity:.45}
+body.alleoffen nav.side ol.etl a.gesperrt{opacity:1}
+@media print{ main .zu{display:block !important} .aufdecken{display:none !important} }
+/* ---------- Seitenweise Anzeige ---------- */
+main.paged > header.kopf, main.paged > section.kap{display:none}
+main.paged > header.kopf.aktiv, main.paged > section.kap.aktiv{display:block}
+.uebersicht a.bslink{color:var(--ink); text-decoration:none; font-weight:600}
+.uebersicht a.bslink:hover{color:var(--akz); text-decoration:underline}
+a.losknopf{display:inline-block; background:var(--akz); color:#fff; text-decoration:none;
+  font-weight:700; padding:10px 18px; border-radius:8px}
+a.losknopf:hover{background:#244a70}
+.blaettern{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin:36px 0 0; padding-top:18px; border-top:1px solid var(--line)}
+.blaettern a{display:block; max-width:48%; padding:10px 16px; border:1px solid var(--line);
+  border-radius:8px; background:var(--panel); text-decoration:none; color:var(--ink); font-size:.9rem}
+.blaettern a:hover{border-color:var(--akz); background:var(--akz-hell)}
+.blaettern a small{display:block; color:var(--mut); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em}
+.blaettern .weiter{margin-left:auto; text-align:right}
+.oben{display:flex; gap:14px; font-size:.84rem; margin:0 0 14px}
+.oben a{color:var(--mut); text-decoration:none} .oben a:hover{color:var(--akz)}
+nav.side a.kaplink.aktiv{background:var(--akz-hell)}
+nav.side.paged ol.etl{display:none}
+nav.side.paged li.aktiv ol.etl{display:block}
+@media print{
+  main.paged > header.kopf, main.paged > section.kap{display:block}
+  .blaettern,.oben{display:none}
+}
 .knopfleiste .imkurs{align-self:center; font-size:.82rem; color:var(--mut); font-style:italic; margin-left:4px}
 .uebersicht tr.spaeter td{color:#9aa6b5}
 .uebersicht tr.spaeter td:first-child{color:#9aa6b5}
@@ -420,6 +456,11 @@ Dann Stopp.“</em> Ein sichtbarer Timer am Board hilft. Der Stopp-Kasten sagt d
 Schülern, was sie für die Besprechung vorbereiten sollen. Die Zeiten sind auf die Pflichtaufgaben
 bemessen. Schnelle Schülerinnen und Schüler arbeiten an den Erweiterungen, langsame bearbeiten
 Basisaufgaben und sehen sich die Lösungen erklärend an.</p>
+<p><strong>Etappen aufdecken:</strong> Auf der Kursseite ist pro Baustein zunächst nur die erste
+Etappe sichtbar. Unter jedem Stopp steht ein Knopf „Weiter mit Etappe …“, mit dem die Schülerinnen
+und Schüler nach der Besprechung die nächste Etappe freigeben. Der Stand wird im Browser gespeichert.
+Wer eine Etappe vorab sehen möchte (z.&nbsp;B. am Board), setzt in der Seitenleiste den Haken
+„Alle Etappen sofort zeigen“. Ein Direktlink wie <code>…#e3-B</code> deckt alles bis dorthin auf.</p>
 <h4 style="margin-top:16px">Fünf Formen der Sicherung</h4>
 <table class="ref">
 <tr><th>Form</th><th>Einsatz</th><th>So geht's</th></tr>
