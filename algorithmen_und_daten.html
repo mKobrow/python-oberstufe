@@ -1907,14 +1907,16 @@ weiterhin die bessere Darstellung, für <em>einzelne Werte und Zwischenschritte<
 </div><article class="auf" id="a7-4" data-stufe="basis"><div class="aufkopf"><span class="aid">7.4</span><h5>Liste ausgeben</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper"><p>Gegeben ist die Liste aus Aufgabe 7.3:</p>
             <pre class="code">hoehen = [80, 140, 45, 190, 95, 120, 60]</pre>
             <p>Diesmal ohne Turtle — nur mit <code>print</code>.</p>
-            <p><strong>a)</strong> Gib die Liste <strong>als Ganzes</strong> mit einem einzigen
-            <code>print</code>-Befehl auf der Konsole aus.</p>
+            <p><strong>a)</strong> Gib jedes Element der Liste unter Verwendung einer
+            <code>for</code>-Schleife auf der Konsole aus — jedes in einer eigenen Zeile.</p>
             <p><strong>b)</strong> Teile jedes Element der Liste durch 2 und gib das Ergebnis aus —
-            jedes in einer eigenen Zeile. Verwende dafür eine <code>for</code>-Schleife, die die
-            Liste durchläuft. Die Liste selbst soll dabei unverändert bleiben.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span>Für a) genügt <code>print(hoehen)</code> — die eckigen Klammern und Kommas setzt Python von selbst.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Für b) läufst du mit <code>for wert in hoehen:</code> durch die Liste. In jedem Durchlauf steht in <code>wert</code> das nächste Element.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span>Das <code>print</code> gehört <strong>eingerückt</strong> in den Schleifenrumpf — sonst wird nur ein einziges Ergebnis ausgegeben.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
+            ebenfalls unter Verwendung einer <code>for</code>-Schleife und jedes in einer eigenen
+            Zeile. Die Liste selbst soll dabei unverändert bleiben.</p></div><div class="knopfleiste"><button type="button" data-ziel="t7-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t7-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" data-ziel="t7-4-2" data-auf="Tipp 3 verbergen" data-zu="Tipp 3">Tipp 3</button><button type="button" class="loesknopf" data-ziel="l7-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t7-4-0"><span class="tnr">Tipp 1</span>Mit <code>for wert in hoehen:</code> läufst du durch die Liste. In jedem Durchlauf steht in <code>wert</code> das nächste Element.</div><div class="tipp verborgen" id="t7-4-1"><span class="tnr">Tipp 2</span>Für b) brauchst du dieselbe Schleife wie in a) — nur gibst du statt <code>wert</code> den Ausdruck <code>wert / 2</code> aus.</div><div class="tipp verborgen" id="t7-4-2"><span class="tnr">Tipp 3</span>Das <code>print</code> gehört <strong>eingerückt</strong> in den Schleifenrumpf — sonst wird nur ein einziges Ergebnis ausgegeben.</div><div class="loesung verborgen" id="l7-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">hoehen = [80, 140, 45, 190, 95, 120, 60]
 
-# a) die ganze Liste ausgeben
-print(hoehen)
+# a) jedes Element ausgeben
+for wert in hoehen:
+    print(wert)
+
 print()
 
 # b) jedes Element halbieren und ausgeben
@@ -1922,7 +1924,13 @@ for wert in hoehen:
     print(wert / 2)
 
 print()
-print(&quot;Liste danach:&quot;, hoehen)    # unveraendert</pre></div><pre class="ausgabe">[80, 140, 45, 190, 95, 120, 60]
+print(&quot;Liste danach:&quot;, hoehen)    # unveraendert</pre></div><pre class="ausgabe">80
+140
+45
+190
+95
+120
+60
 
 40.0
 70.0
@@ -1932,9 +1940,10 @@ print(&quot;Liste danach:&quot;, hoehen)    # unveraendert</pre></div><pre class
 60.0
 30.0
 
-Liste danach: [80, 140, 45, 190, 95, 120, 60]</pre><p>In a) reicht ein einziger Befehl, weil <code>print</code> eine Liste
-            komplett ausgeben kann. Für b) muss jedes Element <em>einzeln</em> angefasst werden —
-            dafür ist die Schleife da.</p>
+Liste danach: [80, 140, 45, 190, 95, 120, 60]</pre><p>Beide Teile nutzen dieselbe Schleife: Sie fasst jedes Element
+            <em>einzeln</em> an. In a) wird es unverändert ausgegeben, in b) vorher halbiert.
+            Zum Vergleich: <code>print(hoehen)</code> gibt die Liste in einem Stück aus, mit
+            eckigen Klammern und Kommas — an die einzelnen Werte kommst du so aber nicht heran.</p>
             <p>Zwei Beobachtungen:</p>
             <ul class="kompakt">
             <li>Alle Ergebnisse haben eine Nachkommastelle, auch <code>40.0</code>. Der Operator
