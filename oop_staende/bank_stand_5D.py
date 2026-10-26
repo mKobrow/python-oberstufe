@@ -77,7 +77,7 @@ class Konto:
         print("Kontostand:", self.kontostand, "€")
 
 
-# Testablauf aus Aufgabe 2.3
+# Testablauf aus Aufgabe 2.4
 kunde1 = Kunde(4711, "Lehmann", "Jan", "14.05.1988")
 konto1 = Konto(987654321, "1234")
 konto2 = Konto(65193275, "0815")
