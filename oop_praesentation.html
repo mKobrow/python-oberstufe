@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OOP-Einführung – Präsentation</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9; --panel:#fff; --ink:#1c2430; --mut:#5d6b7e; --line:#dde3ec;
+  --akz:#2f5d8c; --akz-hell:#eaf1f8;
+  --obj:#eef6e6; --obj-rand:#557a3c; --kl:#e7f0f8; --kl-rand:#2f5d8c;
+  --rot:#b23a1e; --rot-hell:#fbe9e3; --gelb:#fff3c4; --gruen:#2e7d5b;
+  --mono:Consolas,"Cascadia Code",Menlo,"DejaVu Sans Mono",monospace;
+}
+html,body{margin:0; height:100%; background:#0f141b; overflow:hidden}
+body{font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif; color:var(--ink)}
+#buehne{position:absolute; left:50%; top:50%; width:1600px; height:900px;
+  transform-origin:center center; background:var(--bg); overflow:hidden}
+section.folie{position:absolute; inset:0; padding:56px 80px 70px; display:none; font-size:32px; line-height:1.4}
+section.folie.aktiv{display:block}
+section.folie > h2{margin:0 0 28px; font-size:52px; line-height:1.15; color:var(--ink)}
+section.folie > h2 small{display:block; font-size:24px; font-weight:600; color:var(--akz);
+  letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px}
+aside.notiz{display:none}
+p{margin:.35em 0}
+ul{margin:.3em 0; padding-left:1.2em} li{margin:.25em 0}
+code,.mono{font-family:var(--mono); font-size:.9em}
+strong{color:var(--akz)}
+.mut{color:var(--mut)}
+.klein{font-size:26px}
+.zeile{display:flex; gap:48px; align-items:flex-start}
+.spalte{flex:1 1 0; min-width:0}
+.mitte{display:flex; justify-content:center; align-items:center}
+
+/* Fragmente */
+.schritt{opacity:0; visibility:hidden; transition:opacity .35s, transform .35s; transform:translateY(8px)}
+.schritt.an{opacity:1; visibility:visible; transform:none}
+i.schritt,i.pfeil{display:none}
+
+/* Titelfolien */
+section.titel{background:linear-gradient(135deg,#2f5d8c,#1f3f61); color:#fff; padding:0}
+section.titel .tinnen{position:absolute; left:110px; top:250px; right:110px}
+section.titel .teil{font-size:30px; letter-spacing:.12em; text-transform:uppercase; opacity:.8; font-weight:700}
+section.titel h1{font-size:96px; margin:10px 0 18px; line-height:1.05}
+section.titel p{font-size:34px; opacity:.9; max-width:1150px}
+section.titel .fuss{position:absolute; left:110px; bottom:70px; font-size:24px; opacity:.7}
+
+/* Kästen */
+.kasten{background:var(--panel); border:2px solid var(--line); border-radius:16px; padding:22px 30px}
+.merke{background:#fff; border:3px solid var(--rot); border-radius:16px; padding:18px 28px}
+.merke b{color:var(--rot)}
+.impuls{display:inline-block; background:var(--gelb); border-radius:12px; padding:12px 24px; font-weight:600}
+.chip{display:inline-block; padding:8px 22px; border-radius:99px; background:var(--akz-hell);
+  color:var(--akz); font-weight:700; margin:4px 8px 4px 0}
+
+/* Objektdiagramm */
+.obj{display:inline-block; background:var(--obj); border:3px solid var(--obj-rand); border-radius:22px;
+  font-family:var(--mono); font-size:27px; min-width:360px; position:relative; transition:all .5s}
+.obj .kopf{text-align:center; font-weight:700; padding:10px 18px 8px; border-bottom:3px solid var(--obj-rand)}
+.obj .kopf span{text-decoration:underline; text-underline-offset:5px}
+.obj .att{padding:4px 22px; white-space:nowrap; transition:background .4s}
+.obj .atts{padding:8px 0 12px}
+.obj .att.neu{background:var(--gelb)}
+.obj .att .w{transition:color .4s}
+.obj.grau{opacity:.35; filter:grayscale(1)}
+.punkt{display:inline-block; width:14px; height:14px; border-radius:50%; background:var(--ink); vertical-align:middle}
+
+/* Klassen-/Entwurfsdiagramm */
+.kl{display:inline-block; background:var(--kl); border:3px solid var(--kl-rand); font-family:var(--mono);
+  font-size:27px; min-width:360px}
+.kl .kopf{text-align:center; font-weight:700; padding:10px 18px 8px; border-bottom:3px solid var(--kl-rand)}
+.kl .atts{padding:8px 0 10px; border-bottom:3px solid var(--kl-rand)}
+.kl .meth{padding:8px 0 12px}
+.kl .att,.kl .m{padding:3px 22px; white-space:nowrap}
+
+/* Objekt -> Klasse (Verwandlung) */
+.wandel .typ{display:none}
+.wandel.st-typ .wert{display:none} .wandel.st-typ .typ{display:inline}
+.wandel .kname{display:none}
+.wandel.st-kopf .oname{display:none} .wandel.st-kopf .kname{display:inline; text-decoration:none}
+.wandel .meth{display:none; border-top:3px solid var(--obj-rand); padding:8px 0 12px}
+.wandel.st-meth .meth{display:block}
+.wandel.st-form{border-radius:0; background:var(--kl); border-color:var(--kl-rand)}
+.wandel.st-form .kopf,.wandel.st-form .meth{border-color:var(--kl-rand)}
+.wandel.st-typ .typ,.wandel.st-kopf .kname,.wandel.st-meth .meth{animation:aufblitzen 1.2s}
+@keyframes aufblitzen{0%{background:var(--gelb)}100%{background:transparent}}
+
+/* Pfeile */
+svg.pfeile{position:absolute; inset:0; width:1600px; height:900px; pointer-events:none; overflow:visible}
+svg.pfeile line{stroke:var(--ink); stroke-width:3}
+svg.pfeile text{font-family:var(--mono); font-size:26px; fill:var(--ink)}
+svg.pfeile .puls{animation:puls 1s 2}
+@keyframes puls{50%{stroke:var(--rot); stroke-width:7}}
+
+/* Knöpfe in Folien */
+button.knopf{font:inherit; font-size:26px; padding:10px 22px; border-radius:12px; border:2px solid var(--akz);
+  background:#fff; color:var(--akz); cursor:pointer; font-weight:600}
+button.knopf:hover{background:var(--akz-hell)}
+button.knopf.voll{background:var(--akz); color:#fff}
+button.knopf code{font-size:24px}
+.knopfreihe{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
+
+/* Klickkarten */
+.karten{display:grid; gap:22px}
+button.karte{font:inherit; font-size:28px; text-align:left; background:#fff; border:2px solid var(--line);
+  border-radius:16px; padding:30px 24px 18px; cursor:pointer; min-height:120px; position:relative; color:var(--ink)}
+button.karte:hover{border-color:var(--akz)}
+button.karte .hinten{display:none; margin-top:10px; padding-top:10px; border-top:2px dashed var(--line); font-size:25px}
+button.karte.offen{border-color:var(--gruen); background:#f3faf6}
+button.karte.offen .hinten{display:block}
+button.karte .loes{font-weight:800; color:var(--gruen)}
+button.karte::after{content:"antippen"; position:absolute; right:16px; top:12px; font-size:16px; color:var(--mut);
+  text-transform:uppercase; letter-spacing:.08em}
+button.karte.offen::after{content:""}
+
+/* Code */
+pre.code{margin:0; background:#1e2733; color:#e6edf3; border-radius:14px; padding:20px 26px;
+  font-family:var(--mono); font-size:26px; line-height:1.5; overflow:hidden}
+pre.code .z{display:block; padding:0 8px; margin:0 -8px; border-radius:6px; transition:background .3s}
+pre.code .z.hell{background:#3d5a80}
+pre.code .z.leer{height:.6em}
+.k{color:#ff7b9c} .s{color:#a5d6a7} .n{color:#ffcc80} .c{color:#8b98a8} .f{color:#82b1ff}
+[data-paar]{cursor:pointer; transition:background .25s, box-shadow .25s; border-radius:6px}
+[data-paar].hell{background:var(--gelb) !important; box-shadow:0 0 0 3px #e0b400}
+pre.code [data-paar].hell{color:#1c2430}
+pre.code [data-paar].hell span{color:#1c2430}
+
+/* Tabellen */
+table.tab{border-collapse:collapse; font-size:28px; width:100%}
+table.tab th,table.tab td{border-bottom:2px solid var(--line); padding:10px 16px; text-align:left; vertical-align:top}
+table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; color:var(--mut)}
+
+/* Simulator / Stepper */
+.erkl{background:#fff; border-left:8px solid var(--akz); border-radius:10px; padding:16px 24px; font-size:28px; min-height:120px}
+.protokoll{font-family:var(--mono); font-size:22px; color:var(--mut); margin-top:12px; min-height:34px}
+.meldung{display:inline-block; font-size:26px; font-weight:700; padding:8px 18px; border-radius:10px; visibility:hidden}
+.meldung.ok{visibility:visible; background:#e3f3ea; color:var(--gruen)}
+.meldung.nein{visibility:visible; background:var(--rot-hell); color:var(--rot)}
+.var{display:inline-flex; align-items:center; gap:16px; font-family:var(--mono); font-size:28px;
+  background:#fff; border:2px solid var(--ink); border-radius:8px; padding:8px 18px; min-width:140px}
+.var.leer{visibility:hidden}
+.param{font-family:var(--mono); font-size:24px; background:#fff; border:2px dashed var(--mut); border-radius:12px; padding:12px 18px}
+.param div{white-space:nowrap}
+.blink{animation:aufblitzen 1.2s}
+
+/* Fehlerdiagramm */
+.fobj .att{cursor:pointer; position:relative}
+.fobj .fehler{display:none}
+.fehlerliste{font-size:26px}
+.fehlerliste li{display:none} .fehlerliste li.an{display:list-item}
+.fobj .att.markiert,.fobj .kopf.markiert{background:var(--rot-hell); color:var(--rot); outline:3px solid var(--rot)}
+.fobj .kopf{cursor:pointer}
+
+/* Steuerung */
+#leiste{position:fixed; left:0; right:0; bottom:0; height:6px; background:#000}
+#fortschritt{height:100%; width:0; background:var(--akz); transition:width .3s}
+#info{position:absolute; left:80px; bottom:18px; font-size:20px; color:var(--mut); z-index:5}
+#steuer{position:fixed; right:14px; bottom:16px; display:flex; gap:8px; z-index:20; opacity:.25; transition:opacity .3s}
+#steuer:hover{opacity:1}
+#steuer button{font:inherit; font-size:20px; width:52px; height:52px; border-radius:50%; border:none;
+  background:#fff; color:var(--ink); cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#schwarz{position:fixed; inset:0; background:#000; display:none; z-index:50}
+#schwarz.an{display:block}
+#menue{position:fixed; inset:0; background:rgba(15,20,27,.94); z-index:40; display:none; overflow:auto;
+  color:#fff; padding:40px 60px}
+#menue.an{display:block}
+#menue h3{font-size:22px; letter-spacing:.1em; text-transform:uppercase; color:#9fc1e3; margin:26px 0 8px}
+#menue ol{columns:2; column-gap:40px; margin:0; padding-left:1.5em}
+#menue a{color:#fff; text-decoration:none; font-size:19px; line-height:1.7}
+#menue a:hover{text-decoration:underline}
+#menue a.hier{color:#ffcc80; font-weight:700}
+#menue .hilfe{font-size:17px; color:#b8c4d2; margin-top:30px}
+#notizen{position:fixed; left:0; right:0; bottom:6px; max-height:42vh; overflow:auto; background:#fffdf3;
+  border-top:4px solid #e0b400; padding:16px 28px 18px; z-index:30; display:none; font-size:19px; line-height:1.5}
+#notizen.an{display:block}
+#notizen .nkopf{display:flex; gap:20px; font-weight:700; color:var(--mut); font-size:16px; margin-bottom:6px}
+#notizen .nkopf .uhr{margin-left:auto; font-variant-numeric:tabular-nums; cursor:pointer}
+#notizen ul{margin:.2em 0; padding-left:1.3em}
+</style>
+</head>
+<body>
+<div id="buehne">
+
+<!-- ================================================================== TEIL 1: OBJEKTE -->
+<section class="folie titel" id="objekte" data-kapitel="Teil 1 · Objekte" data-titel="Titel: Objekte">
+  <div class="tinnen">
+    <div class="teil">Teil 1 · Objektorientierte Softwareentwicklung</div>
+    <h1>Objekte</h1>
+    <p>Wie stellt man ein Bankkonto im Computer dar? Objekte, Attribute, Zustände und Objektdiagramme</p>
+  </div>
+  <div class="fuss">WarnowBank Rostock · Baustein 2 · ca. 15 min</div>
+  <aside class="notiz"><p><b>Input Baustein 2, ca. 15 min.</b> Ziel: Am Ende können alle ein Objektdiagramm lesen und
+  zeichnen, kennen den Begriff Zustand und haben eine Objektreferenz gesehen. Danach Etappe 2.A (Aufgaben 2.1–2.3).</p>
+  <p>Steuerung: Pfeiltasten oder Leertaste, <b>N</b> Notizen, <b>M</b> Menü, <b>F</b> Vollbild, <b>B</b> Schwarzbild.</p></aside>
+</section>
+
+<section class="folie" data-titel="Wo wir stehen">
+  <h2><small>Rückblick</small>Wo wir stehen</h2>
+  <div class="zeile">
+    <div class="spalte">
+      <p>Die Verb-Substantiv-Methode hat aus der Anforderung zwei Kandidaten geliefert:</p>
+      <p style="margin:24px 0"><span class="chip" style="font-size:36px">Kunde</span> <span class="chip" style="font-size:36px">Konto</span></p>
+      <p class="schritt">Beide haben <strong>Daten</strong> – Name, Kontostand, PIN …</p>
+      <p class="schritt">Beide haben <strong>Fähigkeiten</strong> – einzahlen, abheben, Name ändern …</p>
+    </div>
+    <div class="spalte schritt">
+      <div class="kasten" style="margin-top:20px">
+        <p style="font-size:36px; font-weight:700; margin:0 0 10px">Die Idee der Objektorientierung</p>
+        <p>Was zusammengehört, wird in einem <strong>Objekt</strong> gebündelt: die Daten und die Fähigkeiten eines Kontos an einer Stelle.</p>
+        <p class="mut klein">Erinnerung an 0.2: Dort waren Kontostände und Funktionen über das ganze Programm verstreut.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notiz"><p>Kurz an Baustein 1 anknüpfen: Ergebnis der Kandidatentabelle zeigen (Kunde, Konto). Bezug zur Mängelliste aus 0.2 herstellen (verstreute Daten, kopierte Funktionen).</p></aside>
+</section>
+
+<section class="folie" data-titel="Ein Objekt">
+  <h2><small>Begriff</small>Ein Objekt: das Girokonto von Herrn Lehmann</h2>
+  <div class="zeile">
+    <div class="spalte">
+      <div class="kasten">
+        <p style="font-weight:700; margin-top:0">Daten</p>
+        <ul class="klein">
+          <li>Kontonummer 987654321</li><li>PIN 1234</li><li>Kontostand 2.020,00 €</li><li>Dispo 500,00 €</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spalte schritt">
+      <div class="kasten">
+        <p style="font-weight:700; margin-top:0">Fähigkeiten</p>
+        <ul class="klein"><li>Geld einzahlen</li><li>Geld abheben</li><li>Geld überweisen</li><li>Kontostand abfragen</li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="merke schritt" style="margin-top:34px">
+    <b>Objekt</b> = Daten (<b>Attribute</b>) + Fähigkeiten (<b>Methoden</b>).<br>
+    Jedes Objekt hat eine eigene <b>Identität</b>: Das Konto von Frau Schulz ist ein anderes Objekt – auch wenn es dieselben Werte hätte.
+  </div>
+  <aside class="notiz"><p>Bewusst Alltagssprache links, Fachbegriffe erst im Merkkasten. Impuls: „Was muss die Bank über ein Konto wissen, was muss ein Konto können?“ – Schülerantworten abwarten, dann aufdecken.</p></aside>
+</section>
+
+<section class="folie" data-titel="Attribute">
+  <h2><small>Begriff</small>Attribute: Bezeichner und Wert</h2>
+  <div class="zeile" style="align-items:center">
+    <div class="spalte">
+      <table class="tab mono" style="font-size:30px">
+        <tr><th>Bezeichner</th><th>Wert</th></tr>
+        <tr><td>kontonummer</td><td>987654321</td></tr>
+        <tr><td>pin</td><td>"1234"</td></tr>
+        <tr><td>kontostand</td><td>2020.0</td></tr>
+        <tr><td>dispo</td><td>500.0</td></tr>
+      </table>
+    </div>
+    <div class="spalte">
+      <p class="schritt"><strong>Text</strong> steht in Anführungszeichen: <code>"1234"</code></p>
+      <p class="schritt"><strong>Zahlen</strong> ohne Anführungszeichen, Komma als Punkt: <code>2020.0</code></p>
+      <p class="schritt"><strong>Keine Einheiten</strong>: nicht <code>2020 €</code></p>
+      <p class="schritt"><strong>Bezeichner</strong> klein, ohne Umlaute und Leerzeichen</p>
+    </div>
+  </div>
+  <aside class="notiz"><p>Die PIN ist Text, weil sie mit 0 beginnen kann (0815) – das wird auf der nächsten Folie geprüft. Die Kontonummer der WarnowBank beginnt nie mit 0 und bleibt eine Zahl (strittig, wird in 3.3 nochmals diskutiert).</p></aside>
+</section>
+
+<section class="folie" data-titel="Das Objektdiagramm">
+  <h2><small>Darstellung</small>Das Objektdiagramm (UML)</h2>
+  <div class="zeile" style="align-items:center">
+    <div class="spalte mitte" style="flex:0 0 640px; position:relative">
+      <div class="obj" style="font-size:32px; min-width:500px">
+        <div class="kopf"><span>konto1 : Konto</span></div>
+        <div class="atts">
+          <div class="att">kontonummer = 987654321</div>
+          <div class="att">pin = "1234"</div>
+          <div class="att">kontostand = 2020.0</div>
+          <div class="att">dispo = 500.0</div>
+        </div>
+      </div>
+    </div>
+    <div class="spalte">
+      <ol style="padding-left:1.1em">
+        <li class="schritt">Oben: <strong>Objektbezeichner : Klasse</strong></li>
+        <li class="schritt">Kopfzeile <strong>unterstrichen</strong></li>
+        <li class="schritt">Rechteck mit <strong>abgerundeten Ecken</strong></li>
+        <li class="schritt">Darunter jedes Attribut als <strong>bezeichner = wert</strong></li>
+      </ol>
+      <p class="schritt klein mut" style="margin-top:24px">Die Klasse sagt, <em>von welcher Art</em> das Objekt ist. Mehr dazu in Teil 2.</p>
+    </div>
+  </div>
+  <aside class="notiz"><p>Die Unified Modeling Language legt die Notation fest. Häufige Schülerfehler später: fehlender Unterstrich, vertauschte Kopfzeile, Einheiten im Wert.</p></aside>
+</section>
+
+<section class="folie" data-titel="Quiz: Text oder Zahl?">
+  <h2><small>Kurz geprüft</small>Text oder Zahl?</h2>
+  <div class="karten" style="grid-template-columns:repeat(3,1fr)">
+    <button class="karte" type="button">Kontonummer<br><span class="mono">987654321</span>
+      <span class="hinten"><span class="loes">Zahl:</span> <code>987654321</code></span></button>
+    <button class="karte" type="button">PIN<br><span class="mono">0815</span>
+      <span class="hinten"><span class="loes">Text:</span> <code>"0815"</code> – als Zahl ginge die Null verloren.</span></button>
+    <button class="karte" type="button">Kontostand<br><span class="mono">2.020,50 €</span>
+      <span class="hinten"><span class="loes">Zahl:</span> <code>2020.5</code> – Punkt statt Komma, ohne €</span></button>
+    <button class="karte" type="button">Name<br><span class="mono">Lehmann</span>
+      <span class="hinten"><span class="loes">Text:</span> <code>"Lehmann"</code></span></button>
+    <button class="karte" type="button">Geburtsdatum<br><span class="mono">14.05.1988</span>
+      <span class="hinten"><span class="loes">Text:</span> <code>"14.05.1988"</code> – mehrere Punkte, keine Zahl</span></button>
+    <button class="karte" type="button">Dispo<br><span class="mono">500 €</span>
+      <span class="hinten"><span class="loes">Zahl:</span> <code>500.0</code></span></button>
+  </div>
+  <aside class="notiz"><p>Erst abstimmen lassen (Handzeichen Text/Zahl), dann Karte antippen. Bei der PIN nachfragen: Was passiert mit 0815 als Zahl? (In Python ist <code>0815</code> sogar ein SyntaxError.)</p></aside>
+</section>
+
+<section class="folie" data-titel="Zustand (interaktiv)">
+  <h2><small>Begriff</small>Der Zustand eines Objekts</h2>
+  <div class="zeile" style="gap:60px">
+    <div style="flex:0 0 560px">
+      <div class="obj" id="sim-obj" style="min-width:540px">
+        <div class="kopf"><span>konto1 : Konto</span></div>
+        <div class="atts">
+          <div class="att">kontonummer = 987654321</div>
+          <div class="att">pin = "1234"</div>
+          <div class="att" id="sim-ks">kontostand = <span class="w">2020.0</span></div>
+          <div class="att">dispo = 500.0</div>
+        </div>
+      </div>
+      <p style="margin-top:18px"><span class="impuls" id="sim-nr">Zustand 1</span></p>
+    </div>
+    <div class="spalte">
+      <div class="knopfreihe" style="margin-bottom:16px">
+        <button class="knopf" type="button" data-sim="einzahlen" data-betrag="100"><code>einzahlen(100)</code></button>
+        <button class="knopf" type="button" data-sim="abheben" data-betrag="50"><code>abheben(50)</code></button>
+        <button class="knopf" type="button" data-sim="abheben" data-betrag="3000"><code>abheben(3000)</code></button>
+        <button class="knopf" type="button" data-sim="reset">von vorn</button>
+      </div>
+      <span class="meldung" id="sim-meldung">–</span>
+      <div class="protokoll" id="sim-protokoll"></div>
+      <div class="merke" style="margin-top:22px">
+        Alle Attributwerte zusammen bilden den <b>Zustand</b> eines Objekts.<br>
+        Methoden ändern den Zustand – das Objekt bleibt <b>dasselbe</b>.
+      </div>
+    </div>
+  </div>
+  <aside class="notiz"><p>Knöpfe vom Kurs ansagen lassen. Vor <code>abheben(3000)</code> vorhersagen lassen: Laut Anforderung darf der Kontostand höchstens auf −500 € fallen. Die Simulation lehnt deshalb ab, wenn der Kontostand danach unter −500 läge.</p>
+  <p>Gut zu betonen: Kontonummer, PIN, Dispo ändern sich nie.</p></aside>
+</section>
+
+<section class="folie" data-titel="Abläufe darstellen">
+  <h2><small>Methode</small>Einen Ablauf als Zustandsfolge darstellen</h2>
+  <p class="klein mut" style="margin-top:-12px">Beispiel: Herr Lehmann zahlt 100 € ein, danach hebt er 70 € ab.</p>
+  <div class="zeile" style="gap:14px; align-items:center; margin-top:20px">
+    <div>
+      <p class="klein" style="font-weight:700; margin:0 0 6px">Zustand 1</p>
+      <div class="obj" style="font-size:21px; min-width:0"><div class="kopf"><span>konto1 : Konto</span></div>
+        <div class="atts"><div class="att">kontonummer = 987654321</div><div class="att">pin = "1234"</div>
+        <div class="att">kontostand = 2020.0</div><div class="att">dispo = 500.0</div></div></div>
+    </div>
+    <div class="schritt mono" style="font-size:24px; text-align:center">einzahlen(100)<br><span style="font-size:48px">→</span></div>
+    <div class="schritt">
+      <p class="klein" style="font-weight:700; margin:0 0 6px">Zustand 2</p>
+      <div class="obj" style="font-size:21px; min-width:0"><div class="kopf"><span>konto1 : Konto</span></div>
+        <div class="atts"><div class="att">kontonummer = 987654321</div><div class="att">pin = "1234"</div>
+        <div class="att neu">kontostand = 2120.0</div><div class="att">dispo = 500.0</div></div></div>
+    </div>
+    <div class="schritt mono" style="font-size:24px; text-align:center">abheben(70)<br><span style="font-size:48px">→</span></div>
+    <div class="schritt">
+      <p class="klein" style="font-weight:700; margin:0 0 6px">Zustand 3</p>
+      <div class="obj" style="font-size:21px; min-width:0"><div class="kopf"><span>konto1 : Konto</span></div>
+        <div class="atts"><div class="att">kontonummer = 987654321</div><div class="att">pin = "1234"</div>
+        <div class="att neu">kontostand = 2050.0</div><div class="att">dispo = 500.0</div></div></div>
+    </div>
+  </div>
+  <ul class="schritt klein" style="margin-top:26px">
+    <li>Nach jedem Vorgang ein neues Diagramm – nur die beteiligten Objekte</li>
+    <li>Wird ein Vorgang abgelehnt, bleibt der Zustand unverändert</li>
+  </ul>
+  <aside class="notiz"><p>Genau diese Darstellung brauchen die Schülerinnen und Schüler in Aufgabe 2.3 (mit Überweisung und abgelehnter Abhebung). Nicht vorrechnen, was dort passiert.</p></aside>
+</section>
+
+<section class="folie" data-titel="Objektreferenz">
+  <h2><small>Begriff</small>Objekte kennen andere Objekte</h2>
+  <div style="position:relative; height:330px">
+    <div class="obj" id="r1-konto" style="position:absolute; left:0; top:20px; font-size:26px">
+      <div class="kopf"><span>konto1 : Konto</span></div>
+      <div class="atts"><div class="att">kontonummer = 987654321</div><div class="att">pin = "1234"</div>
+      <div class="att">kontostand = 2020.0</div><div class="att">dispo = 500.0</div>
+      <div class="att">inhaber = <span class="punkt" id="r1-dot"></span></div></div>
+    </div>
+    <div class="obj schritt" id="r1-kunde" style="position:absolute; left:820px; top:60px; font-size:26px">
+      <div class="kopf"><span>kunde1 : Kunde</span></div>
+      <div class="atts"><div class="att">kundennummer = 4711</div><div class="att">name = "Lehmann"</div>
+      <div class="att">vorname = "Jan"</div><div class="att">geburtsdatum = "14.05.1988"</div></div>
+    </div>
+    <i class="pfeil schritt" data-von="r1-dot" data-nach="r1-kunde"></i>
+  </div>
+  <ul style="margin-top:14px">
+    <li class="schritt">Der Wert von <code>inhaber</code> ist <strong>ein anderes Objekt</strong> – gezeichnet als Pfeil: <strong>Objektreferenz</strong></li>
+    <li class="schritt">Richtung: Das Konto kennt seinen Inhaber. Der Kunde kennt sein Konto (vorerst) nicht.</li>
+    <li class="schritt">Zeigt ein Attribut auf kein Objekt, ist sein Wert <code>None</code>.</li>
+  </ul>
+  <aside class="notiz"><p>Die Richtung folgt aus der Anforderung: Jedes Konto gehört genau einem Kunden – dafür genügt ein Attribut im Konto. Ein Kunde mit vielen Konten bräuchte eine Liste (kommt später).</p></aside>
+</section>
+
+<section class="folie" data-titel="Ein Kunde, zwei Konten">
+  <h2><small>Begriff</small>Ein Kunde, zwei Konten</h2>
+  <div style="position:relative; height:480px">
+    <div class="obj" id="r2-k1" style="position:absolute; left:0; top:0; font-size:24px">
+      <div class="kopf"><span>konto1 : Konto</span></div>
+      <div class="atts"><div class="att">kontonummer = 987654321</div><div class="att">kontostand = 1850.0</div>
+      <div class="att">inhaber = <span class="punkt" id="r2-d1"></span></div></div>
+    </div>
+    <div class="obj" id="r2-k3" style="position:absolute; left:0; top:250px; font-size:24px">
+      <div class="kopf"><span>konto3 : Konto</span></div>
+      <div class="atts"><div class="att">kontonummer = 987654322</div><div class="att">kontostand = 0.0</div>
+      <div class="att">inhaber = <span class="punkt" id="r2-d3"></span></div></div>
+    </div>
+    <div class="obj" id="r2-kunde" style="position:absolute; left:820px; top:100px; font-size:24px">
+      <div class="kopf"><span>kunde1 : Kunde</span></div>
+      <div class="atts"><div class="att">kundennummer = 4711</div><div class="att" id="r2-name">name = <span class="w">"Lehmann"</span></div>
+      <div class="att">vorname = "Jan"</div></div>
+    </div>
+    <i class="pfeil" data-von="r2-d1" data-nach="r2-kunde"></i>
+    <i class="pfeil" data-von="r2-d3" data-nach="r2-kunde"></i>
+  </div>
+  <div class="zeile" style="align-items:center; gap:30px">
+    <button class="knopf voll" type="button" id="heirat">Herr Lehmann heiratet</button>
+    <p class="schritt" style="margin:0">Es gibt nur <strong>ein</strong> Kundenobjekt. Der Name wird an <strong>einer</strong> Stelle geändert – beide Konten „sehen“ es.</p>
+  </div>
+  <p class="klein mut" style="margin-top:6px">Attribute <code>pin</code> und <code>dispo</code> hier weggelassen.</p>
+  <aside class="notiz"><p>Vor dem Klick fragen: „An wie vielen Stellen muss der neue Name eingetragen werden?“ Danach Klick – beide Pfeile blinken. Der Kunde wird nicht doppelt gezeichnet (häufiger Fehler in 2.4).</p></aside>
+</section>
+
+<section class="folie" data-titel="Merke: Objekte">
+  <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 1</h2>
+  <table class="tab" style="font-size:27px">
+    <tr><td style="width:300px"><b>Objekt</b></td><td>Einheit aus Daten (Attributen) und Fähigkeiten (Methoden) mit eigener Identität und einem Zustand</td></tr>
+    <tr class="schritt"><td><b>Attribut</b></td><td>Eigenschaft eines Objekts aus Bezeichner und Wert</td></tr>
+    <tr class="schritt"><td><b>Zustand</b></td><td>alle Attributwerte eines Objekts zu einem Zeitpunkt</td></tr>
+    <tr class="schritt"><td><b>Objektdiagramm</b></td><td>abgerundetes Rechteck; oben <u>objektbezeichner : Klasse</u>, darunter bezeichner = wert</td></tr>
+    <tr class="schritt"><td><b>Objektreferenz</b></td><td>Verweis auf ein anderes Objekt, dargestellt als Pfeil vom Attribut zum Objekt</td></tr>
+  </table>
+  <aside class="notiz"><p>Die Definitionen stehen ausführlich auf der Kursseite (rot umrandet) und werden während der Etappe ins Glossar übernommen.</p></aside>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 2.A">
+  <h2><small>Jetzt Sie</small>Etappe 2.A: Objekte darstellen</h2>
+  <div class="kasten" style="font-size:34px">
+    <p>Kursseite, <strong>Baustein 2</strong></p>
+    <ul>
+      <li>Aufgabe 2.1 – Ein Objektdiagramm lesen</li>
+      <li>Aufgabe 2.2 – Eine zweite Kundin</li>
+      <li>Aufgabe 2.3 – Abheben, überweisen, abgelehnt</li>
+    </ul>
+    <p class="mut">ca. 30 min (LK 35 min) · danach Stopp</p>
+  </div>
+  <aside class="notiz"><p>Timer am Board starten. Die nächste Folie (Sicherung 2.A) erst nach der Etappe zeigen.</p></aside>
+</section>
+
+<section class="folie" id="sicherung-2a" data-titel="Sicherung 2.A: Zustandsfolge">
+  <h2><small>Sicherung 2.A</small>Aufgabe 2.3: die Zustandsfolge</h2>
+  <table class="tab mono" style="font-size:27px">
+    <tr><th></th><th>konto1.kontostand</th><th>konto2.kontostand</th><th>Bemerkung</th></tr>
+    <tr><td>Zustand 1</td><td>2020.0</td><td>340.0</td><td style="font-family:inherit"></td></tr>
+    <tr class="schritt"><td>A: 50 € abheben</td><td>1970.0</td><td>340.0</td><td style="font-family:'Segoe UI',sans-serif">nur konto1</td></tr>
+    <tr class="schritt"><td>B: 120 € überweisen</td><td>1850.0</td><td>460.0</td><td style="font-family:'Segoe UI',sans-serif">beide Konten</td></tr>
+    <tr class="schritt"><td>C: 2400 € abheben</td><td>1850.0</td><td>460.0</td><td style="font-family:'Segoe UI',sans-serif">abgelehnt</td></tr>
+  </table>
+  <div class="merke schritt" style="margin-top:28px">
+    C: 1850 − 2400 = −550 &lt; −500 → Der Dispo würde überschritten. <b>Die Software muss vor jeder Abhebung prüfen.</b>
+    <span class="klein mut" style="display:block">Diese Bedingung programmieren Sie in Baustein 4.</span>
+  </div>
+  <aside class="notiz"><p>Zustandsfolge als Zeitleiste; Schülerinnen und Schüler ansagen lassen, welche Werte sich ändern. Veränderlich ist nur <code>kontostand</code> – erster Hinweis auf Datenkapselung.</p></aside>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 2.B">
+  <h2><small>Jetzt Sie</small>Etappe 2.B: Objekte verweisen auf Objekte</h2>
+  <div class="kasten" style="font-size:34px">
+    <ul>
+      <li>Aufgabe 2.4 – Wem gehört welches Konto?</li>
+      <li>Aufgabe 2.5 – Fehler im Objektdiagramm</li>
+      <li class="mut">Wer fertig ist: Aufgabe 2.6 – Der Geldautomat (LK verbindlich)</li>
+    </ul>
+    <p class="mut">ca. 25 min (LK 45 min) · danach Stopp</p>
+  </div>
+</section>
+
+<section class="folie" id="sicherung-2b" data-titel="Sicherung 2.B: Fehlerdiagramm">
+  <h2><small>Sicherung 2.B</small>Aufgabe 2.5: Fehler finden</h2>
+  <div class="zeile" style="gap:60px">
+    <div style="flex:0 0 640px">
+      <div class="obj fobj" style="min-width:600px">
+        <div class="kopf" data-fehler="1">Konto : konto1</div>
+        <div class="atts">
+          <div class="att">kontonummer = 987654321</div>
+          <div class="att" data-fehler="3">pin = 1234</div>
+          <div class="att" data-fehler="4">kontostand = "2.020 €"</div>
+          <div class="att">dispo = 500.0</div>
+          <div class="att" data-fehler="5">inhaber = "Jan Lehmann"</div>
+        </div>
+      </div>
+      <p class="klein mut" style="margin-top:14px">Zeile antippen, um den Fehler zu markieren.</p>
+      <button class="knopf" type="button" id="fehler-alle">alle zeigen</button>
+    </div>
+    <ol class="spalte fehlerliste">
+      <li data-nr="1">Objektbezeichner und Klasse vertauscht: <code>konto1 : Konto</code></li>
+      <li data-nr="2">Kopfzeile nicht unterstrichen</li>
+      <li data-nr="3">PIN ist Text: <code>"1234"</code></li>
+      <li data-nr="4">Kontostand ist eine Zahl: <code>2020.0</code> – ohne Einheit, ohne Tausenderpunkt</li>
+      <li data-nr="5"><code>inhaber</code> ist kein Text, sondern eine Referenz: Pfeil auf <code>kunde1</code></li>
+    </ol>
+  </div>
+  <aside class="notiz"><p>Kopfzeile enthält zwei Fehler (vertauscht, nicht unterstrichen) – der erste Klick auf die Kopfzeile zeigt beide.</p>
+  <p>Danach Diagramm aus 2.4 vergleichen (5 Objekte, Kunde 1 nur einmal) und 2.4b: Richtung der Referenz. LK: Geldautomat aus 2.6 – <code>akt_konto</code> ist eine vorübergehende, <code>inhaber</code> eine dauerhafte Referenz.</p></aside>
+</section>
+
+<!-- ================================================================== TEIL 2: KLASSEN -->
+<section class="folie titel" id="klassen" data-kapitel="Teil 2 · Klassen" data-titel="Titel: Klassen">
+  <div class="tinnen">
+    <div class="teil">Teil 2 · Objektorientierte Softwareentwicklung</div>
+    <h1>Klassen</h1>
+    <p>Vom einzelnen Objekt zum Bauplan: Entwurfsdiagramme, Datentypen, Methoden und Assoziationen</p>
+  </div>
+  <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min</div>
+  <aside class="notiz"><p><b>Input Baustein 3, Teil 2, ca. 15 min.</b> Ziel: Unterschied Klasse/Objekt, Entwurfsdiagramm mit Datentypen und Methoden, Assoziation mit Multiplizität. Danach Etappe 3.A (Aufgaben 3.1–3.4).</p></aside>
+</section>
+
+<section class="folie" data-titel="Gleichartige Objekte">
+  <h2><small>Beobachtung</small>Zwei Konten – was fällt auf?</h2>
+  <div class="zeile" style="justify-content:center; gap:80px; margin-top:20px">
+    <div class="obj" style="font-size:28px"><div class="kopf"><span>konto1 : Konto</span></div>
+      <div class="atts"><div class="att"><span data-paar="g">kontonummer</span> = 987654321</div><div class="att"><span data-paar="g">pin</span> = "1234"</div>
+      <div class="att"><span data-paar="g">kontostand</span> = 2020.0</div><div class="att"><span data-paar="g">dispo</span> = 500.0</div></div></div>
+    <div class="obj" style="font-size:28px"><div class="kopf"><span>konto2 : Konto</span></div>
+      <div class="atts"><div class="att"><span data-paar="g">kontonummer</span> = 65193275</div><div class="att"><span data-paar="g">pin</span> = "0815"</div>
+      <div class="att"><span data-paar="g">kontostand</span> = 340.0</div><div class="att"><span data-paar="g">dispo</span> = 500.0</div></div></div>
+  </div>
+  <ul style="margin-top:40px">
+    <li class="schritt"><strong>Gleich:</strong> dieselben Attribute, dieselben Fähigkeiten</li>
+    <li class="schritt"><strong>Verschieden:</strong> die Werte – also der Zustand</li>
+    <li class="schritt">Solche Objekte heißen <strong>gleichartig</strong>. Man beschreibt sie gemeinsam in einer <strong>Klasse</strong>.</li>
+  </ul>
+  <aside class="notiz"><p>Erst Gemeinsamkeiten nennen lassen, dann einen Bezeichner antippen – alle gleichen Bezeichner leuchten auf.</p></aside>
+</section>
+
+<section class="folie" data-titel="Vom Objekt zur Klasse">
+  <h2><small>Begriff</small>Die Klasse als Bauplan</h2>
+  <div class="zeile" style="gap:70px; align-items:center">
+    <div style="flex:0 0 560px" class="mitte">
+      <div class="obj wandel" id="wandel" style="font-size:30px; min-width:500px">
+        <div class="kopf"><span class="oname">konto1 : Konto</span><span class="kname">Konto</span></div>
+        <div class="atts">
+          <div class="att">kontonummer <span class="wert">= 987654321</span><span class="typ">: Zahl</span></div>
+          <div class="att">pin <span class="wert">= "1234"</span><span class="typ">: Text</span></div>
+          <div class="att">kontostand <span class="wert">= 2020.0</span><span class="typ">: Zahl</span></div>
+          <div class="att">dispo <span class="wert">= 500.0</span><span class="typ">: Zahl</span></div>
+        </div>
+        <div class="meth"><div class="att">einzahlen</div><div class="att">abheben</div><div class="att">…</div></div>
+      </div>
+    </div>
+    <div class="spalte">
+      <p class="schritt">① <strong>Klassenbezeichner</strong> statt Objektname – groß, nicht unterstrichen</p>
+      <i class="schritt" data-ziel="wandel" data-klasse="st-kopf"></i>
+      <p class="schritt">② Statt Werten stehen <strong>Datentypen</strong>: Text, Zahl, Wahrheitswert</p>
+      <i class="schritt" data-ziel="wandel" data-klasse="st-typ"></i>
+      <p class="schritt">③ Ein dritter Bereich für die <strong>Methoden</strong></p>
+      <i class="schritt" data-ziel="wandel" data-klasse="st-meth"></i>
+      <p class="schritt">④ Rechteck mit <strong>eckigen</strong> Kanten: das <strong>Entwurfsdiagramm</strong></p>
+      <i class="schritt" data-ziel="wandel" data-klasse="st-form"></i>
+    </div>
+  </div>
+  <div class="merke schritt" style="margin-top:30px">Eine <b>Klasse</b> ist der Bauplan für gleichartige Objekte. Aus einer Klasse werden beliebig viele Objekte erzeugt.</div>
+  <aside class="notiz"><p>Jeder Schritt verwandelt das Objektdiagramm ein Stück. Wichtig: Die Klasse hat keine Werte – deshalb Datentypen.</p></aside>
+</section>
+
+<section class="folie" data-titel="Datentypen">
+  <h2><small>Entscheiden</small>Datentypen: Text, Zahl oder Wahrheitswert?</h2>
+  <div class="zeile" style="gap:50px">
+    <div class="spalte" style="flex:0 0 640px">
+      <div class="kasten klein">
+        <p style="margin-top:0"><b>Zwei Prüffragen</b></p>
+        <ol style="padding-left:1.1em">
+          <li>Wird mit dem Wert gerechnet oder der Größe nach verglichen? → <strong>Zahl</strong></li>
+          <li>Kann er mit 0 beginnen oder Buchstaben, Leer- und Sonderzeichen enthalten? → <strong>Text</strong></li>
+        </ol>
+        <p>Nur zwei mögliche Werte, ja oder nein? → <strong>Wahrheitswert</strong></p>
+      </div>
+    </div>
+    <div class="spalte karten" style="grid-template-columns:1fr 1fr; gap:16px">
+      <button class="karte" type="button" style="min-height:100px">Kartennummer<br><span class="mono klein">4000 1234 5678</span>
+        <span class="hinten"><span class="loes">Text</span> – Leerzeichen, kein Rechnen</span></button>
+      <button class="karte" type="button" style="min-height:100px">PIN-Fehlversuche<br><span class="mono klein">2</span>
+        <span class="hinten"><span class="loes">Zahl</span> – wird hochgezählt</span></button>
+      <button class="karte" type="button" style="min-height:100px">Karte gesperrt?<br><span class="mono klein">ja / nein</span>
+        <span class="hinten"><span class="loes">Wahrheitswert</span></span></button>
+      <button class="karte" type="button" style="min-height:100px">Zinssatz<br><span class="mono klein">1,5 %</span>
+        <span class="hinten"><span class="loes">Zahl</span> – <code>1.5</code>, damit wird gerechnet</span></button>
+    </div>
+  </div>
+  <aside class="notiz"><p>Beispiele bewusst außerhalb von Aufgabe 3.3 gewählt (dort: Kontonummer, PLZ, Telefonnummer, IBAN …).</p></aside>
+</section>
+
+<section class="folie" data-titel="Methoden aus den Verben">
+  <h2><small>Entwerfen</small>Methoden kommen aus den Verben</h2>
+  <div class="kasten" style="font-size:34px">
+    Satz 5: „Auf ein Konto kann Geld <span data-paar="v1">eingezahlt</span> und von ihm <span data-paar="v2">abgehoben</span> werden.“
+  </div>
+  <div class="zeile" style="margin-top:34px; align-items:center">
+    <div class="spalte schritt">
+      <div class="kl" style="font-size:28px"><div class="kopf">Konto</div>
+        <div class="atts"><div class="att">…</div></div>
+        <div class="meth"><div class="m" data-paar="v1">einzahlen</div><div class="m" data-paar="v2">abheben</div></div></div>
+    </div>
+    <div class="spalte">
+      <ul>
+        <li class="schritt">Das Verb wird zur <strong>Methode</strong> der Klasse, die die Fähigkeit besitzt</li>
+        <li class="schritt">Konvention: klein, ohne Umlaute, Wortteile mit Unterstrich: <code>name_aendern</code></li>
+        <li class="schritt">Nicht jeder Satz liefert eine Methode – Startwerte beschreiben, was beim <strong>Erzeugen</strong> passiert</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notiz"><p>Die vollständige Tabelle für alle Sätze erstellen die Schülerinnen und Schüler in Aufgabe 3.1b.</p></aside>
+</section>
+
+<section class="folie" data-titel="Quiz: Klasse oder Objekt?">
+  <h2><small>Kurz geprüft</small>Klasse oder Objekt?</h2>
+  <div class="karten" style="grid-template-columns:repeat(3,1fr)">
+    <button class="karte" type="button">Bankkarte<span class="hinten"><span class="loes">Klasse</span> – der Bauplan</span></button>
+    <button class="karte" type="button">die Karte mit der Nummer 4000&nbsp;1234&nbsp;5678<span class="hinten"><span class="loes">Objekt</span> – ein bestimmtes Exemplar</span></button>
+    <button class="karte" type="button">Schülerin<span class="hinten"><span class="loes">Klasse</span></span></button>
+    <button class="karte" type="button">Lea aus der 11b<span class="hinten"><span class="loes">Objekt</span></span></button>
+    <button class="karte" type="button">Stadt<span class="hinten"><span class="loes">Klasse</span></span></button>
+    <button class="karte" type="button">Rostock<span class="hinten"><span class="loes">Objekt</span> – ein Objekt der Klasse Stadt</span></button>
+  </div>
+  <aside class="notiz"><p>Abstimmung per Handzeichen, dann aufdecken. Merksatz: Ein Objekt ist ein bestimmtes Exemplar mit eigenen Werten.</p></aside>
+</section>
+
+<section class="folie" data-titel="Assoziation">
+  <h2><small>Beziehungen</small>Aus der Referenz wird eine Assoziation</h2>
+  <div style="position:relative; height:330px">
+    <div class="kl" id="as-konto" style="position:absolute; left:0; top:10px; font-size:26px">
+      <div class="kopf">Konto</div>
+      <div class="atts"><div class="att">kontonummer : Zahl</div><div class="att">pin : Text</div><div class="att">kontostand : Zahl</div><div class="att">dispo : Zahl</div></div>
+      <div class="meth"><div class="m">…</div></div>
+    </div>
+    <div class="kl" id="as-kunde" style="position:absolute; left:900px; top:30px; font-size:26px">
+      <div class="kopf">Kunde</div>
+      <div class="atts"><div class="att">kundennummer : Zahl</div><div class="att">name : Text</div><div class="att">…</div></div>
+      <div class="meth"><div class="m">…</div></div>
+    </div>
+    <i class="pfeil" data-von="as-konto" data-nach="as-kunde" data-label="inhaber" data-mult="1"></i>
+  </div>
+  <div class="zeile" style="gap:40px">
+    <ul class="spalte klein">
+      <li class="schritt">Pfeil von Klasse zu Klasse: <strong>Assoziation</strong></li>
+      <li class="schritt">Am Pfeil der <strong>Bezeichner</strong> des Attributs – nicht zusätzlich im Attributbereich</li>
+      <li class="schritt">An der Spitze die <strong>Multiplizität</strong>: Wie viele Kunden hat ein Konto?</li>
+    </ul>
+    <table class="tab spalte schritt" style="font-size:24px">
+      <tr><td class="mono">1</td><td>genau eins</td><td class="mono">0..1</td><td>keins oder eins</td></tr>
+      <tr><td class="mono">1..*</td><td>mindestens eins</td><td class="mono">0..*</td><td>beliebig viele</td></tr>
+    </table>
+  </div>
+  <aside class="notiz"><p>Zurück zur Folie „Objekte kennen andere Objekte“: Der Pfeil zwischen Objekten wird im Entwurf zum Pfeil zwischen Klassen. In 3.4 begründen die Schülerinnen und Schüler, warum hier 1 und nicht 0..1 steht.</p></aside>
+</section>
+
+<section class="folie" data-titel="Merke: Klassen">
+  <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 2</h2>
+  <table class="tab" style="font-size:27px">
+    <tr><td style="width:300px"><b>Klasse</b></td><td>Bauplan für gleichartige Objekte: dieselben Attribute und Methoden. Attribute mit Datentypen statt Werten.</td></tr>
+    <tr class="schritt"><td><b>Entwurfsdiagramm</b></td><td>Rechteck mit drei Bereichen: Klassenbezeichner, Attribute mit Datentyp, Methoden</td></tr>
+    <tr class="schritt"><td><b>Assoziation</b></td><td>Beziehung zwischen Klassen über ein Attribut, dessen Datentyp eine andere Klasse ist; Pfeil mit Bezeichner</td></tr>
+    <tr class="schritt"><td><b>Multiplizität</b></td><td>wie viele Objekte der anderen Klasse ein Objekt verwalten kann oder muss (1, 0..1, 0..*)</td></tr>
+  </table>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 3.A">
+  <h2><small>Jetzt Sie</small>Etappe 3.A: Klassen entwerfen</h2>
+  <div class="kasten" style="font-size:34px">
+    <p>Kursseite, <strong>Baustein 3</strong></p>
+    <ul>
+      <li>Aufgabe 3.1 – Kunde und Konto entwerfen</li>
+      <li>Aufgabe 3.2 – Klasse oder Objekt?</li>
+      <li>Aufgabe 3.3 – Zahl oder Text?</li>
+      <li>Aufgabe 3.4 – Die Assoziation interpretieren</li>
+      <li class="mut">Wer fertig ist: Aufgabe 3.5 – Weitere Klassen der Bank (LK verbindlich)</li>
+    </ul>
+    <p class="mut">ca. 30 min (LK 40 min) · danach Stopp</p>
+  </div>
+</section>
+
+<section class="folie" id="sicherung-3a" data-titel="Sicherung 3.A: Unser Modell">
+  <h2><small>Sicherung 3.A</small>Unser Modell der WarnowBank</h2>
+  <div style="position:relative; height:560px">
+    <div class="kl" id="m-konto" style="position:absolute; left:40px; top:0; font-size:27px">
+      <div class="kopf">Konto</div>
+      <div class="atts"><div class="att">kontonummer : Zahl</div><div class="att">pin : Text</div><div class="att">kontostand : Zahl</div><div class="att">dispo : Zahl</div></div>
+      <div class="meth schritt"><div class="m">einzahlen</div><div class="m">abheben</div><div class="m">ueberweisen</div>
+        <div class="m">kontostand_abfragen</div><div class="m">auszug_drucken</div><div class="m">pin_pruefen</div></div>
+    </div>
+    <div class="kl" id="m-kunde" style="position:absolute; left:930px; top:40px; font-size:27px">
+      <div class="kopf">Kunde</div>
+      <div class="atts"><div class="att">kundennummer : Zahl</div><div class="att">name : Text</div><div class="att">vorname : Text</div><div class="att">geburtsdatum : Text</div></div>
+      <div class="meth schritt"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
+    </div>
+    <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1"></i>
+  </div>
+  <aside class="notiz"><p>Erst Attribute (aus 3.1a), dann Methoden (3.1b), dann Assoziation (3.4). Strittig in 3.3: Kontonummer – im Kurs als Zahl festgelegt, weil sie bei der WarnowBank nie mit 0 beginnt. Weichen Kursentscheidungen ab, im Glossar vermerken.</p>
+  <p>Dieses Diagramm steht auf der Kursseite am Anfang von Etappe 3.B.</p></aside>
+</section>
+
+<!-- ================================================================== TEIL 3: PYTHON -->
+<section class="folie titel" id="python" data-kapitel="Teil 3 · Klassen in Python" data-titel="Titel: Klassen in Python">
+  <div class="tinnen">
+    <div class="teil">Teil 3 · Objektorientierte Softwareentwicklung</div>
+    <h1>Klassen in Python</h1>
+    <p>Vom Entwurfsdiagramm zum Programm: Konstruktor, <span class="mono">self</span>, Objekte erzeugen und Referenzen</p>
+  </div>
+  <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min · Thonny bereithalten</div>
+  <aside class="notiz"><p><b>Input Baustein 3, Teil 3, ca. 15 min.</b> Thonny am Board öffnen (Ansicht → Variablen und Heap). Danach Etappe 3.B (Aufgaben 3.6–3.9).</p></aside>
+</section>
+
+<section class="folie" data-titel="Vom Entwurf zum Code">
+  <h2><small>Übersetzen</small>Vom Entwurfsdiagramm zum Code</h2>
+  <div class="zeile" style="gap:50px; align-items:center">
+    <div style="flex:0 0 440px">
+      <div class="kl" style="font-size:27px; min-width:420px">
+        <div class="kopf"><span data-paar="k">Kunde</span></div>
+        <div class="atts">
+          <div class="att"><span data-paar="a1">kundennummer</span> : <span data-paar="t1">Zahl</span></div>
+          <div class="att"><span data-paar="a2">name</span> : Text</div>
+          <div class="att"><span data-paar="a3">vorname</span> : Text</div>
+          <div class="att"><span data-paar="a4">geburtsdatum</span> : Text</div>
+        </div>
+        <div class="meth"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
+      </div>
+      <p class="klein mut" style="margin-top:14px">Antippen: Was gehört zusammen?</p>
+    </div>
+    <div class="spalte">
+<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> <span data-paar="k">Kunde</span>:</span><span class="z">    <span class="k">def</span> <span class="f" data-paar="ini">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.<span data-paar="a1">kundennummer</span> = kundennummer</span><span class="z">        <span class="k">self</span>.<span data-paar="a2">name</span> = name</span><span class="z">        <span class="k">self</span>.<span data-paar="a3">vorname</span> = vorname</span><span class="z">        <span class="k">self</span>.<span data-paar="a4">geburtsdatum</span> = geburtsdatum</span></pre>
+      <ul class="klein" style="margin-top:18px">
+        <li class="schritt"><code>class Kunde:</code> – Klassenname groß, alles Eingerückte gehört dazu</li>
+        <li class="schritt"><code>__init__</code> – der <strong>Konstruktor</strong>: legt die Attribute an (je zwei Unterstriche)</li>
+        <li class="schritt">Datentypen: Text → <code>str</code>, Zahl → <code>int</code>/<code>float</code>, Wahrheitswert → <code>bool</code></li>
+        <li class="schritt">Methoden folgen in Baustein 4</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notiz"><p>Die Klasse Kunde wird hier vollständig gezeigt – sie dürfen die Schülerinnen und Schüler in 3.6 übernehmen. Die Klasse Konto implementieren sie selbst.</p></aside>
+</section>
+
+<section class="folie" data-titel="Der Konstruktor Schritt für Schritt" id="konstruktor">
+  <h2><small>Genau hingeschaut</small>Was passiert beim Erzeugen eines Objekts?</h2>
+  <div class="zeile" style="gap:40px">
+    <div style="flex:0 0 880px">
+<pre class="code" id="ks-code" style="font-size:24px"><span class="z" data-z="0"><span class="k">class</span> Kunde:</span><span class="z" data-z="1">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z" data-z="2">        <span class="k">self</span>.kundennummer = kundennummer</span><span class="z" data-z="3">        <span class="k">self</span>.name = name</span><span class="z" data-z="4">        <span class="k">self</span>.vorname = vorname</span><span class="z" data-z="5">        <span class="k">self</span>.geburtsdatum = geburtsdatum</span><span class="z leer"></span><span class="z" data-z="6">kunde1 = Kunde(<span class="n">4711</span>, <span class="s">"Lehmann"</span>, <span class="s">"Jan"</span>, <span class="s">"14.05.1988"</span>)</span></pre>
+      <div class="erkl" id="ks-erkl" style="margin-top:20px"></div>
+      <div class="knopfreihe" style="margin-top:14px">
+        <button class="knopf" type="button" data-ks="-1">◀ zurück</button>
+        <button class="knopf voll" type="button" data-ks="1">Schritt ▶</button>
+        <span class="mut klein" id="ks-nr"></span>
+      </div>
+    </div>
+    <div class="spalte" style="position:relative; height:660px">
+      <div class="var leer" id="ks-var" style="position:absolute; left:0; top:0">kunde1 <span class="punkt" id="ks-vdot"></span></div>
+      <div class="obj" id="ks-obj" style="visibility:hidden; position:absolute; left:40px; top:110px; font-size:22px; min-width:380px">
+        <div class="kopf"><span>: Kunde</span></div>
+        <div class="atts" id="ks-atts" style="min-height:40px"></div>
+      </div>
+      <div class="param" id="ks-param" style="visibility:hidden; position:absolute; left:0; top:400px; font-size:21px">
+        <div>self = <span class="punkt" id="ks-sdot"></span></div>
+        <div>kundennummer = 4711</div><div>name = "Lehmann"</div><div>vorname = "Jan"</div><div>geburtsdatum = "14.05.1988"</div>
+        <div style="color:var(--mut); font-family:'Segoe UI',sans-serif; font-size:18px; margin-top:6px">Parameter – nur während <code>__init__</code></div>
+      </div>
+      <i class="pfeil" id="ks-p-self" data-von="ks-sdot" data-nach="ks-obj" style="display:none"></i>
+      <i class="pfeil" id="ks-p-var" data-von="ks-vdot" data-nach="ks-obj" style="display:none"></i>
+    </div>
+  </div>
+  <aside class="notiz"><p>Mit Pfeiltaste oder „Schritt“ durchgehen. Kernaussagen: <code>self</code> ist das neue Objekt; <code>self.name = name</code> kopiert den Parameterwert ins Objekt; Parameter verschwinden nach dem Konstruktor, Attribute bleiben. Anschließend dasselbe in Thonny mit dem Debugger (<kbd>Strg</kbd>+<kbd>F5</kbd>, dann <kbd>F7</kbd>) zeigen.</p></aside>
+</section>
+
+<section class="folie" data-titel="Feste Startwerte">
+  <h2><small>Konstruktor</small>Nicht jedes Attribut ist ein Parameter</h2>
+  <div class="zeile" style="gap:50px; align-items:center">
+    <div style="flex:0 0 860px">
+<pre class="code" style="font-size:25px"><span class="z"><span class="k">class</span> Geldautomat:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, <span data-paar="st">standort</span>):</span><span class="z">        <span class="k">self</span>.standort = <span data-paar="st">standort</span></span><span class="z">        <span class="k">self</span>.bargeld = <span class="n" data-paar="fest">50000.0</span></span><span class="z">        <span class="k">self</span>.akt_konto = <span class="k" data-paar="none">None</span></span><span class="z leer"></span><span class="z">automat1 = Geldautomat(<span class="s">"Kröpeliner Straße"</span>)</span></pre>
+    </div>
+    <div class="spalte">
+      <div class="obj" style="font-size:24px; min-width:0"><div class="kopf"><span>automat1 : Geldautomat</span></div>
+        <div class="atts"><div class="att"><span data-paar="st">standort = "Kröpeliner Straße"</span></div><div class="att"><span data-paar="fest">bargeld = 50000.0</span></div>
+        <div class="att"><span data-paar="none">akt_konto = None</span></div></div></div>
+    </div>
+  </div>
+  <ul style="margin-top:30px">
+    <li class="schritt">Was für jedes Objekt <strong>anders</strong> ist, wird als Parameter übergeben</li>
+    <li class="schritt">Was für alle neuen Objekte <strong>gleich</strong> ist, setzt der Konstruktor selbst: <strong>fester Startwert</strong></li>
+    <li class="schritt"><code>None</code>: Das Attribut verweist (noch) auf kein Objekt</li>
+  </ul>
+  <aside class="notiz"><p>Übertrag in 3.6: Laut Anforderung startet jedes Konto mit 0,00 € und hat 500 € Dispo. Welche Attribute werden also Parameter? – nicht vorwegnehmen.</p></aside>
+</section>
+
+<section class="folie" data-titel="Objekte erzeugen und benutzen">
+  <h2><small>In Thonny</small>Objekte erzeugen und benutzen</h2>
+  <div class="zeile" style="gap:50px">
+    <div style="flex:0 0 860px">
+<pre class="code" style="font-size:25px"><span class="z"><span class="c"># Datei mit F5 ausführen, dann in der Shell:</span></span><span class="z">&gt;&gt;&gt; kunde1 = Kunde(<span class="n">4711</span>, <span class="s">"Lehmann"</span>, <span class="s">"Jan"</span>, <span class="s">"14.05.1988"</span>)</span><span class="z schritt">&gt;&gt;&gt; kunde1.vorname</span><span class="z schritt"><span class="s">'Jan'</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name = <span class="s">"Lehmann-Krüger"</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name</span><span class="z schritt"><span class="s">'Lehmann-Krüger'</span></span></pre>
+    </div>
+    <div class="spalte">
+      <ul class="klein">
+        <li><strong>Instanziierung:</strong> <code>objekt = Klasse(Werte)</code> – <code>self</code> wird nicht mitgeschrieben</li>
+        <li class="schritt"><strong>Punktnotation:</strong> <code>objekt.attribut</code></li>
+        <li class="schritt">Zuweisung ändert den Zustand (ob das gut ist, klären wir in Baustein 5)</li>
+        <li class="schritt"><em>Ansicht → Variablen</em>: Doppelklick öffnet den <strong>Objektinspektor</strong></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notiz"><p>Jetzt live in Thonny: Klasse Kunde eintippen oder einfügen, F5, Objekt erzeugen, Objektinspektor zeigen. Bezug herstellen: Der Objektinspektor zeigt genau das Objektdiagramm.</p></aside>
+</section>
+
+<section class="folie" data-titel="Variablen speichern Referenzen" id="heap">
+  <h2><small>Genau hingeschaut</small>Variablen speichern Referenzen</h2>
+  <div class="zeile" style="gap:30px">
+    <div style="flex:0 0 760px">
+<pre class="code" id="hp-code" style="font-size:23px"><span class="z" data-z="0">a = Kunde(<span class="n">4711</span>, <span class="s">"Lehmann"</span>, <span class="s">"Jan"</span>, <span class="s">"14.05.1988"</span>)</span><span class="z" data-z="1">b = Kunde(<span class="n">4712</span>, <span class="s">"Schulz"</span>, <span class="s">"Mia"</span>, <span class="s">"02.11.2001"</span>)</span><span class="z" data-z="2">c = a</span><span class="z" data-z="3">c.name = <span class="s">"Lehmann-Krüger"</span></span><span class="z" data-z="4">b = Kunde(<span class="n">4713</span>, <span class="s">"Weber"</span>, <span class="s">"Tom"</span>, <span class="s">"30.01.1999"</span>)</span></pre>
+      <div class="erkl" id="hp-erkl" style="margin-top:20px; font-size:26px"></div>
+      <div class="knopfreihe" style="margin-top:14px">
+        <button class="knopf" type="button" data-hp="-1">◀ zurück</button>
+        <button class="knopf voll" type="button" data-hp="1">Schritt ▶</button>
+        <span class="mut klein" id="hp-nr"></span>
+      </div>
+    </div>
+    <div class="spalte" style="position:relative; height:640px">
+      <div class="klein mut" style="position:absolute; left:0; top:0">Variablen</div>
+      <div class="klein mut" style="position:absolute; left:260px; top:0">Objekte im Speicher</div>
+      <div class="var" id="hp-va" style="position:absolute; left:0; top:60px; min-width:0">a <span class="punkt" id="hp-da"></span></div>
+      <div class="var" id="hp-vb" style="position:absolute; left:0; top:260px; min-width:0">b <span class="punkt" id="hp-db"></span></div>
+      <div class="var" id="hp-vc" style="position:absolute; left:0; top:160px; min-width:0">c <span class="punkt" id="hp-dc"></span></div>
+      <div class="obj" id="hp-o1" style="position:absolute; left:260px; top:50px; font-size:21px; min-width:0">
+        <div class="kopf"><span>: Kunde</span></div><div class="atts"><div class="att" id="hp-o1n">name = <span class="w">"Lehmann"</span></div><div class="att">vorname = "Jan"</div></div></div>
+      <div class="obj" id="hp-o2" style="position:absolute; left:260px; top:250px; font-size:21px; min-width:0">
+        <div class="kopf"><span>: Kunde</span></div><div class="atts"><div class="att">name = "Schulz"</div><div class="att">vorname = "Mia"</div></div></div>
+      <div class="obj" id="hp-o3" style="position:absolute; left:260px; top:450px; font-size:21px; min-width:0">
+        <div class="kopf"><span>: Kunde</span></div><div class="atts"><div class="att">name = "Weber"</div><div class="att">vorname = "Tom"</div></div></div>
+      <i class="pfeil" id="hp-pa" data-von="hp-da" data-nach="hp-o1" style="display:none"></i>
+      <i class="pfeil" id="hp-pb" data-von="hp-db" data-nach="hp-o2" style="display:none"></i>
+      <i class="pfeil" id="hp-pc" data-von="hp-dc" data-nach="hp-o1" style="display:none"></i>
+    </div>
+  </div>
+  <aside class="notiz"><p>Vor Schritt 3 (<code>c = a</code>) vorhersagen lassen: Wie viele Kundenobjekte gibt es danach? Vor Schritt 5: Was liefert <code>a.name</code>? In Thonny mit <em>Ansicht → Heap</em> nachprüfen: <code>a</code> und <code>c</code> haben dieselbe ID.</p>
+  <p>Kundenattribute hier auf <code>name</code> und <code>vorname</code> gekürzt.</p></aside>
+</section>
+
+<section class="folie" data-titel="Typische Fehlermeldungen">
+  <h2><small>Wenn es nicht läuft</small>Fehlermeldungen lesen</h2>
+  <div class="karten" style="grid-template-columns:1fr 1fr">
+    <button class="karte" type="button"><code style="color:var(--rot)">NameError: name 'Kunde' is not defined</code>
+      <span class="hinten">Die Datei wurde nicht mit <kbd>F5</kbd> ausgeführt – oder der Klassenname ist falsch geschrieben (<code>kunde</code> statt <code>Kunde</code>).</span></button>
+    <button class="karte" type="button"><code style="color:var(--rot)">IndentationError: expected an indented block after function definition</code>
+      <span class="hinten">Der Rumpf von <code>__init__</code> ist nicht eingerückt. Alles, was zum Konstruktor gehört, steht eine Stufe weiter rechts.</span></button>
+    <button class="karte" type="button"><code style="color:var(--rot)">TypeError: Kunde.__init__() takes 5 positional arguments but 6 were given</code>
+      <span class="hinten">Beim Erzeugen wurde ein Wert zu viel übergeben. Python zählt <code>self</code> mit: 4 Werte + <code>self</code> = 5.</span></button>
+    <button class="karte" type="button"><code style="color:var(--rot)">AttributeError: 'Kunde' object has no attribute 'nachname'</code>
+      <span class="hinten">Das Attribut heißt anders: Im Konstruktor wurde <code>self.name</code> angelegt, nicht <code>self.nachname</code>.</span></button>
+  </div>
+  <p class="klein mut" style="margin-top:22px">Faustregel: Die letzte Zeile der Meldung wörtlich übersetzen – sie verrät fast immer die Ursache.</p>
+  <aside class="notiz"><p>Bewusst andere Fehler als in Aufgabe 3.9 (dort: <code>_init_</code>, fehlendes <code>self.</code>, fehlendes <code>self</code> als Parameter, fehlender Wert).</p></aside>
+</section>
+
+<section class="folie" data-titel="Merke: Klassen in Python">
+  <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 3</h2>
+  <table class="tab" style="font-size:27px">
+    <tr><td style="width:300px"><b>Konstruktor</b></td><td>Methode <code>__init__</code>, die beim Erzeugen automatisch ausgeführt wird; legt die Attribute an und belegt sie mit Parametern oder festen Startwerten</td></tr>
+    <tr class="schritt"><td><b><code>self</code></b></td><td>das Objekt, das gerade erzeugt bzw. benutzt wird; immer erster Parameter</td></tr>
+    <tr class="schritt"><td><b>Instanziierung</b></td><td>Erzeugen eines Objekts: <code>objektname = Klassenname(Werte)</code></td></tr>
+    <tr class="schritt"><td><b>Referenz</b></td><td>Variablen speichern Verweise auf Objekte; <code>c = a</code> kopiert den Verweis, nicht das Objekt</td></tr>
+  </table>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 3.B">
+  <h2><small>Jetzt Sie</small>Etappe 3.B: Klassen in Python</h2>
+  <div class="kasten" style="font-size:33px">
+    <ul>
+      <li>Aufgabe 3.6 – Kunde und Konto implementieren (neue Datei <code>bank.py</code>)</li>
+      <li>Aufgabe 3.7 – Zwei gleiche Kunden?</li>
+      <li>Aufgabe 3.8 – Wie viele Konten gibt es?</li>
+      <li>Aufgabe 3.9 – Fehlersuche</li>
+      <li class="mut">Wer fertig ist: 3.10 Die Klasse Karte, 3.11 Das Konto kennt seinen Inhaber (LK verbindlich)</li>
+    </ul>
+    <p class="mut">ca. 40 min (LK 55 min) · danach Stopp</p>
+  </div>
+</section>
+
+<section class="folie" id="sicherung-3b" data-titel="Sicherung 3.B: Code-Stand und Kurz-Check">
+  <h2><small>Sicherung 3.B</small>Unser Stand von <code>bank.py</code></h2>
+  <div class="zeile" style="gap:40px">
+    <div style="flex:0 0 860px">
+<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> Kunde:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.kundennummer = kundennummer</span><span class="z">        <span class="k">self</span>.name = name</span><span class="z">        <span class="k">self</span>.vorname = vorname</span><span class="z">        <span class="k">self</span>.geburtsdatum = geburtsdatum</span><span class="z leer"></span><span class="z schritt"><span class="k">class</span> Konto:</span><span class="z schritt">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kontonummer, pin):</span><span class="z schritt">        <span class="k">self</span>.kontonummer = kontonummer</span><span class="z schritt">        <span class="k">self</span>.pin = pin</span><span class="z schritt">        <span class="k">self</span>.kontostand = <span class="n">0.0</span></span><span class="z schritt">        <span class="k">self</span>.dispo = <span class="n">500.0</span></span></pre>
+      <p class="klein mut" style="margin-top:10px">Danach erhalten alle diesen Stand über den Austauschordner.</p>
+    </div>
+    <div class="spalte">
+      <p style="font-weight:700; margin-top:0">Kurz-Check</p>
+      <div class="karten" style="gap:14px">
+        <button class="karte" type="button" style="min-height:0; font-size:24px">Unterschied: <code>Konto</code>, <code>konto1</code>, <code>konto1.kontostand</code>
+          <span class="hinten">Klasse (Bauplan) – Objekt (Variable mit Referenz) – Attribut des Objekts</span></button>
+        <button class="karte" type="button" style="min-height:0; font-size:24px">Aufgabe des Konstruktors
+          <span class="hinten">legt beim Erzeugen die Attribute an und belegt sie mit Startwerten</span></button>
+        <button class="karte" type="button" style="min-height:0; font-size:24px">„falsch“ in Python
+          <span class="hinten"><code>False</code> – großgeschrieben, ohne Anführungszeichen</span></button>
+      </div>
+    </div>
+  </div>
+  <aside class="notiz"><p>Code-Stand entspricht <code>oop_staende/bank_stand_4B.py</code> im Repository. Danach geht es mit Baustein 4 (Methoden) weiter.</p></aside>
+</section>
+
+</div><!-- #buehne -->
+
+<div id="leiste"><div id="fortschritt"></div></div>
+<div id="steuer">
+  <button type="button" id="b-menue" title="Menü (M)">☰</button>
+  <button type="button" id="b-notiz" title="Notizen (N)">✎</button>
+  <button type="button" id="b-voll" title="Vollbild (F)">⛶</button>
+  <button type="button" id="b-zurueck" title="zurück">‹</button>
+  <button type="button" id="b-weiter" title="weiter">›</button>
+</div>
+<div id="schwarz"></div>
+<div id="notizen"><div class="nkopf"><span id="n-titel"></span><span id="n-nr"></span><span class="uhr" id="n-uhr" title="Klick: Uhr zurücksetzen">00:00</span></div><div id="n-text"></div></div>
+<div id="menue"></div>
+
+<script>
+(function(){
+  var buehne = document.getElementById("buehne");
+  var folien = Array.prototype.slice.call(document.querySelectorAll("section.folie"));
+  var nr = 0, skala = 1;
+  var info = document.createElement("div"); info.id = "info";
+
+  // Kapitel zuordnen
+  var kap = "";
+  folien.forEach(function(f){
+    if(f.dataset.kapitel) kap = f.dataset.kapitel;
+    f.dataset.kap = kap;
+    f.dataset.titelText = f.dataset.titel || (f.querySelector("h2") ? f.querySelector("h2").textContent : "");
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "pfeile");
+    svg.innerHTML = '<defs><marker id="spitze-' + folien.indexOf(f) + '" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker>'
+      + '<marker id="offen-' + folien.indexOf(f) + '" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.6"/></marker></defs><g></g>';
+    f.appendChild(svg);
+  });
+
+  // ---- Skalierung
+  function skalieren(){
+    skala = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    buehne.style.transform = "translate(-50%,-50%) scale(" + skala + ")";
+    pfeileZeichnen();
+  }
+
+  // ---- Pfeile
+  function rechteck(el, f){
+    var r = el.getBoundingClientRect(), b = f.getBoundingClientRect();
+    return {x:(r.left - b.left) / skala, y:(r.top - b.top) / skala, w:r.width / skala, h:r.height / skala};
+  }
+  function sichtbar(el){
+    if(el.style.display === "none") return false;
+    if(el.classList.contains("schritt") && !el.classList.contains("an")) return false;
+    return true;
+  }
+  function randpunkt(r, px, py){
+    // Schnittpunkt der Strecke vom Mittelpunkt von r nach (px,py) mit dem Rand von r
+    var cx = r.x + r.w / 2, cy = r.y + r.h / 2, dx = px - cx, dy = py - cy;
+    var tx = dx ? (r.w / 2) / Math.abs(dx) : Infinity, ty = dy ? (r.h / 2) / Math.abs(dy) : Infinity;
+    var t = Math.min(tx, ty);
+    return {x: cx + dx * t, y: cy + dy * t};
+  }
+  function pfeileZeichnen(){
+    var f = folien[nr]; if(!f) return;
+    var g = f.querySelector("svg.pfeile g"); g.innerHTML = "";
+    var i = folien.indexOf(f);
+    f.querySelectorAll("i.pfeil").forEach(function(p){
+      if(!sichtbar(p)) return;
+      var von = document.getElementById(p.dataset.von), nach = document.getElementById(p.dataset.nach);
+      if(!von || !nach) return;
+      if(getComputedStyle(nach).visibility === "hidden" || getComputedStyle(von).visibility === "hidden") return;
+      var rv = rechteck(von, f), rn = rechteck(nach, f), a, e;
+      var istKlasse = !!p.dataset.label;
+      if(istKlasse){
+        // Assoziation: von Rand zu Rand, waagerecht in mittlerer Höhe
+        var y = Math.max(rv.y, rn.y) + Math.min(rv.y + rv.h - Math.max(rv.y, rn.y), rn.y + rn.h - Math.max(rv.y, rn.y)) / 2;
+        a = {x: rv.x + rv.w, y: y}; e = {x: rn.x, y: y};
+      } else {
+        a = {x: rv.x + rv.w / 2, y: rv.y + rv.h / 2};
+        e = randpunkt(rn, a.x, a.y);
+      }
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      l.setAttribute("x1", a.x); l.setAttribute("y1", a.y); l.setAttribute("x2", e.x); l.setAttribute("y2", e.y);
+      l.setAttribute("marker-end", "url(#" + (istKlasse ? "offen-" : "spitze-") + i + ")");
+      if(p.dataset.puls){ l.setAttribute("class", "puls"); }
+      g.appendChild(l);
+      if(istKlasse){
+        var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", (a.x + e.x) / 2); t.setAttribute("y", a.y - 14); t.setAttribute("text-anchor", "middle");
+        t.textContent = p.dataset.label; g.appendChild(t);
+        var m = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        m.setAttribute("x", e.x - 40); m.setAttribute("y", e.y - 14); m.setAttribute("text-anchor", "middle");
+        m.textContent = p.dataset.mult; g.appendChild(m);
+      }
+    });
+  }
+  window.pfeileZeichnen = pfeileZeichnen;
+
+  // ---- Fragmente
+  function schritte(f){ return Array.prototype.slice.call(f.querySelectorAll(".schritt")); }
+  function schrittAnwenden(el, an){
+    el.classList.toggle("an", an);
+    if(el.dataset.ziel){
+      var z = document.getElementById(el.dataset.ziel);
+      if(z) z.classList.toggle(el.dataset.klasse, an);
+    }
+  }
+  function alleSchritte(f, an){ schritte(f).reverse().forEach(function(s){ schrittAnwenden(s, an); }); }
+
+  // ---- Navigation
+  function zeige(n, vonHinten){
+    n = Math.max(0, Math.min(folien.length - 1, n));
+    folien.forEach(function(f, i){ f.classList.toggle("aktiv", i === n); });
+    nr = n;
+    var f = folien[n];
+    alleSchritte(f, !!vonHinten);
+    if(f._widget && f._widget.zuruecksetzen) f._widget.zuruecksetzen(!!vonHinten);
+    f.appendChild(info);
+    info.textContent = f.dataset.kap + " · " + (n + 1) + " / " + folien.length;
+    document.getElementById("fortschritt").style.width = ((n + 1) / folien.length * 100) + "%";
+    var ziel = f.id ? "#" + f.id : "#f" + (n + 1);
+    if(location.hash !== ziel) history.replaceState(null, "", ziel);
+    notizenFuellen();
+    setTimeout(pfeileZeichnen, 0);
+  }
+  function weiter(){
+    var f = folien[nr];
+    if(f._widget && f._widget.weiter && f._widget.weiter()) return;
+    var naechster = schritte(f).filter(function(s){ return !s.classList.contains("an"); })[0];
+    if(naechster){
+      schrittAnwenden(naechster, true);
+      // unsichtbare Steuer-Fragmente direkt mitnehmen
+      var rest = schritte(f).filter(function(s){ return !s.classList.contains("an"); });
+      while(rest[0] && rest[0].tagName === "I" && rest[0].dataset.ziel){ schrittAnwenden(rest.shift(), true); }
+      pfeileZeichnen(); return;
+    }
+    if(nr < folien.length - 1) zeige(nr + 1);
+  }
+  function zurueck(){
+    var f = folien[nr];
+    if(f._widget && f._widget.zurueck && f._widget.zurueck()) return;
+    var an = schritte(f).filter(function(s){ return s.classList.contains("an"); });
+    if(an.length){
+      while(an.length && an[an.length - 1].tagName === "I" && an[an.length - 1].dataset.ziel){ schrittAnwenden(an.pop(), false); }
+      if(an.length) schrittAnwenden(an.pop(), false);
+      pfeileZeichnen(); return;
+    }
+    if(nr > 0) zeige(nr - 1, true);
+  }
+
+  // ---- Notizen, Uhr, Menü
+  var start = Date.now();
+  function notizenFuellen(){
+    var f = folien[nr], n = f.querySelector("aside.notiz");
+    document.getElementById("n-titel").textContent = f.dataset.titelText;
+    document.getElementById("n-nr").textContent = "Folie " + (nr + 1) + " / " + folien.length;
+    document.getElementById("n-text").innerHTML = n ? n.innerHTML : '<p class="mut">Keine Notizen.</p>';
+  }
+  setInterval(function(){
+    var s = Math.floor((Date.now() - start) / 1000);
+    document.getElementById("n-uhr").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  }, 1000);
+  document.getElementById("n-uhr").addEventListener("click", function(){ start = Date.now(); });
+
+  function menueBauen(){
+    var m = document.getElementById("menue"), h = "", kap = null;
+    folien.forEach(function(f, i){
+      if(f.dataset.kap !== kap){ if(kap !== null) h += "</ol>"; kap = f.dataset.kap; h += "<h3>" + kap + "</h3><ol start='" + (i + 1) + "'>"; }
+      h += '<li><a href="#" data-i="' + i + '"' + (i === nr ? ' class="hier"' : '') + '>' + f.dataset.titelText + '</a></li>';
+    });
+    h += "</ol><p class='hilfe'>Tasten: → / Leertaste weiter · ← zurück · N Notizen · M Menü · F Vollbild · B Schwarzbild · Pos1/Ende erste/letzte Folie · Esc schließen</p>";
+    m.innerHTML = h;
+    m.querySelectorAll("a").forEach(function(a){
+      a.addEventListener("click", function(e){ e.preventDefault(); m.classList.remove("an"); zeige(+a.dataset.i); });
+    });
+  }
+  function menue(){ var m = document.getElementById("menue"); if(!m.classList.contains("an")) menueBauen(); m.classList.toggle("an"); }
+  function notizen(){ document.getElementById("notizen").classList.toggle("an"); }
+  function vollbild(){
+    if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(function(){});
+  }
+
+  document.addEventListener("keydown", function(e){
+    if(e.altKey || e.ctrlKey || e.metaKey) return;
+    var k = e.key;
+    if(document.getElementById("menue").classList.contains("an") && k !== "m" && k !== "M" && k !== "Escape") return;
+    if(k === "ArrowRight" || k === "PageDown" || k === " " || k === "ArrowDown"){ e.preventDefault(); weiter(); }
+    else if(k === "ArrowLeft" || k === "PageUp" || k === "ArrowUp"){ e.preventDefault(); zurueck(); }
+    else if(k === "Home"){ zeige(0); } else if(k === "End"){ zeige(folien.length - 1); }
+    else if(k === "n" || k === "N"){ notizen(); }
+    else if(k === "m" || k === "M"){ menue(); }
+    else if(k === "f" || k === "F"){ vollbild(); }
+    else if(k === "b" || k === "B" || k === "."){ document.getElementById("schwarz").classList.toggle("an"); }
+    else if(k === "Escape"){ document.getElementById("menue").classList.remove("an"); document.getElementById("schwarz").classList.remove("an"); }
+  });
+  document.getElementById("schwarz").addEventListener("click", function(){ this.classList.remove("an"); });
+  document.getElementById("b-weiter").addEventListener("click", weiter);
+  document.getElementById("b-zurueck").addEventListener("click", zurueck);
+  document.getElementById("b-menue").addEventListener("click", menue);
+  document.getElementById("b-notiz").addEventListener("click", notizen);
+  document.getElementById("b-voll").addEventListener("click", vollbild);
+  // Wischen am Board
+  var tx = null;
+  buehne.addEventListener("touchstart", function(e){ tx = e.touches[0].clientX; }, {passive:true});
+  buehne.addEventListener("touchend", function(e){
+    if(tx === null) return; var dx = e.changedTouches[0].clientX - tx; tx = null;
+    if(Math.abs(dx) > 80){ if(dx < 0) weiter(); else zurueck(); }
+  });
+  // Klick auf freie Fläche: weiter
+  buehne.addEventListener("click", function(e){
+    if(e.target.closest("button,a,[data-paar],.fobj,pre,input")) return;
+    weiter();
+  });
+
+  // ---- Interaktive Elemente ----------------------------------------------------
+  // Klickkarten
+  document.querySelectorAll("button.karte").forEach(function(k){
+    k.addEventListener("click", function(){ k.classList.toggle("offen"); });
+  });
+  // Zuordnungen (data-paar)
+  document.querySelectorAll("[data-paar]").forEach(function(el){
+    el.addEventListener("click", function(e){
+      e.stopPropagation();
+      var f = el.closest("section.folie"), p = el.dataset.paar;
+      var an = !el.classList.contains("hell");
+      f.querySelectorAll("[data-paar].hell").forEach(function(x){ x.classList.remove("hell"); });
+      if(an) f.querySelectorAll('[data-paar="' + p + '"]').forEach(function(x){ x.classList.add("hell"); });
+    });
+  });
+
+  // Zustand-Simulator
+  (function(){
+    var ks = 2020.0, zustand = 1, dispo = 500.0, prot = [];
+    var feld = document.querySelector("#sim-ks .w"), nrEl = document.getElementById("sim-nr");
+    var meld = document.getElementById("sim-meldung"), protEl = document.getElementById("sim-protokoll");
+    function fmt(x){ return (Math.round(x * 100) / 100).toFixed(1).replace(/\.0$/, ".0"); }
+    function zeichnen(){ feld.textContent = fmt(ks); nrEl.textContent = "Zustand " + zustand; protEl.textContent = prot.join("  →  "); }
+    function blitz(){ var a = document.getElementById("sim-ks"); a.classList.remove("blink"); void a.offsetWidth; a.classList.add("blink"); }
+    document.querySelectorAll("[data-sim]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var art = b.dataset.sim, betrag = +b.dataset.betrag;
+        if(art === "reset"){ ks = 2020.0; zustand = 1; prot = []; meld.className = "meldung"; zeichnen(); return; }
+        if(art === "einzahlen"){ ks += betrag; zustand++; prot.push("einzahlen(" + betrag + ")"); meld.className = "meldung ok"; meld.textContent = "Zustand geändert"; blitz(); }
+        else if(ks - betrag >= -dispo){ ks -= betrag; zustand++; prot.push("abheben(" + betrag + ")"); meld.className = "meldung ok"; meld.textContent = "Zustand geändert"; blitz(); }
+        else { prot.push("abheben(" + betrag + ") abgelehnt"); meld.className = "meldung nein";
+          meld.textContent = "Abgelehnt: " + fmt(ks) + " − " + betrag + " = " + fmt(ks - betrag) + " < −500"; }
+        zeichnen();
+      });
+    });
+  })();
+
+  // Heirat
+  document.getElementById("heirat").addEventListener("click", function(){
+    var w = document.querySelector("#r2-name .w"), f = this.closest("section.folie");
+    var neu = w.textContent === '"Lehmann"';
+    w.textContent = neu ? '"Lehmann-Krüger"' : '"Lehmann"';
+    this.textContent = neu ? "zurücksetzen" : "Herr Lehmann heiratet";
+    var a = document.getElementById("r2-name"); a.classList.remove("blink"); void a.offsetWidth; a.classList.add("blink");
+    f.querySelectorAll("i.pfeil").forEach(function(p){ p.dataset.puls = neu ? "1" : ""; });
+    pfeileZeichnen();
+    f.querySelectorAll("i.pfeil").forEach(function(p){ p.dataset.puls = ""; });
+    if(neu){ var s = f.querySelector(".schritt"); if(s) s.classList.add("an"); }
+  });
+
+  // Fehlerdiagramm
+  (function(){
+    var obj = document.querySelector(".fobj"), liste = document.querySelector(".fehlerliste");
+    function zeige(n, an){
+      liste.querySelectorAll('li[data-nr="' + n + '"]').forEach(function(li){ li.classList.toggle("an", an); });
+      if(n === 1) liste.querySelector('li[data-nr="2"]').classList.toggle("an", an);
+    }
+    obj.querySelectorAll("[data-fehler]").forEach(function(z){
+      z.addEventListener("click", function(e){
+        e.stopPropagation();
+        var an = !z.classList.contains("markiert");
+        z.classList.toggle("markiert", an); zeige(+z.dataset.fehler, an);
+      });
+    });
+    obj.querySelectorAll(".att:not([data-fehler])").forEach(function(z){
+      z.addEventListener("click", function(e){ e.stopPropagation(); z.style.background = "#e3f3ea"; setTimeout(function(){ z.style.background = ""; }, 700); });
+    });
+    document.getElementById("fehler-alle").addEventListener("click", function(){
+      obj.querySelectorAll("[data-fehler]").forEach(function(z){ z.classList.add("markiert"); zeige(+z.dataset.fehler, true); });
+    });
+    obj.closest("section.folie")._widget = {zuruecksetzen: function(alles){
+      obj.querySelectorAll("[data-fehler]").forEach(function(z){ z.classList.toggle("markiert", alles); zeige(+z.dataset.fehler, alles); });
+    }};
+  })();
+
+  // Konstruktor-Stepper
+  (function(){
+    var f = document.getElementById("konstruktor");
+    var code = f.querySelector("#ks-code"), erkl = f.querySelector("#ks-erkl"), nrEl = f.querySelector("#ks-nr");
+    var obj = f.querySelector("#ks-obj"), atts = f.querySelector("#ks-atts"), param = f.querySelector("#ks-param");
+    var vari = f.querySelector("#ks-var"), pSelf = f.querySelector("#ks-p-self"), pVar = f.querySelector("#ks-p-var");
+    var A = ['kundennummer = 4711', 'name = "Lehmann"', 'vorname = "Jan"', 'geburtsdatum = "14.05.1988"'];
+    var S = [
+      {z:null, t:"Ausgangslage: Die Klasse <code>Kunde</code> ist definiert. Ein Kundenobjekt gibt es noch nicht."},
+      {z:6, t:"Der Aufruf <code>Kunde(…)</code> erzeugt ein neues, noch <strong>leeres</strong> Objekt der Klasse Kunde."},
+      {z:1, t:"Python startet den Konstruktor. <code>self</code> verweist auf das neue Objekt, die vier Werte landen in den Parametern."},
+      {z:2, t:"<code>self.kundennummer = kundennummer</code>: Links das Attribut des Objekts, rechts der Parameter. Der Wert wird im Objekt gespeichert."},
+      {z:3, t:"Ebenso der Name …"},
+      {z:4, t:"… der Vorname …"},
+      {z:5, t:"… und das Geburtsdatum. Das Objekt ist fertig."},
+      {z:6, t:"Der Konstruktor endet, die Parameter verschwinden. In <code>kunde1</code> wird eine <strong>Referenz</strong> auf das Objekt gespeichert – im Objektdiagramm: <u>kunde1 : Kunde</u>."}
+    ];
+    var s = 0;
+    function zeichnen(){
+      code.querySelectorAll(".z").forEach(function(z){ z.classList.toggle("hell", S[s].z !== null && +z.dataset.z === S[s].z); });
+      erkl.innerHTML = S[s].t; nrEl.textContent = "Schritt " + (s + 1) + " / " + S.length;
+      obj.style.visibility = s >= 1 ? "visible" : "hidden";
+      var n = Math.max(0, Math.min(4, s - 2));
+      atts.innerHTML = A.slice(0, n).map(function(a, i){ return '<div class="att' + (i === n - 1 && s >= 3 && s <= 6 ? ' neu' : '') + '">' + a + '</div>'; }).join("");
+      param.style.visibility = (s >= 2 && s <= 6) ? "visible" : "hidden";
+      pSelf.style.display = (s >= 2 && s <= 6) ? "" : "none";
+      vari.classList.toggle("leer", s < 7);
+      pVar.style.display = s >= 7 ? "" : "none";
+      pfeileZeichnen();
+    }
+    f._widget = {
+      weiter: function(){ if(s < S.length - 1){ s++; zeichnen(); return true; } return false; },
+      zurueck: function(){ if(s > 0){ s--; zeichnen(); return true; } return false; },
+      zuruecksetzen: function(ende){ s = ende ? S.length - 1 : 0; zeichnen(); }
+    };
+    f.querySelectorAll("[data-ks]").forEach(function(b){
+      b.addEventListener("click", function(){ if(+b.dataset.ks > 0) f._widget.weiter(); else f._widget.zurueck(); });
+    });
+  })();
+
+  // Heap-Stepper
+  (function(){
+    var f = document.getElementById("heap");
+    var code = f.querySelector("#hp-code"), erkl = f.querySelector("#hp-erkl"), nrEl = f.querySelector("#hp-nr");
+    var o1 = f.querySelector("#hp-o1"), o2 = f.querySelector("#hp-o2"), o3 = f.querySelector("#hp-o3");
+    var va = f.querySelector("#hp-va"), vb = f.querySelector("#hp-vb"), vc = f.querySelector("#hp-vc");
+    var pa = f.querySelector("#hp-pa"), pb = f.querySelector("#hp-pb"), pc = f.querySelector("#hp-pc");
+    var name1 = f.querySelector("#hp-o1n .w");
+    var S = [
+      {z:null, t:"Jede Zeile wird nacheinander ausgeführt. Rechts: Variablen und Objekte im Speicher."},
+      {z:0, t:"Ein Kundenobjekt entsteht. <code>a</code> speichert eine <strong>Referenz</strong> darauf – nicht das Objekt selbst."},
+      {z:1, t:"Ein zweites Objekt, referenziert von <code>b</code>."},
+      {z:2, t:"<code>c = a</code> erzeugt <strong>kein</strong> neues Objekt: Rechts steht kein Klassenname mit Klammern. <code>c</code> verweist auf <em>dasselbe</em> Objekt wie <code>a</code>."},
+      {z:3, t:"Die Änderung über <code>c</code> ist auch über <code>a</code> sichtbar: <code>a.name</code> liefert jetzt <code>'Lehmann-Krüger'</code>."},
+      {z:4, t:"<code>b</code> verweist auf ein neues Objekt. Auf Frau Schulz zeigt nichts mehr – das Objekt ist nicht mehr erreichbar und wird von Python gelöscht."}
+    ];
+    var s = 0;
+    function zeichnen(){
+      code.querySelectorAll(".z").forEach(function(z){ z.classList.toggle("hell", S[s].z !== null && +z.dataset.z === S[s].z); });
+      erkl.innerHTML = S[s].t; nrEl.textContent = "Schritt " + (s + 1) + " / " + S.length;
+      o1.style.visibility = s >= 1 ? "visible" : "hidden"; va.style.visibility = s >= 1 ? "visible" : "hidden"; pa.style.display = s >= 1 ? "" : "none";
+      o2.style.visibility = s >= 2 ? "visible" : "hidden"; vb.style.visibility = s >= 2 ? "visible" : "hidden";
+      vc.style.visibility = s >= 3 ? "visible" : "hidden"; pc.style.display = s >= 3 ? "" : "none";
+      name1.textContent = s >= 4 ? '"Lehmann-Krüger"' : '"Lehmann"';
+      f.querySelector("#hp-o1n").classList.toggle("neu", s === 4);
+      o3.style.visibility = s >= 5 ? "visible" : "hidden";
+      o2.classList.toggle("grau", s >= 5);
+      pb.style.display = s >= 2 ? "" : "none";
+      pb.dataset.nach = s >= 5 ? "hp-o3" : "hp-o2";
+      pfeileZeichnen();
+    }
+    f._widget = {
+      weiter: function(){ if(s < S.length - 1){ s++; zeichnen(); return true; } return false; },
+      zurueck: function(){ if(s > 0){ s--; zeichnen(); return true; } return false; },
+      zuruecksetzen: function(ende){ s = ende ? S.length - 1 : 0; zeichnen(); }
+    };
+    f.querySelectorAll("[data-hp]").forEach(function(b){
+      b.addEventListener("click", function(){ if(+b.dataset.hp > 0) f._widget.weiter(); else f._widget.zurueck(); });
+    });
+  })();
+
+  // ---- Start
+  function hashIndex(){
+    var h = location.hash.slice(1), i = 0;
+    if(/^f\d+$/.test(h)) i = +h.slice(1) - 1;
+    else if(h){ var el = document.getElementById(h); if(el && el.classList.contains("folie")) i = folien.indexOf(el); }
+    return Math.max(0, Math.min(folien.length - 1, i));
+  }
+  window.addEventListener("resize", skalieren);
+  window.addEventListener("hashchange", function(){ var i = hashIndex(); if(i !== nr) zeige(i); });
+  skalieren();
+  zeige(hashIndex());
+})();
+</script>
+</body>
+</html>
