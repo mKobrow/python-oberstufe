@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OOP WarnowBank – Ablaufplan</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --ink:#1c2430; --mut:#5d6b7e;
+  --line:#dde3ec; --akz:#2f5d8c; --akz-hell:#eaf1f8;
+  --basis:#2e7d5b; --standard:#2f5d8c; --erw:#8a4b9c;
+  --codebg:#1e2733; --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.65 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+a{color:var(--akz)}
+
+/* ---------- Layout ---------- */
+.wrap{display:flex; align-items:flex-start; max-width:1500px; margin:0 auto}
+nav.side{
+  position:sticky; top:0; flex:0 0 268px; height:100vh; overflow-y:auto;
+  background:var(--panel); border-right:1px solid var(--line); padding:22px 18px 40px;
+}
+main{flex:1 1 auto; min-width:0; padding:34px 42px 120px; max-width:1050px}
+
+nav.side h1{font-size:1.05rem; line-height:1.35; margin:0 0 4px}
+nav.side .sub{font-size:.78rem; color:var(--mut); margin:0 0 18px}
+nav.side ol{list-style:none; margin:0; padding:0; counter-reset:k}
+nav.side li{margin:0 0 2px}
+nav.side a.kaplink{
+  display:flex; gap:9px; align-items:baseline; padding:7px 9px; border-radius:7px;
+  text-decoration:none; color:var(--ink); font-size:.88rem; line-height:1.3;
+}
+nav.side a.kaplink:hover{background:var(--akz-hell)}
+nav.side a.kaplink .nr{
+  flex:0 0 20px; font-weight:700; color:var(--akz); font-variant-numeric:tabular-nums;
+}
+nav.side .navtitel{font-size:.7rem; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--mut); margin:22px 0 8px; font-weight:700}
+
+.filter{display:flex; flex-direction:column; gap:5px}
+.filter label{display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer;
+  padding:4px 6px; border-radius:6px}
+.filter label:hover{background:var(--akz-hell)}
+.filter input{accent-color:var(--akz); width:15px; height:15px}
+.werkzeug{margin-top:16px; display:flex; flex-direction:column; gap:6px}
+.werkzeug button{
+  font:inherit; font-size:.83rem; padding:7px 10px; border:1px solid var(--line);
+  background:#fff; border-radius:7px; cursor:pointer; text-align:left; color:var(--ink);
+}
+.werkzeug button:hover{background:var(--akz-hell); border-color:var(--akz)}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:26px 30px; margin-bottom:26px;
+}
+header.kopf h2{margin:0 0 6px; font-size:1.6rem; letter-spacing:-.01em}
+header.kopf p{margin:0; color:var(--mut)}
+.uebersicht{
+  width:100%; border-collapse:collapse; margin-top:20px; font-size:.87rem;
+}
+.uebersicht th,.uebersicht td{
+  text-align:left; padding:7px 10px; border-bottom:1px solid var(--line);
+}
+.uebersicht th{font-size:.72rem; text-transform:uppercase; letter-spacing:.07em; color:var(--mut)}
+.uebersicht td:first-child{font-weight:700; color:var(--akz); width:34px}
+.uebersicht td:last-child{white-space:nowrap; color:var(--mut); text-align:right}
+
+/* ---------- Kapitel ---------- */
+section.kap{margin:0 0 46px; scroll-margin-top:18px}
+.kaphead{
+  display:flex; align-items:flex-start; gap:16px; padding:0 4px 14px;
+  border-bottom:3px solid var(--akz); margin-bottom:20px;
+}
+.kaphead .knr{
+  flex:0 0 auto; font-size:2.1rem; font-weight:800; color:var(--akz); line-height:1;
+  letter-spacing:-.03em;
+}
+.kaphead h3{margin:0 0 3px; font-size:1.3rem}
+.kaphead .meta{font-size:.83rem; color:var(--mut)}
+
+.ziele{
+  background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--basis);
+  border-radius:var(--radius); padding:15px 20px; margin:0 0 18px;
+}
+.ziele h4,.wissen h4{
+  margin:0 0 8px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--mut);
+}
+.ziele ul{margin:0; padding-left:20px}
+.ziele li{margin:2px 0}
+
+.wissen{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px 22px; margin:0 0 26px;
+}
+.wissen p{margin:.6em 0}
+.wissen > :last-child{margin-bottom:0}
+
+/* ---------- Aufgabenkarte ---------- */
+article.auf{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  margin:0 0 16px; overflow:hidden; scroll-margin-top:18px;
+}
+article.auf.aus{display:none}
+.aufkopf{display:flex; align-items:center; gap:12px; padding:14px 20px; border-bottom:1px solid var(--line)}
+.aufkopf .aid{
+  font-weight:800; color:var(--akz); font-variant-numeric:tabular-nums; font-size:.95rem;
+  flex:0 0 auto;
+}
+.aufkopf h5{margin:0; font-size:1.02rem; flex:1 1 auto; font-weight:600}
+.badge{
+  flex:0 0 auto; font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  padding:3px 9px; border-radius:99px; color:#fff;
+}
+.st-basis{background:var(--basis)} .st-standard{background:var(--standard)} .st-erw{background:var(--erw)}
+.hakenbox{flex:0 0 auto; display:flex; align-items:center; cursor:pointer}
+.hakenbox input{width:17px; height:17px; accent-color:var(--basis); cursor:pointer}
+article.auf.fertig .aufkopf{background:#f2f9f5}
+article.auf.fertig .aufkopf h5{text-decoration:line-through; text-decoration-color:#a9c9b8}
+
+.aufkoerper{padding:16px 20px 6px}
+.aufkoerper p{margin:.55em 0}
+.aufkoerper > :first-child{margin-top:0}
+ul.kompakt,ol.kompakt{margin:.5em 0; padding-left:22px}
+ul.kompakt li,ol.kompakt li{margin:3px 0}
+
+.knopfleiste{display:flex; flex-wrap:wrap; gap:8px; padding:6px 20px 16px}
+.knopfleiste button{
+  font:inherit; font-size:.84rem; padding:7px 14px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--line); background:#fff; color:var(--ink);
+}
+.knopfleiste button:hover{border-color:var(--akz); background:var(--akz-hell)}
+.knopfleiste button.loesknopf{border-color:var(--akz); color:var(--akz); font-weight:600}
+.knopfleiste button[disabled]{opacity:.4; cursor:default}
+.knopfleiste button[disabled]:hover{border-color:var(--line); background:#fff}
+
+.tipp{
+  margin:0 20px 12px; padding:12px 16px; border-radius:8px;
+  background:#fffaf0; border:1px solid #f0e0c0; border-left:4px solid #d9a441; font-size:.93rem;
+}
+.tipp .tnr{font-weight:700; color:#a9741d; margin-right:6px}
+.loesung{
+  margin:0 20px 18px; padding:16px 18px; border-radius:8px;
+  background:#f7faf8; border:1px solid #d8e6de; border-left:4px solid var(--basis);
+}
+.loesung h6{
+  margin:0 0 10px; font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; color:var(--basis);
+}
+.loesung p{margin:.55em 0} .loesung > :last-child{margin-bottom:0}
+.verborgen{display:none}
+
+/* ---------- Code ---------- */
+pre.code,pre.hl{
+  background:var(--codebg); color:#e6edf3; padding:14px 16px; border-radius:8px;
+  overflow-x:auto; font:13.5px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+  margin:.7em 0; white-space:pre; tab-size:4;
+}
+code{
+  background:#eef2f7; padding:1px 5px; border-radius:4px;
+  font:.88em/1.4 "Cascadia Code",Consolas,Menlo,monospace; color:#25405c;
+}
+pre code{background:none; padding:0; color:inherit; font-size:inherit}
+.codebox{position:relative}
+.codebox .kopieren{
+  position:absolute; top:8px; right:8px; font:inherit; font-size:.74rem; padding:4px 9px;
+  border:1px solid #3d4b5c; background:#2b3542; color:#c3ceda; border-radius:6px; cursor:pointer;
+}
+.codebox .kopieren:hover{background:#3a4756; color:#fff}
+.tok-kw{color:#ff8fbf} .tok-bi{color:#8fd3ff} .tok-str{color:#b9e88a}
+.tok-num{color:#f2c97d} .tok-com{color:#7f8ea3; font-style:italic}
+
+/* ---------- Tabellen im Merkkasten ---------- */
+table.ref{border-collapse:collapse; width:100%; margin:.9em 0; font-size:.88rem; background:#fff}
+table.ref th,table.ref td{border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top}
+table.ref th{background:var(--akz-hell); font-weight:700; font-size:.8rem}
+p.hinweis{
+  background:#fffaf0; border-left:4px solid #d9a441; padding:10px 14px; border-radius:0 7px 7px 0;
+  font-size:.93rem;
+}
+
+/* ---------- Struktogramme ---------- */
+.sg{
+  border:2px solid #33404f; display:inline-block; min-width:330px; max-width:100%;
+  background:#fff; font-size:.87rem; margin:.9em 0; vertical-align:top;
+}
+.sg-row{border-bottom:1px solid #33404f; padding:6px 11px}
+.sg-loop{border-bottom:1px solid #33404f}
+.sg-loop-head{padding:6px 11px; font-style:italic; background:#f4f7fb; border-bottom:1px solid #33404f}
+.sg-loop-body{margin-left:20px; border-left:1px solid #33404f}
+.sg-if{border-bottom:1px solid #33404f}
+.sg-if-head{
+  position:relative; height:56px; border-bottom:1px solid #33404f; background:
+   linear-gradient(to bottom left,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     left/50% 100% no-repeat,
+   linear-gradient(to bottom right,transparent 49.5%,#33404f 49.5%,#33404f 50.5%,transparent 50.5%)
+     right/50% 100% no-repeat;
+}
+.sg-cond{
+  position:absolute; top:2px; left:50%; transform:translateX(-50%);
+  background:#fff; padding:0 6px; white-space:nowrap; font-weight:600;
+}
+.sg-ja{position:absolute; bottom:2px; left:8px; font-size:.8rem; color:#2e7d5b}
+.sg-nein{position:absolute; bottom:2px; right:8px; font-size:.8rem; color:#a5453d}
+.sg-if-body{display:flex}
+.sg-branch{flex:1 1 50%; min-width:0; display:flex; flex-direction:column}
+.sg-branch > :last-child{flex:1 1 auto}
+.sg-branch:first-child{border-right:1px solid #33404f}
+.sg > :last-child,.sg-loop-body > :last-child,.sg-branch > :last-child{border-bottom:none}
+.sg-legende{display:flex; flex-wrap:wrap; gap:26px; align-items:flex-start; margin:1em 0}
+.sg-legende .sg{min-width:220px}
+.sg-titel{font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--mut);
+  margin:0 0 4px; font-weight:700}
+
+/* ---------- Listenbild ---------- */
+.listenbild{display:flex; gap:0; margin:1.1em 0; flex-wrap:wrap}
+.lb-zelle{
+  border:2px solid #33404f; border-right-width:1px; border-left-width:1px;
+  min-width:74px; text-align:center; background:#fff;
+}
+.lb-zelle:first-child{border-left-width:2px} .lb-zelle:last-child{border-right-width:2px}
+.lb-idx{display:block; font-size:.72rem; background:#eef2f7; color:var(--mut);
+  border-bottom:1px solid #cfd8e3; padding:2px}
+.lb-wert{display:block; padding:8px 4px; font-weight:700; font-family:Consolas,Menlo,monospace}
+
+/* ---------- Fuss ---------- */
+footer{
+  margin-top:50px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:.82rem; color:var(--mut);
+}
+footer .herkunft{
+  display:inline-block; margin:0 0 10px; padding:7px 14px;
+  background:var(--panel); border:1px solid var(--line); border-radius:99px;
+  color:var(--ink);
+}
+footer .herkunft strong{font-weight:700}
+@media print{
+  footer{display:block; margin-top:22px}
+  footer .herkunft{border:none; background:none; padding:0; display:block}
+  footer .seitenhinweis{display:none}
+}
+
+/* ---------- Druck ---------- */
+@media print{
+  nav.side{display:none}
+  main{max-width:none; padding:0}
+  body{background:#fff; font-size:11pt}
+  .knopfleiste,.hakenbox{display:none !important}
+  .verborgen{display:block !important}
+  article.auf{border:1px solid #ccd4de}
+  .aufkopf,.tipp,.ziele{break-inside:avoid; page-break-inside:avoid}
+  .aufkopf,.kaphead,.loesung h6{break-after:avoid; page-break-after:avoid}
+  pre.code,pre.hl,.sg,table.ref{break-inside:avoid; page-break-inside:avoid}
+  section.kap{page-break-before:always}
+  section.kap:first-of-type{page-break-before:auto}
+  header.kopf .uebersicht{display:none}
+  pre.code,pre.hl{background:#f3f5f8; color:#1c2430; border:1px solid #ccd4de;
+    white-space:pre-wrap; font-size:9.5pt}
+  .tok-kw,.tok-bi,.tok-str,.tok-num{color:#1c2430}
+  .tok-com{color:#667}
+  .codebox .kopieren{display:none}
+  header.kopf{border:none; padding:0}
+}
+@media(max-width:940px){
+  nav.side{display:none}
+  main{padding:20px 16px 80px}
+}
+
+/* ---------- Konsolenausgabe ---------- */
+pre.ausgabe{
+  background:#f3f6fa; color:#243447; border:1px solid var(--line);
+  border-left:4px solid var(--mut); border-radius:8px; padding:10px 14px 13px;
+  overflow-x:auto; margin:.7em 0; white-space:pre;
+  font:13px/1.55 "Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+}
+pre.ausgabe::before{
+  content:"Konsole"; display:block; margin-bottom:7px;
+  font:700 .66rem/1 "Segoe UI",system-ui,sans-serif;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--mut);
+}
+/* ---------- Exkurs ---------- */
+.exkurs{border-left:4px solid var(--akz)}
+.exkurs > h4{color:var(--akz)}
+@media print{
+  pre.ausgabe{background:#f7f8fa; color:#1c2430; font-size:9.5pt; white-space:pre-wrap}
+}
+
+/* ---------- Ergaenzungen OOP-Kurs ---------- */
+kbd{font:.85em Consolas,Menlo,monospace; border:1px solid #c5cfdb; border-bottom-width:2px;
+  border-radius:4px; padding:0 5px; background:#fff}
+.def{
+  background:#fff; border:1px solid #ecd2cd; border-left:4px solid #b4473c;
+  border-radius:var(--radius); padding:13px 20px; margin:0 0 14px;
+}
+.defkopf{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.defbeg{font-weight:700; color:#b4473c; font-size:1.02rem}
+.defmark{font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:#a07a74; margin-left:auto}
+.def p{margin:.35em 0} .def > :last-child{margin-bottom:0}
+
+.etappe{
+  margin:34px 0 18px; padding:14px 20px 12px; border-radius:var(--radius);
+  background:var(--akz); color:#fff; scroll-margin-top:18px;
+}
+.etkopf{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.etnr{font-weight:800; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; opacity:.85}
+.ettitel{font-weight:700; font-size:1.08rem}
+.etzeit{margin-left:auto; font-size:.8rem; padding:2px 10px; border-radius:99px;
+  background:rgba(255,255,255,.18); white-space:nowrap}
+.etappe ul{margin:8px 0 0; padding-left:20px; font-size:.93rem}
+.etappe li{margin:1px 0}
+
+.stopp{
+  margin:20px 0 10px; padding:14px 20px 12px; border-radius:var(--radius);
+  background:#fff6f1; border:2px solid #d2603a;
+}
+.stkopf{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.stschild{
+  background:#d2603a; color:#fff; font-weight:800; font-size:.74rem; letter-spacing:.1em;
+  text-transform:uppercase; padding:5px 10px;
+  clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);
+}
+.sttitel{font-weight:700; color:#8f3a1d}
+.stopp .etzeit{background:#f6dccf; color:#8f3a1d}
+.stopp p{margin:.4em 0; font-size:.93rem}
+.stopp ul{margin:.3em 0 0; padding-left:20px; font-size:.93rem}
+
+.anf{
+  background:#fffdf6; border:1px solid #e8dfc2; border-radius:8px; padding:14px 20px;
+  margin:0 0 20px; font-size:.95rem;
+}
+.anfkopf{font-weight:700; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+  color:#8a6d1f; margin-bottom:6px}
+.anf p{margin:.45em 0} .anf ol{margin:.3em 0; padding-left:22px} .anf li{margin:3px 0}
+
+.phasen{display:flex; flex-wrap:wrap; gap:4px; margin:1em 0}
+.phasen span{
+  flex:1 1 110px; background:var(--akz-hell); color:var(--akz); font-weight:700; font-size:.88rem;
+  text-align:center; padding:10px 18px 9px; line-height:1.25;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%,12px 50%);
+}
+.phasen span:first-child{clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+.phasen small{display:block; font-weight:400; font-size:.74rem; color:var(--mut); margin-top:2px}
+
+figure.uml{margin:1em 0; overflow-x:auto}
+figure.uml svg{max-width:100%; height:auto; display:block}
+.umlcap{font-size:.8rem; color:var(--mut); margin-top:6px}
+
+nav.side ol.etl{margin:0 0 6px 29px}
+nav.side ol.etl a{display:block; font-size:.78rem; color:var(--mut); text-decoration:none;
+  padding:1px 6px; border-radius:5px}
+nav.side ol.etl a:hover{background:var(--akz-hell); color:var(--ink)}
+/* ---------- Etappen aufdecken ---------- */
+main .zu{display:none !important}
+main.alleoffen .zu:not(.aufdecken){display:block !important}
+main.alleoffen .aufdecken{display:none !important}
+.aufdecken{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 30px}
+.aufdecken button{font:inherit; font-weight:700; font-size:.92rem; padding:10px 18px;
+  border-radius:8px; border:none; background:var(--akz); color:#fff; cursor:pointer}
+.aufdecken button:hover{background:#244a70}
+.aufdecken span{font-size:.84rem; color:var(--mut)}
+nav.side ol.etl a.gesperrt{opacity:.45}
+body.alleoffen nav.side ol.etl a.gesperrt{opacity:1}
+@media print{ main .zu{display:block !important} .aufdecken{display:none !important} }
+/* ---------- Seitenweise Anzeige ---------- */
+main.paged > header.kopf, main.paged > section.kap{display:none}
+main.paged > header.kopf.aktiv, main.paged > section.kap.aktiv{display:block}
+.uebersicht a.bslink{color:var(--ink); text-decoration:none; font-weight:600}
+.uebersicht a.bslink:hover{color:var(--akz); text-decoration:underline}
+a.losknopf{display:inline-block; background:var(--akz); color:#fff; text-decoration:none;
+  font-weight:700; padding:10px 18px; border-radius:8px}
+a.losknopf:hover{background:#244a70}
+.blaettern{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin:36px 0 0; padding-top:18px; border-top:1px solid var(--line)}
+.blaettern a{display:block; max-width:48%; padding:10px 16px; border:1px solid var(--line);
+  border-radius:8px; background:var(--panel); text-decoration:none; color:var(--ink); font-size:.9rem}
+.blaettern a:hover{border-color:var(--akz); background:var(--akz-hell)}
+.blaettern a small{display:block; color:var(--mut); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em}
+.blaettern .weiter{margin-left:auto; text-align:right}
+.oben{display:flex; gap:14px; font-size:.84rem; margin:0 0 14px}
+.oben a{color:var(--mut); text-decoration:none} .oben a:hover{color:var(--akz)}
+nav.side a.kaplink.aktiv{background:var(--akz-hell)}
+nav.side.paged ol.etl{display:none}
+nav.side.paged li.aktiv ol.etl{display:block}
+@media print{
+  main.paged > header.kopf, main.paged > section.kap{display:block}
+  .blaettern,.oben{display:none}
+}
+.knopfleiste .imkurs{align-self:center; font-size:.82rem; color:var(--mut); font-style:italic; margin-left:4px}
+.uebersicht tr.spaeter td{color:#9aa6b5}
+.uebersicht tr.spaeter td:first-child{color:#9aa6b5}
+
+@media print{
+  .etappe{background:#fff; color:var(--ink); border:2px solid var(--akz)}
+  .etappe .etzeit{background:none; border:1px solid var(--line)}
+  .etappe,.stopp,.def,.anf,figure.uml{break-inside:avoid; page-break-inside:avoid}
+}
+
+table.plan{width:100%; border-collapse:collapse; background:#fff; font-size:.88rem; margin:0 0 20px}
+table.plan th,table.plan td{border:1px solid var(--line); padding:8px 10px; vertical-align:top; text-align:left}
+table.plan th{background:var(--akz-hell); font-size:.74rem; text-transform:uppercase; letter-spacing:.05em}
+table.ablauf td:nth-child(2),table.ablauf td:nth-child(3),table.plan td.std{text-align:center; white-space:nowrap; font-variant-numeric:tabular-nums}
+table.plan td.std{color:var(--mut)}
+table.plan tr.ph-E td:first-child{color:var(--akz)}
+table.plan tr.ph-S{background:#fff9f6}
+table.plan tr.ph-S p{margin:.25em 0} table.plan tr.ph-S ul{margin:.2em 0 .4em; padding-left:18px}
+table.plan .stschild{display:inline-block; margin-bottom:4px}
+table.plan tr.spaeter td{color:#9aa6b5}
+table.ablauf td:first-child{width:118px}
+@media print{ table.plan{font-size:9pt} table.plan tr{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="side">
+  <h1>Ablaufplan für die Lehrkraft</h1>
+  <p class="sub">Objektorientierte Softwareentwicklung<br>Projekt WarnowBank</p>
+  <div class="navtitel">Inhalt</div>
+  <ol>
+    <li><a class="kaplink" href="#ueberblick"><span class="nr">·</span><span>Überblick und Gesamtplan</span></a></li>
+    <li><a class="kaplink" href="#sicherung"><span class="nr">·</span><span>Sicherungskonzept</span></a></li>
+    <li><a class="kaplink" href="#k0"><span class="nr">0</span><span>Gute Software – warum objektorientiert?</span></a></li><li><a class="kaplink" href="#k1"><span class="nr">1</span><span>Vom Bankvorgang zur Anforderung</span></a></li><li><a class="kaplink" href="#k2"><span class="nr">2</span><span>Objekte erkunden</span></a></li><li><a class="kaplink" href="#k3"><span class="nr">3</span><span>Vom Objekt zur Klasse</span></a></li><li><a class="kaplink" href="#k4"><span class="nr">4</span><span>Die erste eigene Klasse</span></a></li><li><a class="kaplink" href="#k5"><span class="nr">5</span><span>Methoden: Anfragen und Aufträge</span></a></li>
+    <li><a class="kaplink" href="#erwartung"><span class="nr">·</span><span>Erwartungshorizonte</span></a></li>
+    <li><a class="kaplink" href="#staende"><span class="nr">·</span><span>Code-Stände</span></a></li>
+  </ol>
+</nav>
+<main>
+<header class="kopf" id="ueberblick">
+  <p style="background:#fff4e5; border:1px solid #f0c27b; border-radius:8px; padding:9px 14px; font-size:.88rem; margin:0 0 16px"><strong>Archivfassung</strong> (Selbstlernvariante mit Prototyp). Aktuell: <a href="oop_softwareentwicklung_lehrkraft.html">Ablaufplan zur Kursseite mit Input</a>.</p>
+  <h2>Ablaufplan und Sicherungskonzept</h2>
+  <p>Begleitplan zur Kursseite <a href="oop_softwareentwicklung_selbstlern.html">Objektorientierte
+  Softwareentwicklung mit Python</a>. Rahmenplan Informatik MV (2019), Thema
+  <em>Objektorientierte Softwareentwicklung</em>: GK ca. 32 Std. (Modellierung 16, Programmierung 16),
+  LK ca. 54 Std. (27/27). Modellierung und Programmierung sind verschränkt; der Arbeitsbereich
+  <em>Entwicklung von Software</em> läuft integrativ mit.</p>
+  <p style="margin-top:.6em"><strong>Annahmen:</strong> Unterrichtsstunden à 45 min, GK 3 und LK 5
+  Wochenstunden. Die Spalten „Std.“ zeigen, in welcher Stunde des Bausteins eine Phase liegt –
+  Phasen, die über eine Stundengrenze reichen, lassen sich in Doppelstunden durchziehen oder am
+  Stopp davor teilen. Die Zeiten der Kursseite und dieses Plans sind identisch.</p>
+  <p style="margin-top:.6em"><strong>Früh an den Rechner:</strong> Ab Baustein 2 arbeiten die
+  Schülerinnen und Schüler mit einem vorgegebenen Prototyp der Kontoverwaltung. Sie benutzen ihn,
+  bevor sie ihn verstehen, und schreiben erst danach eigenen Code (siehe
+  <a href="#sicherung">Sicherungskonzept</a>). Dadurch entfallen doppelte Etappen; die
+  ausgearbeiteten Bausteine 0–5 brauchen GK 15 und LK 21 Stunden. Es bleiben GK 2 und LK 3
+  Stunden Reserve, z.&nbsp;B. für eine Transferaufgabe in einem zweiten Kontext (der Rahmenplan
+  verlangt, die Prinzipien an mehreren Kontexten zu erarbeiten).</p>
+  <table class="plan" style="margin-top:18px">
+    <tr><th></th><th>Baustein</th><th>GK Std.</th><th>LK Std.</th><th>GK Woche</th><th>LK Woche</th><th>Stand</th></tr>
+    <tr><td>0</td><td>Gute Software – warum objektorientiert?</td><td>1</td><td>1</td><td>1</td><td>1</td><td>ausgearbeitet</td></tr><tr><td>1</td><td>Vom Bankvorgang zur Anforderung</td><td>2</td><td>3</td><td>1</td><td>1</td><td>ausgearbeitet</td></tr><tr><td>2</td><td>Objekte erkunden<br><small>Prototyp benutzen, Objektdiagramme, Referenzen</small></td><td>3</td><td>4</td><td>2</td><td>1–2</td><td>ausgearbeitet</td></tr><tr><td>3</td><td>Vom Objekt zur Klasse</td><td>2</td><td>3</td><td>3</td><td>2–3</td><td>ausgearbeitet</td></tr><tr><td>4</td><td>Die erste eigene Klasse<br><small>Prototyp lesen, Klassen nach dem Modell implementieren</small></td><td>3</td><td>4</td><td>3–4</td><td>3</td><td>ausgearbeitet</td></tr><tr><td>5</td><td>Methoden: Anfragen und Aufträge</td><td>4</td><td>6</td><td>4–5</td><td>4–5</td><td>ausgearbeitet</td></tr><tr class="spaeter"><td>6</td><td>Datenkapselung<br><small>Dieb, private Attribute, get/set, Implementationsdiagramm</small></td><td>3</td><td>5</td><td>6</td><td>5–6</td><td>folgt</td></tr><tr class="spaeter"><td>7</td><td>Objekte arbeiten zusammen<br><small>Assoziation implementieren, Objektkommunikation, Sequenzdiagramme</small></td><td>4</td><td>7</td><td>7–8</td><td>6–7</td><td>folgt</td></tr><tr class="spaeter"><td>8</td><td>Die Bank verwaltet Konten<br><small>Objekte in Listen, Klassendokumentation</small></td><td>4</td><td>7</td><td>8–9</td><td>7–8</td><td>folgt</td></tr><tr class="spaeter"><td>9</td><td>Softwareentwicklung im Überblick<br><small>Vorgehensmodell, 3-Schicht-Architektur, Qualität bewerten, GUI</small></td><td>2</td><td>5</td><td>9–10</td><td>9</td><td>folgt</td></tr><tr class="spaeter"><td>10</td><td>Girokonto und Sparkonto<br><small>Vererbung; LK: Polymorphie und Aggregation</small></td><td>2</td><td>6</td><td>10</td><td>10–11</td><td>folgt</td></tr><tr class="spaeter"><td></td><td>Reserve<br><small>z.&nbsp;B. Transferaufgabe in einem zweiten Kontext</small></td><td>2</td><td>3</td><td>11</td><td>11</td><td>frei</td></tr><tr><td></td><td><strong>Summe</strong></td><td><strong>32</strong></td><td><strong>54</strong></td><td>11 Wochen</td><td>11 Wochen</td><td></td></tr>
+  </table>
+</header>
+
+<section class="kap" id="sicherung">
+<div class="kaphead"><div class="knr">S</div><div><h3>Sicherungskonzept</h3>
+<div class="meta">Wie Selbstlernphasen und gemeinsame Sicherung zusammengehen</div></div></div>
+<div class="wissen">
+<h4>Der Rhythmus</h4>
+<p>Jede Etappe beginnt mit einer Ansage der Lehrkraft nach dem Muster der blauen Etappenbalken:
+<em>„Die nächsten 35 Minuten: Wissenskästen lesen, Aufgaben 2.5 bis 2.7. Wer fertig ist, macht 2.8.
+Dann Stopp.“</em> Ein sichtbarer Timer am Board hilft. Der Stopp-Kasten sagt den Schülerinnen und
+Schülern, was sie für die Besprechung vorbereiten sollen. Die Zeiten sind auf die Pflichtaufgaben
+bemessen. Schnelle Schülerinnen und Schüler arbeiten an den Erweiterungen, langsame bearbeiten
+Basisaufgaben und sehen sich die Lösungen erklärend an.</p>
+<p><strong>Etappen aufdecken:</strong> Auf der Kursseite ist pro Baustein zunächst nur die erste
+Etappe sichtbar. Unter jedem Stopp steht ein Knopf „Weiter mit Etappe …“, mit dem die Schülerinnen
+und Schüler nach der Besprechung die nächste Etappe freigeben. Der Stand wird im Browser gespeichert.
+Wer eine Etappe vorab sehen möchte (z.&nbsp;B. am Board), setzt in der Seitenleiste den Haken
+„Alle Etappen sofort zeigen“. Ein Direktlink wie <code>…#e3-B</code> deckt alles bis dorthin auf.</p>
+<h4 style="margin-top:16px">Fünf Formen der Sicherung</h4>
+<table class="ref">
+<tr><th>Form</th><th>Einsatz</th><th>So geht's</th></tr>
+<tr><td><strong>Dokumentenkamera / Bildschirmfreigabe</strong></td><td>Diagramme (2.A, 2.C, 3.A)</td><td>Eine Schülerlösung zeigen, möglichst eine mit typischem Fehler. Der Kurs sucht Abweichungen von der Konvention, bevor die Musterlösung kommt.</td></tr>
+<tr><td><strong>Gemeinsames Tafelbild</strong></td><td>Ergebnisse, die später weiterverwendet werden (1.B, 2.B, 3.B)</td><td>Die Lehrkraft schreibt, die Schülerinnen und Schüler diktieren. Das Ergebnis wird verbindlich, z.&nbsp;B. Anforderung V2 oder das Entwurfsdiagramm. Foto ins Kursnetz.</td></tr>
+<tr><td><strong>Live-Coding in Thonny</strong></td><td>Vorhersage und Programm (2.B, 2.C, 4.A, 5.C)</td><td>Erst Vorhersage einholen (Handzeichen), dann ausführen. Fehler bewusst provozieren.</td></tr>
+<tr><td><strong>Glossar im Hefter</strong></td><td>jede Sicherung mit Definitionen</td><td>Die Schülerinnen und Schüler übernehmen die rot umrandeten Definitionen während der Etappe. Im Stopp wird nur geprüft und ergänzt, nicht abgeschrieben. Das Glossar ist das Lernmaterial für die Klausur.</td></tr>
+<tr><td><strong>Kurz-Check</strong></td><td>Ende eines Bausteins (4.C, 5.D)</td><td>Drei Fragen, Antwort auf Zettel. Dient der Selbsteinschätzung und als Rückmeldung für die Lehrkraft.</td></tr>
+</table>
+<h4 style="margin-top:16px">Arbeiten mit dem Prototyp</h4>
+<p>Baustein 2 beginnt mit einem fertigen Prototyp (<code>prototyp.py</code>). Die Schülerinnen und
+Schüler erzeugen damit Objekte, sehen sie im Objektinspektor und in der Heap-Ansicht und sagen
+Abläufe voraus, bevor sie sie ausführen. Den Code lesen sie erst in Baustein 4, eigenen Code
+schreiben sie ab 4.3. Das folgt dem Prinzip <em>Predict – Run – Investigate – Modify – Make</em>
+(PRIMM): erst vorhersagen und benutzen, dann verstehen, dann selbst schreiben. Fragen zur Syntax
+werden in Baustein 2 deshalb bewusst auf Baustein 4 vertagt.</p>
+<p>Der Prototyp weicht absichtlich von der Anforderung (Version&nbsp;2) ab: Der Kontostand ist ein
+Parameter des Konstruktors, und <code>abheben</code> prüft weder Dispo noch Betrag. Diese
+Abweichungen sind Lernanlässe: In 2.4 widerspricht das Programm der Vorhersage nach der
+Anforderung (Kontostand −550&nbsp;€), in 4.1 werden Code und Entwurfsdiagramm verglichen, in 4.3
+entsteht die eigene, korrekte Klasse. Wichtig ist die Botschaft: Ein laufendes Programm ist nicht
+automatisch richtig – Maßstab ist die Anforderung.</p>
+<h4 style="margin-top:16px">Code-Stände synchronisieren</h4>
+<p>Vor Etappe 2.A legt die Lehrkraft den Prototyp in den Austauschordner. Die Schülerinnen und
+Schüler speichern ihn als <code>prototyp.py</code>. Nach den Sicherungen 4.B, 5.B und 5.D gibt die Lehrkraft einen gemeinsamen Stand von
+<code>bank.py</code> über den Austauschordner aus (siehe <a href="#staende">Code-Stände</a>).
+So arbeiten auch Schülerinnen und Schüler, die gefehlt haben oder nicht fertig wurden, mit einem
+lauffähigen Programm weiter. Ihre eigene Datei behalten sie zum Vergleich.</p>
+</div>
+</section>
+
+<section class="kap" id="k0"><div class="kaphead"><div class="knr">0</div><div><h3>Gute Software – warum objektorientiert?</h3><div class="meta">GK 1 Std. (45 min) · LK 1 Std. (45 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 0.A</strong></td><td>20</td><td>15</td><td class="std">1</td><td class="std">1</td><td>Zu Beginn (ca. 3 min): Kursseite öffnen, Arbeitsweise mit Etappen, Stopps und Glossar erklären, Glossarseite im Hefter anlegen. Dann Aufgabe 0.1 (Recherche in Partnerarbeit).</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 0.A</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Tabelle an der Tafel: Jede Gruppe ergänzt ein Kriterium mit Bankbeispiel. Kurz Quellen bewerten lassen.</p><p><strong>Leitfragen:</strong></p><ul><li>Was ist der Unterschied zwischen Korrektheit und Robustheit?</li><li>Welche Quelle war seriös – woran erkennt man das?</li></ul><p><strong>Ergebnis:</strong> Die vier verbindlichen Kriterien (Korrektheit, Robustheit, Wiederverwendbarkeit, Effizienz) mit je einem Bankbeispiel; weitere Kriterien als Ergänzung.</p><p><strong>Stolpersteine:</strong> Korrektheit und Robustheit werden verwechselt: korrekt = tut, was gefordert ist; robust = übersteht auch das Nicht-Vorgesehene.</p><p><strong>Glossar/Hefter:</strong> Glossarseite anlegen; Definition <em>Softwarequalitätskriterien</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 0.B</strong></td><td>10</td><td>15</td><td class="std">1</td><td class="std">1</td><td>Aufgabe 0.2 (Programm in Thonny ausführen und bewerten); Erweiterung 0.3 (LK verbindlich); Kasten <em>Das Versprechen der Objektorientierung</em></td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 0.B</strong></td><td>5</td><td>5</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Mängel sammeln und den Kriterien zuordnen; Kasten <em>Das Versprechen der Objektorientierung</em> als Ausblick.</p><p><strong>Leitfragen:</strong></p><ul><li>Was müsste man für 1000 Konten ändern?</li></ul><p><strong>Ergebnis:</strong> Fragen der Schülerinnen und Schüler an die OOP sammeln (Foto) und in Baustein 9 wieder aufgreifen: Hat die OOP ihr Versprechen gehalten?</p><p><strong>Stolpersteine:</strong> Die Zeile <code>kontostand2 = kontostand2 + 1000000</code> wird für einen Tippfehler gehalten – genau darüber ins Gespräch kommen.</p><p><strong>Glossar/Hefter:</strong> –</p></td></tr></table></section><section class="kap" id="k1"><div class="kaphead"><div class="knr">1</div><div><h3>Vom Bankvorgang zur Anforderung</h3><div class="meta">GK 2 Std. (90 min) · LK 3 Std. (135 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr>
+<tr class="ph-L"><td><strong>Einstieg</strong></td><td>5</td><td>5</td><td class="std">1</td><td class="std">1</td><td>Szenario WarnowBank vorstellen, an Aufgabe 0.2 anknüpfen: Diesmal beginnen wir mit einer sauberen Anforderung. Partner für 1.1 festlegen.</td></tr>
+<tr class="ph-E"><td><strong>Etappe 1.A</strong></td><td>40</td><td>45</td><td class="std">1</td><td class="std">1–2</td><td>Wissen <em>Der Weg zur Software</em>; Aufgabe 1.1 (Partnerarbeit; Teil c vergleicht die Schrittfolge direkt mit Anforderung V1); Wissen <em>Verb-Substantiv-Methode</em>; Aufgabe 1.2</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 1.A</strong></td><td>15</td><td>15</td><td class="std">2</td><td class="std">2</td><td><p><strong>Form:</strong> Zweischritt: Erst die Schrittfolge per Zuruf an der Tafel, fehlende Daten markieren (ca. 5 min). Dann die Kandidatentabelle am Board füllen; Strittiges per Handzeichen abstimmen und begründen lassen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Daten werden <em>gespeichert</em>, welche nur <em>für einen Vorgang</em> eingegeben?</li><li>Ist die PIN ein Objekt? Ist der Geldautomat eins?</li><li>Woran erkennt man, dass ein Kandidat eigenständig ist?</li></ul><p><strong>Ergebnis:</strong> Tafel: Schrittfolge mit zwei Spalten „gespeichert“ (PIN, Kontostand, Dispo) und „eingegeben“ (PIN-Eingabe, Betrag) – diese Unterscheidung später für Attribut/Parameter wieder aufgreifen. Festlegung für den Kurs: Objekte <strong>Kunde</strong> und <strong>Konto</strong>; Geldautomat und Karte vorerst nicht. Verben den beiden Objekten zugeordnet.</p><p><strong>Stolpersteine:</strong> Prüfungen im Hintergrund (PIN, Deckung) werden oft vergessen. „Bank“ wird gern als Objekt gewählt – die Bank ist (vorerst) das ganze System und kommt in Baustein 8 als Verwaltungsklasse zurück.</p><p><strong>Glossar/Hefter:</strong> Phasenkette, Definitionen <em>Anforderungsdefinition</em> und <em>Verb-Substantiv-Methode</em></p></td></tr>
+<tr class="ph-E"><td><strong>Etappe 1.B</strong></td><td>15</td><td>40</td><td class="std">2</td><td class="std">2–3</td><td>Aufgabe 1.3 (die Lückenliste aus 1.1c ist die Vorarbeit); Erweiterung 1.4 (LK verbindlich)</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 1.B</strong></td><td>15</td><td>30</td><td class="std">2</td><td class="std">3</td><td><p><strong>Form:</strong> Rückfragen sammeln, Lehrkraft spielt „die Bank“ und beantwortet sie. Ergebnis: Kursfassung (Version 2).</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Festlegungen braucht der Programmierer unbedingt?</li><li>LK: Was haben Giro- und Sparkonto gemeinsam?</li></ul><p><strong>Ergebnis:</strong> Anforderungsdefinition Version 2 – sie steht auf der Kursseite zu Beginn von Baustein 2. Weichen Kursentscheidungen ab (z.&nbsp;B. anderer Dispo), dies im Glossar vermerken; die Seite und der Prototyp arbeiten mit 500&nbsp;€.</p><p><strong>Stolpersteine:</strong> Zu allgemeine Fragen („Was soll das Programm können?“). Auf präzise, beantwortbare Rückfragen drängen.</p><p><strong>Glossar/Hefter:</strong> Anforderung V2 (ausgedruckt einkleben oder abfotografieren)</p></td></tr>
+</table></section><section class="kap" id="k2"><div class="kaphead"><div class="knr">2</div><div><h3>Objekte erkunden</h3><div class="meta">GK 3 Std. (135 min) · LK 4 Std. (180 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr>
+<tr class="ph-E"><td><strong>Etappe 2.A</strong></td><td>30</td><td>35</td><td class="std">1</td><td class="std">1</td><td>Vorab <code>prototyp.py</code> in den Austauschordner legen. Zu Beginn (ca. 3 min) am Board zeigen: Datei öffnen, <kbd>F5</kbd>, Shell, Variablenansicht, Objektinspektor. Ansage: „Sie müssen den Code noch nicht verstehen.“ Dann Wissen <em>Ein erster Prototyp</em>; Aufgabe 2.1; Wissen <em>Objekte darstellen</em>; Aufgaben 2.2, 2.3</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.A</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Eine Schülerlösung zu 2.3 unter der Dokumentenkamera, daneben der Objektinspektor am Board. Kurs sucht Abweichungen von der UML-Konvention.</p><p><strong>Leitfragen:</strong></p><ul><li>Text oder Zahl – woran sieht man das im Diagramm?</li><li>Was hat die Shell bei der PIN 0815 gemeldet?</li><li>Was ist der Zustand eines Objekts?</li></ul><p><strong>Ergebnis:</strong> Konventionen: abgerundetes Rechteck, <code>bezeichner : Klasse</code> unterstrichen, Texte in Anführungszeichen, keine Einheiten. Das Objektdiagramm zeigt genau das, was das Programm im Speicher anlegt.</p><p><strong>Stolpersteine:</strong> Fehlender Unterstrich, Einheit „€“ im Wert, PIN als Zahl (0815 ergibt einen <code>SyntaxError</code>, 815 verliert die Null). Fragen zur Syntax des Prototyps auf Baustein 4 vertagen.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Objekt</em>, <em>Attribut</em>, <em>Objektdiagramm</em></p></td></tr>
+<tr class="ph-E"><td><strong>Etappe 2.B</strong></td><td>30</td><td>35</td><td class="std">1–2</td><td class="std">2</td><td>Wissen <em>Abläufe simulieren</em>; Aufgabe 2.4: erst Vorhersage auf Papier, dann Ausführung im Prototyp. Darauf achten, dass wirklich zuerst gezeichnet wird, ggf. Bildschirme bis zur Hälfte der Etappe ausschalten lassen.</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.B</strong></td><td>15</td><td>15</td><td class="std">2</td><td class="std">2–3</td><td><p><strong>Form:</strong> Zustandsfolge an der Tafel als Zeitleiste (Zustand 1–4); Schülerinnen und Schüler ändern nur die betroffenen Werte. Dann Vorgang C live im Prototyp ausführen: Kontostand −550.0.</p><p><strong>Leitfragen:</strong></p><ul><li>Wer hat recht – die Vorhersage oder das Programm?</li><li>Welche Prüfung muss die Software vor jeder Abhebung machen?</li><li>Welche Attribute ändern sich nie?</li></ul><p><strong>Ergebnis:</strong> Bedingung in Worten: Kontostand nach Abhebung ≥ −Dispo. Der Prototyp prüft sie nicht. Ein laufendes Programm ist nicht automatisch korrekt – Maßstab ist die Anforderung (Rückbezug auf Korrektheit, Baustein 0). Die Bedingung wird in 5.3 als Verzweigung programmiert – Tafelbild aufheben.</p><p><strong>Stolpersteine:</strong> Die Vorhersage wird nach dem Ausführen „angepasst“; bei C wird −550 aus dem Programm übernommen. Bei der Überweisung wird das Zielkonto vergessen.</p><p><strong>Glossar/Hefter:</strong> Zustandsfolge als Beispiel</p></td></tr>
+<tr class="ph-E"><td><strong>Etappe 2.C</strong></td><td>35</td><td>55</td><td class="std">2–3</td><td class="std">3–4</td><td>Wissen <em>Objektreferenzen</em>; Aufgaben 2.5, 2.6; Wissen <em>Variablen speichern Referenzen</em>; Aufgabe 2.7; Erweiterung 2.8 (LK verbindlich). Bei Zeitknappheit im GK 2.6 als Hausaufgabe.</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 2.C</strong></td><td>15</td><td>30</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Fehlerliste 2.6 im Plenum (schnell), dann Diagramm 2.5 vergleichen. Zu 2.7 erst Vorhersage per Handzeichen (Wert von <code>konto1.kontostand</code>?), dann live in Thonny mit Heap-Ansicht prüfen.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum zeigt der Pfeil vom Konto zum Kunden?</li><li>Warum sieht man den neuen Namen auch über <code>konto3.inhaber</code>?</li><li>Wie viele Objekte gibt es in 2.7, wie viele Variablen? Was passiert mit einem Objekt, auf das nichts mehr zeigt?</li><li>LK: Worin unterscheiden sich <code>inhaber</code> und <code>akt_konto</code>?</li></ul><p><strong>Ergebnis:</strong> Referenz = Wert ist ein Objekt; Darstellung als Pfeil; Richtung folgt aus der Anforderung. Variablen speichern Referenzen; eine Zuweisung kopiert die Referenz, nicht das Objekt.</p><p><strong>Stolpersteine:</strong> Kunde wird doppelt gezeichnet; <code>inhaber = "Lehmann"</code> als Text; Vorstellung, <code>konto3 = konto1</code> erzeuge eine Kopie.</p><p><strong>Glossar/Hefter:</strong> Definition <em>Objektreferenz</em>; Diagramm aus 2.7</p></td></tr>
+</table></section><section class="kap" id="k3"><div class="kaphead"><div class="knr">3</div><div><h3>Vom Objekt zur Klasse</h3><div class="meta">GK 2 Std. (90 min) · LK 3 Std. (135 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 3.A</strong></td><td>25</td><td>30</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Klassen entwickeln</em>; Aufgaben 3.1, 3.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 3.A</strong></td><td>10</td><td>15</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Kurzer Vergleich 3.1 an der Tafel; 3.2c als Murmelphase (1 min), dann Plenum.</p><p><strong>Leitfragen:</strong></p><ul><li>Was ist der Unterschied zwischen <code>Konto</code> und <code>konto1</code>?</li></ul><p><strong>Ergebnis:</strong> Klasse = Bauplan mit Datentypen; Objekt = Exemplar mit Werten.</p><p><strong>Stolpersteine:</strong> Klassenname unterstrichen oder mit Doppelpunkt; Werte statt Datentypen.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Klasse</em>, <em>Entwurfsdiagramm</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 3.B</strong></td><td>35</td><td>45</td><td class="std">1–2</td><td class="std">2</td><td>Aufgaben 3.3, 3.4; Wissen <em>Assoziationen</em>; Aufgabe 3.5; Erweiterung 3.6 (LK verbindlich)</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 3.B</strong></td><td>20</td><td>45</td><td class="std">2</td><td class="std">3</td><td><p><strong>Form:</strong> <strong>Große Sicherung:</strong> gemeinsames Entwurfsdiagramm an der Tafel entwickeln, Methoden aus der Tabelle 3.3 übernehmen. Strittig: Kontonummer Zahl oder Text – kurz diskutieren, dann festlegen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Methode ergibt sich aus Satz 6?</li><li>Warum steht <code>inhaber</code> nicht im Attributbereich?</li><li>LK: Welche Multiplizität hat <code>akt_konto</code>?</li></ul><p><strong>Ergebnis:</strong> Modell Konto/Kunde mit Assoziation <code>inhaber</code>, Multiplizität 1 (steht auf der Kursseite zu Beginn von Baustein 4). LK zusätzlich: Analogie zum ER-Modell (1:n) ansprechen.</p><p><strong>Stolpersteine:</strong> Methoden mit Parametern im Entwurf; <code>inhaber</code> doppelt (als Attribut und Pfeil).</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Assoziation</em>, <em>Multiplizität</em>; Entwurfsdiagramm</p></td></tr></table></section><section class="kap" id="k4"><div class="kaphead"><div class="knr">4</div><div><h3>Die erste eigene Klasse</h3><div class="meta">GK 3 Std. (135 min) · LK 4 Std. (180 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr>
+<tr class="ph-E"><td><strong>Etappe 4.A</strong></td><td>30</td><td>30</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Klassen in Python</em>; Aufgaben 4.1 (Prototyp lesen und mit dem Modell vergleichen), 4.2</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.A</strong></td><td>10</td><td>10</td><td class="std">1</td><td class="std">1</td><td><p><strong>Form:</strong> Live in Thonny am Board: den Aufruf aus 4.1a ans Ende von <code>prototyp.py</code> schreiben, mit <kbd>Strg</kbd>+<kbd>F5</kbd> debuggen und mit <kbd>F7</kbd> in den Konstruktor springen. Ein Schüler erklärt Zeile für Zeile. Abweichungen aus 4.1b an der Tafel sammeln.</p><p><strong>Leitfragen:</strong></p><ul><li>Wofür steht <code>self</code>? Warum wird es beim Erzeugen nicht mitgeschrieben?</li><li>Was am Prototyp widerspricht der Anforderung?</li><li>Warum ist <code>a == b</code> falsch?</li></ul><p><strong>Ergebnis:</strong> Code der Klasse mit Pfeilen Parameter → Attribut. Abweichungsliste: Kontostand als Parameter (Satz 2), <code>abheben</code> ohne Prüfung (Satz 4/5), fehlende Methoden. Objekt hat Identität.</p><p><strong>Stolpersteine:</strong> Der Prototyp wird für die Musterlösung gehalten. Betonen: Prototyp ≠ Modell – in 4.3 wird nach dem Modell implementiert.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Konstruktor</em>, <em>Instanziierung</em></p></td></tr>
+<tr class="ph-E"><td><strong>Etappe 4.B</strong></td><td>35</td><td>45</td><td class="std">1–2</td><td class="std">1–2</td><td>Aufgaben 4.3 (neue Datei <code>bank.py</code>), 4.4</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.B</strong></td><td>15</td><td>15</td><td class="std">2</td><td class="std">2–3</td><td><p><strong>Form:</strong> Fehler A–D zügig im Plenum; danach <strong>Code-Stand 4.B</strong> über den Austauschordner verteilen, damit alle gleich weiterarbeiten.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Fehlermeldung gehört zu welchem Fehler?</li><li>Warum hat unser Konstruktor weniger Parameter als der des Prototyps?</li></ul><p><strong>Ergebnis:</strong> Merkliste „typische Fehler“: _init_, self vergessen (2×), Parameter fehlt.</p><p><strong>Stolpersteine:</strong> Fehler B wird oft für richtig gehalten, weil er erst beim Zugriff auffällt. Der Konstruktor wird mit dem Parameter <code>kontostand</code> aus dem Prototyp übernommen.</p><p><strong>Glossar/Hefter:</strong> Merkliste typischer Fehler</p></td></tr>
+<tr class="ph-E"><td><strong>Etappe 4.C</strong></td><td>30</td><td>50</td><td class="std">3</td><td class="std">3–4</td><td>Aufgabe 4.5; Erweiterung 4.6 (LK verbindlich)</td></tr>
+<tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 4.C</strong></td><td>15</td><td>30</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Kurz-Check (3 Fragen, Antwort auf Zettel oder per Handzeichen), dann LK: Objektdiagramm zu 4.6 an der Tafel.</p><p><strong>Leitfragen:</strong></p><ul><li>Kurz-Check: (1) Was ist der Unterschied zwischen <code>Konto</code>, <code>konto1</code> und <code>konto1.kontostand</code>? (2) Was macht der Konstruktor? (3) Wie schreibt man in Python den Wahrheitswert „falsch“?</li><li>LK: Warum liefert <code>konto1.inhaber == konto3.inhaber</code> True, <code>a == b</code> in 4.2 aber False?</li></ul><p><strong>Ergebnis:</strong> Selbsteinschätzung; wer unsicher ist, wiederholt 4.3 mit Lösung.</p><p><strong>Stolpersteine:</strong> <code>"False"</code> als Text statt <code>False</code>.</p><p><strong>Glossar/Hefter:</strong> –</p></td></tr>
+</table></section><section class="kap" id="k5"><div class="kaphead"><div class="knr">5</div><div><h3>Methoden: Anfragen und Aufträge</h3><div class="meta">GK 4 Std. (180 min) · LK 6 Std. (270 min)</div></div></div><table class="plan ablauf"><tr><th>Phase</th><th>GK<br>min</th><th>LK<br>min</th><th>GK<br>Std.</th><th>LK<br>Std.</th><th>Inhalt</th></tr><tr class="ph-E"><td><strong>Etappe 5.A</strong></td><td>30</td><td>35</td><td class="std">1</td><td class="std">1</td><td>Wissen <em>Anfragen und Aufträge</em>; Aufgaben 5.1, 5.2</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.A</strong></td><td>15</td><td>15</td><td class="std">1</td><td class="std">1–2</td><td><p><strong>Form:</strong> Tabelle Anfrage/Auftrag gemeinsam an der Tafel; Gegenüberstellung <code>return</code> vs. <code>print</code> mit Live-Beispiel (<code>x = kunde1.get_name()</code> gegen eine print-Variante).</p><p><strong>Leitfragen:</strong></p><ul><li>Was gibt <code>print(kunde2.set_name("Krüger"))</code> aus – und warum?</li><li>Warum nutzt eine Anfrage <code>return</code>?</li></ul><p><strong>Ergebnis:</strong> Anfrage: Rückgabe, Zustand unverändert; Auftrag: keine Rückgabe, Zustand ändert sich. get/set-Konvention.</p><p><strong>Stolpersteine:</strong> Aufruf ohne Klammern (<code>kunde1.get_name</code>) liefert die Methode statt des Werts.</p><p><strong>Glossar/Hefter:</strong> Definitionen <em>Methode</em>, <em>Parameter und Rückgabe</em></p></td></tr><tr class="ph-E"><td><strong>Etappe 5.B</strong></td><td>35</td><td>50</td><td class="std">2</td><td class="std">2–3</td><td>Aufgaben 5.3, 5.4</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.B</strong></td><td>15</td><td>20</td><td class="std">2–3</td><td class="std">3</td><td><p><strong>Form:</strong> Bedingung von <code>abheben</code> mit dem Tafelbild aus Sicherung 2.B vergleichen. Danach <strong>Code-Stand 5.B</strong> verteilen.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum <code>&gt;=</code> und nicht <code>&gt;</code>?</li><li>Warum liefert <code>pin_pruefen(815)</code> False?</li></ul><p><strong>Ergebnis:</strong> Modell (Bedingung in Worten) → Code (Verzweigung) – der Weg von der Simulation zur Implementierung wird sichtbar.</p><p><strong>Stolpersteine:</strong> Zahl 500 statt <code>self.dispo</code>; Bedingung mit dem alten Kontostand statt dem neuen.</p><p><strong>Glossar/Hefter:</strong> –</p></td></tr><tr class="ph-E"><td><strong>Etappe 5.C</strong></td><td>25</td><td>40</td><td class="std">3</td><td class="std">3–4</td><td>Aufgabe 5.5; Wissen <em>Systematisch testen</em>; Aufgabe 5.6</td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.C</strong></td><td>15</td><td>20</td><td class="std">3</td><td class="std">4</td><td><p><strong>Form:</strong> Testtabelle gemeinsam; Testfall 5 live vorführen („Abheben macht reich“), Korrektur gemeinsam entwickeln.</p><p><strong>Leitfragen:</strong></p><ul><li>Warum erwartete Ergebnisse <em>vor</em> dem Test notieren?</li><li>Welche Sonderfälle gehören in jede Testtabelle?</li></ul><p><strong>Ergebnis:</strong> Testtabelle: Normalfall, Grenzwert, knapp darüber, 0, unzulässig. Korrigierte Methoden mit <code>if – elif – else</code>.</p><p><strong>Stolpersteine:</strong> Erwartung wird nach dem Test „angepasst“.</p><p><strong>Glossar/Hefter:</strong> Testtabelle als Muster</p></td></tr><tr class="ph-E"><td><strong>Etappe 5.D</strong></td><td>30</td><td>60</td><td class="std">4</td><td class="std">5–6</td><td>Aufgabe 5.7; Erweiterung 5.8 (LK verbindlich); Kasten <em>Ein Problem bleibt</em></td></tr><tr class="ph-S"><td><span class="stschild">Stopp</span><br><strong>Sicherung 5.D</strong></td><td>15</td><td>30</td><td class="std">4</td><td class="std">6</td><td><p><strong>Form:</strong> Kontoauszug kurz vergleichen; dann <em>Ein Problem bleibt</em> live vorführen und als Problemfrage für Baustein 6 stehen lassen. <strong>Code-Stand 5.D</strong> verteilen.</p><p><strong>Leitfragen:</strong></p><ul><li>Welche Attribute dürfen von außen gelesen, welche verändert werden?</li><li>LK: Wie kommunizieren zwei Konten bei einer Überweisung?</li></ul><p><strong>Ergebnis:</strong> Problemfrage Datenkapselung; LK: Objektkommunikation über Parameterreferenz (Vorbereitung Sequenzdiagramm).</p><p><strong>Stolpersteine:</strong> Buchung wird auch bei abgelehnter Abhebung eingetragen.</p><p><strong>Glossar/Hefter:</strong> Problemfrage notieren</p></td></tr></table></section>
+
+<section class="kap" id="erwartung">
+<div class="kaphead"><div class="knr">E</div><div><h3>Erwartungshorizonte</h3>
+<div class="meta">Zu den Aufgaben, die auf der Kursseite keine Lösung haben, weil ihr Ergebnis am Stopp gemeinsam erarbeitet wird</div></div></div>
+<div class="wissen"><p>Auf der Kursseite stehen nur noch Lösungen zu Aufgaben, bei denen die Schülerinnen
+und Schüler ihr Ergebnis selbst prüfen müssen, um weiterarbeiten zu können: die Programmieraufgaben
+(2.1, 4.3, 4.4, 4.5, 4.6 und Baustein 5). Bei Anforderungsanalyse, Modellierung, Bewertung und
+Vorhersageaufgaben (2.4, 2.5c, 2.7, 4.1, 4.2) ist die gemeinsame Sicherung der Abgleich. Eine sichtbare Musterlösung
+würde dort die eigene Auseinandersetzung abkürzen. Die Tipps bleiben überall erhalten.</p></div>
+<h4 style="margin:26px 0 8px">Baustein 0</h4><article class="auf"><div class="aufkopf"><span class="aid">0.1</span><h5>Qualitätskriterien recherchieren</h5></div><div class="loesung" style="margin:14px 20px 18px"><table class="ref"><tr><th>Kriterium</th><th>Bedeutung</th><th>Beispiel Banksoftware</th></tr>
+<tr><td><strong>Korrektheit</strong></td><td>Die Software erfüllt genau die Anforderungen.</td><td>Nach einer Abhebung von 50&nbsp;€ ist der Kontostand um genau 50&nbsp;€ kleiner.</td></tr>
+<tr><td><strong>Robustheit</strong></td><td>Die Software reagiert auch auf falsche Eingaben und unerwartete Situationen sinnvoll, statt abzustürzen oder Unsinn zu tun.</td><td>Ein negativer Betrag beim Abheben wird abgelehnt.</td></tr>
+<tr><td><strong>Wiederverwendbarkeit</strong></td><td>Teile der Software lassen sich in anderen Zusammenhängen erneut einsetzen.</td><td>Die Kontoverwaltung kann auch in einer App und am Automaten benutzt werden.</td></tr>
+<tr><td><strong>Effizienz</strong></td><td>Die Software geht sparsam mit Rechenzeit und Speicher um.</td><td>Eine Überweisung wird auch bei Millionen Konten in Sekundenbruchteilen ausgeführt.</td></tr>
+<tr><td>Erweiterbarkeit / Wartbarkeit</td><td>Die Software lässt sich mit wenig Aufwand ändern und ergänzen.</td><td>Ein neues Sparkonto kann ergänzt werden, ohne alles neu zu schreiben.</td></tr>
+<tr><td>Benutzerfreundlichkeit</td><td>Die Software ist leicht verständlich und bedienbar.</td><td>Der Automat führt verständlich durch die Abhebung.</td></tr>
+<tr><td>Sicherheit</td><td>Daten sind vor unberechtigtem Zugriff geschützt.</td><td>Niemand kann ohne PIN abheben oder den Kontostand direkt ändern.</td></tr>
+<tr><td>Portabilität</td><td>Die Software läuft auf verschiedenen Systemen.</td><td>Dasselbe Programm läuft unter Windows, Linux und auf dem Server.</td></tr>
+<tr><td>Kompatibilität</td><td>Die Software arbeitet mit anderen Systemen zusammen.</td><td>Überweisungen an andere Banken funktionieren.</td></tr>
+</table>
+<p>Die Formulierungen unterscheiden sich je nach Quelle. Entscheidend ist, dass Sie jedes Kriterium
+an einem Beispiel erklären können.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">0.2</span><h5>Eine Kontoverwaltung bewerten</h5></div><div class="loesung" style="margin:14px 20px 18px"><pre class="ausgabe">-980.0 1000340.0</pre>
+<table class="ref"><tr><th>Kriterium</th><th>Mangel</th></tr>
+<tr><td>Korrektheit</td><td><code>abheben1</code> prüft den Dispo nicht. Konto 1 steht bei −980&nbsp;€, obwohl nur −500&nbsp;€ erlaubt sind.</td></tr>
+<tr><td>Robustheit</td><td>Negative Beträge werden nicht abgefangen. Und jede Programmzeile kann den Kontostand direkt ändern – eine Million Euro einfach so.</td></tr>
+<tr><td>Wiederverwendbarkeit</td><td>Für jedes Konto gibt es eine eigene Abhebefunktion. Keine davon ist für ein anderes Konto verwendbar.</td></tr>
+<tr><td>Erweiterbarkeit</td><td>Ein neues Konto erfordert neue Variablen und neue Funktionen. Der Dispo (500) steht fest im Code.</td></tr>
+</table>
+<p><strong>c)</strong> Für 1000 Kunden bräuchte man 3000 Variablen und 1000 fast gleiche Funktionen
+– pro weitere Fähigkeit (einzahlen, überweisen …) noch einmal 1000. Ein Fehler wie in
+<code>abheben1</code> müsste an 1000 Stellen gesucht werden. Man bräuchte eine Möglichkeit, die
+Daten eines Kontos und die Funktionen, die mit ihnen arbeiten, <em>einmal</em> zu beschreiben und
+dann für beliebig viele Konten zu verwenden.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">0.3</span><h5>Kriterien im Widerspruch</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> <em>Sicherheit – Benutzerfreundlichkeit:</em> PIN, TAN und Zwei-Faktor-Anmeldung
+schützen das Konto, kosten bei jeder Überweisung aber Zeit und Nerven. Eine Überweisung mit einem
+Klick wäre bequemer, aber unsicher.</p>
+<p><em>Robustheit – Effizienz:</em> Vor jeder Buchung zu prüfen, ob der Betrag positiv ist, die PIN
+stimmt, der Dispo reicht und das Zielkonto existiert, kostet Rechenzeit. Bei Millionen Buchungen
+täglich summiert sich das.</p>
+<p><strong>b)</strong> Bei einer Bank haben Korrektheit, Robustheit und Sicherheit Vorrang: Ein
+falscher Kontostand oder ein manipulierbares Konto richtet weit mehr Schaden an als eine
+Überweisung, die eine Sekunde länger dauert. Eine andere Gewichtung ist vertretbar, wenn sie
+begründet wird.</p></div></article><h4 style="margin:26px 0 8px">Baustein 1</h4><article class="auf"><div class="aufkopf"><span class="aid">1.1</span><h5>Geld abheben – und was die Anforderung dazu sagt</h5></div><div class="loesung" style="margin:14px 20px 18px"><table class="ref"><tr><th>Schritt</th><th>Daten</th></tr>
+<tr><td>1. Karte einstecken</td><td>Kontonummer (auf der Karte gespeichert)</td></tr>
+<tr><td>2. PIN eingeben</td><td>eingegebene PIN</td></tr>
+<tr><td>3. Automat prüft die PIN</td><td>gespeicherte PIN des Kontos</td></tr>
+<tr><td>4. Betrag wählen</td><td>Betrag (50&nbsp;€)</td></tr>
+<tr><td>5. Automat prüft die Deckung</td><td>Kontostand, Überziehungsrahmen (Dispo)</td></tr>
+<tr><td>6. Kontostand wird verringert</td><td>Kontostand wird verändert</td></tr>
+<tr><td>7. Karte und Geld werden ausgegeben</td><td>–</td></tr></table>
+<p>Wichtig ist die Unterscheidung: Manche Daten werden <em>gespeichert</em> (PIN, Kontostand),
+andere werden nur <em>für einen Vorgang</em> übergeben (eingegebene PIN, Betrag). Diese
+Unterscheidung wird später wichtig: Gespeicherte Daten werden zu Attributen, übergebene
+Daten zu Parametern.</p>
+<p><strong>c)</strong> Ausdrücklich genannt werden: die PIN, die Karte, der Betrag (indirekt
+über „Geld abheben“), der Kontostand (als „wie viel Geld auf seinem Konto ist“).</p>
+<p>Ungenau oder fehlend:</p>
+<ul class="kompakt">
+<li><em>„persönliche Daten“</em> – welche genau? Name, Vorname, Geburtsdatum, Adresse?</li>
+<li><em>Kontonummer</em> – wird nicht erwähnt, obwohl ohne sie kein Konto eindeutig ist.</li>
+<li><em>„etwas überzogen“</em> – um wie viel? Gibt es eine feste Grenze?</li>
+<li><em>Kundennummer</em> – woran erkennt die Bank zwei Kunden mit gleichem Namen?</li>
+<li><em>Buchungen</em> – sollen Ein- und Auszahlungen gespeichert werden (Kontoauszug)?</li>
+</ul></div></article><article class="auf"><div class="aufkopf"><span class="aid">1.2</span><h5>Kandidaten sammeln und auswählen</h5></div><div class="loesung" style="margin:14px 20px 18px"><table class="ref">
+<tr><th>Substantiv</th><th>Entscheidung</th><th>Begründung</th></tr>
+<tr><td>Kunde</td><td><strong>Objekt</strong></td><td>besitzt eigene Daten (Name, …), die sich ändern können</td></tr>
+<tr><td>Konto</td><td><strong>Objekt</strong></td><td>besitzt einen Kontostand, der sich ständig ändert, und Fähigkeiten (einzahlen, abheben)</td></tr>
+<tr><td>persönliche Daten, Name (Heirat)</td><td>Angabe zum Kunden</td><td>gehören zum Kunden</td></tr>
+<tr><td>PIN, „wie viel Geld auf dem Konto ist“ (Kontostand)</td><td>Angabe zum Konto</td><td>gehören zum Konto</td></tr>
+<tr><td>Geld</td><td>Wert</td><td>ein Betrag, der bei einem Vorgang übergeben wird</td></tr>
+<tr><td>Bank, Software, Verwaltung</td><td>nicht relevant (vorerst)</td><td>bezeichnen das ganze System</td></tr>
+<tr><td>Geldautomat, Karte</td><td>Grenzfall</td><td>für den Kern nicht nötig; können später als eigene Objekte ergänzt werden</td></tr>
+</table>
+<table class="ref">
+<tr><th>Verb</th><th>Objekt</th></tr>
+<tr><td>einzahlen, abheben, überziehen, überweisen, „sehen, wie viel Geld …“</td><td>Konto</td></tr>
+<tr><td>anpassen (Name ändern), Daten aushändigen</td><td>Kunde</td></tr>
+<tr><td>eröffnen</td><td>Grenzfall: Ein Konto wird <em>erzeugt</em> – das übernimmt später der Konstruktor.</td></tr>
+</table>
+<p>Es gibt nicht <em>die eine</em> richtige Lösung. Entscheidend ist eine nachvollziehbare
+Begründung. Die Entscheidung für <strong>Kunde</strong> und <strong>Konto</strong> wird im Kurs
+festgelegt und gilt für die weitere Arbeit.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">1.3</span><h5>Die Anforderung bewerten</h5></div><div class="loesung" style="margin:14px 20px 18px"><table class="ref">
+<tr><th>Rückfrage</th><th>Vorschlag zur Festlegung</th></tr>
+<tr><td>Welche persönlichen Daten werden gespeichert?</td><td>Kundennummer, Name, Vorname, Geburtsdatum</td></tr>
+<tr><td>Wie weit darf ein Konto überzogen werden?</td><td>fester Dispositionskredit von 500&nbsp;€</td></tr>
+<tr><td>Kann ein Kunde mehrere Konten haben? Kann ein Konto mehrere Inhaber haben?</td><td>ein Kunde: beliebig viele Konten; ein Konto: genau ein Inhaber</td></tr>
+<tr><td>Wird an einen Kunden oder auf ein Konto überwiesen?</td><td>auf ein Konto (ein Kunde kann mehrere haben)</td></tr>
+<tr><td>Mit welchem Kontostand startet ein neues Konto?</td><td>0,00&nbsp;€</td></tr>
+<tr><td>Was passiert bei negativen Beträgen?</td><td>Sie werden abgelehnt.</td></tr>
+<tr><td>Sollen Buchungen gespeichert werden?</td><td>ja, für einen Kontoauszug</td></tr>
+</table>
+<p><strong>c)</strong> In der vorliegenden Form ist die Anforderung als Grundlage
+<em>nicht</em> geeignet: Zentrale Daten fehlen (Kontonummer, Kundennummer), Grenzen sind
+unklar („etwas überzogen“) und Fehlerfälle sind nicht beschrieben. Zwei Teams würden daraus
+unterschiedliche Programme entwickeln, die beide „richtig“ wären. Als Ausgangspunkt für ein
+Gespräch mit der Bank ist sie aber brauchbar.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">1.4</span><h5>Ein Sparkonto für die WarnowBank</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> Beispiel: „Kunden können zusätzlich ein Sparkonto eröffnen. Ein
+Sparkonto darf nicht überzogen werden. Pro Kalendermonat dürfen höchstens 2000&nbsp;€
+abgehoben werden. Am Jahresende werden dem Sparkonto Zinsen in Höhe des aktuellen Zinssatzes
+gutgeschrieben.“</p>
+<p><strong>b)</strong> Neue Daten: Zinssatz, im laufenden Monat bereits abgehobener Betrag.
+Neue Fähigkeit: Zinsen gutschreiben (verzinsen). Abheben bleibt, prüft aber andere Grenzen.</p>
+<p><strong>c)</strong> Gemeinsam: Kontonummer, PIN, Kontostand, Inhaber; einzahlen, abheben,
+Kontostand abfragen. Unterschiedlich: Dispo nur beim Girokonto; Zinssatz und Monatslimit nur
+beim Sparkonto; die Regeln beim Abheben unterscheiden sich.</p>
+<p>Diese Beobachtung – viel Gemeinsames, ein paar Unterschiede – führt später zum Konzept der
+<strong>Vererbung</strong>.</p></div></article><h4 style="margin:26px 0 8px">Baustein 2</h4><article class="auf"><div class="aufkopf"><span class="aid">2.2</span><h5>Ein Objektdiagramm lesen</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> <code>konto1</code> – Objektbezeichner, <code>Konto</code> – Klasse,
+<code>kontostand</code> – Attributbezeichner, <code>2020.0</code> – Attributwert.</p>
+<p><strong>b)</strong> Die Shell meldet <code>SyntaxError: leading zeros in decimal integer literals
+are not permitted …</code>: In Python darf eine Zahl nicht mit 0 beginnen. Ohne die Null wird zwar
+ein Konto erzeugt, seine PIN ist dann aber <code>815</code> – nicht mehr vierstellig und nicht
+gleich <code>"0815"</code>. Deshalb wird die PIN als <em>Text</em> gespeichert, die Kontonummer als
+<em>Zahl</em>. Die Kontonummer der
+WarnowBank beginnt nie mit 0, deshalb ist hier eine Zahl unproblematisch. Diese Frage wird in
+Aufgabe 3.4 noch genauer untersucht.</p>
+<p><strong>c)</strong> Das Konto mit der Nummer 987654321 und der PIN 1234 hat einen Kontostand
+von 2020&nbsp;€ und einen Dispo von 500&nbsp;€.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.3</span><h5>Eine zweite Kundin</h5></div><div class="loesung" style="margin:14px 20px 18px"><figure class="uml"><svg class="umlsvg" viewBox="0 0 583 122" width="583" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf2" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf2o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="231" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="115.5" y="19" text-anchor="middle" font-weight="700" font-size="13">kunde2 : Kunde</text><line x1="62.118" y1="22" x2="168.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="231" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">kundennummer = 4712</text><text x="12" y="63" font-size="12.5">name = "Schulz"</text><text x="12" y="81" font-size="12.5">vorname = "Mia"</text><text x="12" y="99" font-size="12.5">geburtsdatum = "02.11.2001"</text><rect x="300" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="396.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="343.118" y1="22" x2="449.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="300" y1="28" x2="493" y2="28" stroke="#557a3c"/><text x="312" y="45" font-size="12.5">kontonummer = 65193275</text><text x="312" y="63" font-size="12.5">pin = "0815"</text><text x="312" y="81" font-size="12.5">kontostand = 340.0</text><text x="312" y="99" font-size="12.5">dispo = 500.0</text></svg></figure>
+<p>Häufige Fehler: Klassenname fehlt oder Unterstrich fehlt; <code>kontostand = 340 €</code>
+mit Einheit; PIN ohne Anführungszeichen (dann ginge die führende Null verloren); Attribute
+anders benannt als bei <code>konto1</code>. Objekte derselben Klasse haben immer
+<em>dieselben</em> Attribute – nur die Werte unterscheiden sich.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.4</span><h5>Abheben, überweisen, abgelehnt</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>Zustand 2</strong> (nach A): nur <code>konto1</code> ändert sich.</p><figure class="uml"><svg class="umlsvg" viewBox="0 0 583 122" width="583" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf3" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf3o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="200" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="100.0" y="19" text-anchor="middle" font-weight="700" font-size="13">konto1 : Konto</text><line x1="46.618" y1="22" x2="153.382" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="200" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">kontonummer = 987654321</text><text x="12" y="63" font-size="12.5">pin = "1234"</text><text x="12" y="81" font-size="12.5">kontostand = 1970.0</text><text x="12" y="99" font-size="12.5">dispo = 500.0</text><rect x="300" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="396.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="343.118" y1="22" x2="449.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="300" y1="28" x2="493" y2="28" stroke="#557a3c"/><text x="312" y="45" font-size="12.5">kontonummer = 65193275</text><text x="312" y="63" font-size="12.5">pin = "0815"</text><text x="312" y="81" font-size="12.5">kontostand = 340.0</text><text x="312" y="99" font-size="12.5">dispo = 500.0</text></svg></figure><p><strong>Zustand 3</strong> (nach B): beide Konten ändern sich.</p><figure class="uml"><svg class="umlsvg" viewBox="0 0 583 122" width="583" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf4" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf4o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="200" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="100.0" y="19" text-anchor="middle" font-weight="700" font-size="13">konto1 : Konto</text><line x1="46.618" y1="22" x2="153.382" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="200" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">kontonummer = 987654321</text><text x="12" y="63" font-size="12.5">pin = "1234"</text><text x="12" y="81" font-size="12.5">kontostand = 1850.0</text><text x="12" y="99" font-size="12.5">dispo = 500.0</text><rect x="300" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="396.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="343.118" y1="22" x2="449.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="300" y1="28" x2="493" y2="28" stroke="#557a3c"/><text x="312" y="45" font-size="12.5">kontonummer = 65193275</text><text x="312" y="63" font-size="12.5">pin = "0815"</text><text x="312" y="81" font-size="12.5">kontostand = 460.0</text><text x="312" y="99" font-size="12.5">dispo = 500.0</text></svg></figure><p><strong>Zustand 4</strong> (nach C): unverändert gleich Zustand 3.</p>
+<p><strong>b)</strong> Bei A und B stimmen Vorhersage und Programm überein. Bei C weicht der
+Prototyp ab: Er setzt den Kontostand von <code>konto1</code> auf −550.0.</p>
+<p><strong>c)</strong> 1850&nbsp;€ − 2400&nbsp;€ = −550&nbsp;€. Der Kontostand würde unter −500&nbsp;€
+fallen, der Dispo würde also um 50&nbsp;€ überschritten. Laut Satz 4 der Anforderung muss die
+Abhebung abgelehnt werden; der Zustand ändert sich nicht. Der Prototyp prüft beim Abheben weder den
+Dispo noch, ob der Betrag positiv ist. Er läuft, ist aber nicht korrekt.</p>
+<p><strong>d)</strong> Verändert hat sich nur <code>kontostand</code>. Kontonummer, PIN und Dispo
+bleiben konstant. Das ist ein erster Hinweis darauf, welche Attribute später von außen
+<em>verändert</em> werden dürfen und welche nur <em>gelesen</em> werden sollen.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.5</span><h5>Wem gehört welches Konto?</h5></div><div class="loesung" style="margin:14px 20px 18px"><figure class="uml"><svg class="umlsvg" viewBox="0 0 681 452" width="681" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf6" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf6o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="200" height="128" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="100.0" y="19" text-anchor="middle" font-weight="700" font-size="13">konto1 : Konto</text><line x1="46.618" y1="22" x2="153.382" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="200" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">kontonummer = 987654321</text><text x="12" y="63" font-size="12.5">pin = "1234"</text><text x="12" y="81" font-size="12.5">kontostand = 1850.0</text><text x="12" y="99" font-size="12.5">dispo = 500.0</text><text x="12" y="117" font-size="12.5">inhaber =</text><circle cx="88.39999999999999" cy="113" r="3" fill="#1c2430"/><line x1="88.39999999999999" y1="113" x2="360.0" y2="128.4" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf6)"/><rect x="0" y="150" width="200" height="128" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="100.0" y="169" text-anchor="middle" font-weight="700" font-size="13">konto3 : Konto</text><line x1="46.618" y1="172" x2="153.382" y2="172" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="178" x2="200" y2="178" stroke="#557a3c"/><text x="12" y="195" font-size="12.5">kontonummer = 987654322</text><text x="12" y="213" font-size="12.5">pin = "4321"</text><text x="12" y="231" font-size="12.5">kontostand = 0.0</text><text x="12" y="249" font-size="12.5">dispo = 500.0</text><text x="12" y="267" font-size="12.5">inhaber =</text><circle cx="88.39999999999999" cy="263" r="3" fill="#1c2430"/><line x1="88.39999999999999" y1="263" x2="360.0" y2="173.2" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf6)"/><rect x="360" y="80" width="231" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="475.5" y="99" text-anchor="middle" font-weight="700" font-size="13">kunde1 : Kunde</text><line x1="422.118" y1="102" x2="528.882" y2="102" stroke="#1c2430" stroke-width="1"/><line x1="360" y1="108" x2="591" y2="108" stroke="#557a3c"/><text x="372" y="125" font-size="12.5">kundennummer = 4711</text><text x="372" y="143" font-size="12.5">name = "Lehmann"</text><text x="372" y="161" font-size="12.5">vorname = "Jan"</text><text x="372" y="179" font-size="12.5">geburtsdatum = "14.05.1988"</text><rect x="0" y="310" width="193" height="128" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="96.5" y="329" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="43.118" y1="332" x2="149.882" y2="332" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="338" x2="193" y2="338" stroke="#557a3c"/><text x="12" y="355" font-size="12.5">kontonummer = 65193275</text><text x="12" y="373" font-size="12.5">pin = "0815"</text><text x="12" y="391" font-size="12.5">kontostand = 460.0</text><text x="12" y="409" font-size="12.5">dispo = 500.0</text><text x="12" y="427" font-size="12.5">inhaber =</text><circle cx="88.39999999999999" cy="423" r="3" fill="#1c2430"/><line x1="88.39999999999999" y1="423" x2="360.0" y2="396.3" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf6)"/><rect x="360" y="330" width="231" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="475.5" y="349" text-anchor="middle" font-weight="700" font-size="13">kunde2 : Kunde</text><line x1="422.118" y1="352" x2="528.882" y2="352" stroke="#1c2430" stroke-width="1"/><line x1="360" y1="358" x2="591" y2="358" stroke="#557a3c"/><text x="372" y="375" font-size="12.5">kundennummer = 4712</text><text x="372" y="393" font-size="12.5">name = "Schulz"</text><text x="372" y="411" font-size="12.5">vorname = "Mia"</text><text x="372" y="429" font-size="12.5">geburtsdatum = "02.11.2001"</text></svg></figure>
+<p><strong>b)</strong> Laut Anforderung gehört jedes Konto <em>genau einem</em> Kunden – dafür
+genügt im Konto ein einziges Attribut <code>inhaber</code>. Ein Kunde kann dagegen
+<em>beliebig viele</em> Konten besitzen; im Kunden bräuchte man dafür eine ganze Liste von
+Referenzen. Für die bisherigen Anforderungen (z.&nbsp;B. „Wem gehört dieses Konto?“) reicht die
+Richtung Konto → Kunde aus.</p>
+<p><strong>c)</strong> <code>konto3.inhaber.name</code> liefert <code>'Lehmann-Krüger'</code>. Für Herrn
+Lehmann gibt es nur <em>ein</em> Kundenobjekt. <code>kunde1</code>, <code>konto1.inhaber</code> und
+<code>konto3.inhaber</code> verweisen auf dasselbe Objekt, deshalb ist die Änderung über alle drei
+Wege sichtbar. Genau so soll es sein: Nach einer Heirat muss der Name nur an <em>einer</em> Stelle
+geändert werden, auch wenn der Kunde fünf Konten hat.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.6</span><h5>Fehler im Objektdiagramm</h5></div><div class="loesung" style="margin:14px 20px 18px"><ul class="kompakt">
+<li>Objektbezeichner und Klasse sind vertauscht: richtig ist <code>konto1 : Konto</code>.</li>
+<li>Die Kopfzeile ist nicht unterstrichen.</li>
+<li>Die PIN steht ohne Anführungszeichen; sie wird aber als Text gespeichert.</li>
+<li>Der Kontostand ist ein Text mit Einheit und Tausenderpunkt; richtig ist die Zahl
+<code>2020.0</code>.</li>
+<li><code>inhaber</code> enthält einen Text. Gemeint ist aber das Kundenobjekt, also eine
+Referenz auf <code>kunde1</code> (Pfeil).</li>
+</ul><figure class="uml"><svg class="umlsvg" viewBox="0 0 651 142" width="651" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf8" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf8o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="200" height="128" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="100.0" y="19" text-anchor="middle" font-weight="700" font-size="13">konto1 : Konto</text><line x1="46.618" y1="22" x2="153.382" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="200" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">kontonummer = 987654321</text><text x="12" y="63" font-size="12.5">pin = "1234"</text><text x="12" y="81" font-size="12.5">kontostand = 2020.0</text><text x="12" y="99" font-size="12.5">dispo = 500.0</text><text x="12" y="117" font-size="12.5">inhaber =</text><circle cx="88.39999999999999" cy="113" r="3" fill="#1c2430"/><line x1="88.39999999999999" y1="113" x2="330.0" y2="87.3" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf8)"/><rect x="330" y="20" width="231" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="445.5" y="39" text-anchor="middle" font-weight="700" font-size="13">kunde1 : Kunde</text><line x1="392.118" y1="42" x2="498.882" y2="42" stroke="#1c2430" stroke-width="1"/><line x1="330" y1="48" x2="561" y2="48" stroke="#557a3c"/><text x="342" y="65" font-size="12.5">kundennummer = 4711</text><text x="342" y="83" font-size="12.5">name = "Lehmann"</text><text x="342" y="101" font-size="12.5">vorname = "Jan"</text><text x="342" y="119" font-size="12.5">geburtsdatum = "14.05.1988"</text></svg></figure></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.7</span><h5>Wie viele Konten gibt es?</h5></div><div class="loesung" style="margin:14px 20px 18px"><figure class="uml"><svg class="umlsvg" viewBox="0 0 550 402" width="550" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf20" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf20o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="140" height="92" rx="11" fill="#f4f6f9" stroke="#5d6b7e" stroke-width="1.4"/><text x="70.0" y="19" text-anchor="middle" font-weight="700" font-size="13">Variablen</text><line x1="0" y1="28" x2="140" y2="28" stroke="#5d6b7e"/><text x="12" y="45" font-size="12.5">konto1 =</text><circle cx="80.8" cy="41" r="3" fill="#1c2430"/><line x1="80.8" y1="41" x2="260.0" y2="50.0" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf20)"/><text x="12" y="63" font-size="12.5">konto2 =</text><circle cx="80.8" cy="59" r="3" fill="#1c2430"/><line x1="80.8" y1="59" x2="260.0" y2="147.4" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf20)"/><text x="12" y="81" font-size="12.5">konto3 =</text><circle cx="80.8" cy="77" r="3" fill="#1c2430"/><line x1="80.8" y1="77" x2="260.0" y2="62.9" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf20)"/><rect x="260" y="0" width="200" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="360.0" y="19" text-anchor="middle" font-weight="700" font-size="13">: Konto</text><line x1="333.309" y1="22" x2="386.691" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="260" y1="28" x2="460" y2="28" stroke="#557a3c"/><text x="272" y="45" font-size="12.5">kontonummer = 987654321</text><text x="272" y="63" font-size="12.5">pin = "1234"</text><text x="272" y="81" font-size="12.5">kontostand = 100.0</text><text x="272" y="99" font-size="12.5">dispo = 500.0</text><rect x="260" y="140" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="356.5" y="159" text-anchor="middle" font-weight="700" font-size="13">: Konto</text><line x1="329.809" y1="162" x2="383.191" y2="162" stroke="#1c2430" stroke-width="1"/><line x1="260" y1="168" x2="453" y2="168" stroke="#557a3c"/><text x="272" y="185" font-size="12.5">kontonummer = 11112222</text><text x="272" y="203" font-size="12.5">pin = "9999"</text><text x="272" y="221" font-size="12.5">kontostand = 0.0</text><text x="272" y="239" font-size="12.5">dispo = 500.0</text><rect x="260" y="280" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="356.5" y="299" text-anchor="middle" font-weight="700" font-size="13">: Konto</text><line x1="329.809" y1="302" x2="383.191" y2="302" stroke="#1c2430" stroke-width="1"/><line x1="260" y1="308" x2="453" y2="308" stroke="#557a3c"/><text x="272" y="325" font-size="12.5">kontonummer = 65193275</text><text x="272" y="343" font-size="12.5">pin = "0815"</text><text x="272" y="361" font-size="12.5">kontostand = 0.0</text><text x="272" y="379" font-size="12.5">dispo = 500.0</text></svg></figure>
+<p><strong>b)</strong> <code>100.0</code>. <code>konto3</code> und <code>konto1</code> referenzieren
+<em>dasselbe</em> Objekt. Eine Änderung über den einen Namen ist auch über den anderen sichtbar.</p>
+<p><strong>c)</strong> Es existiert noch, aber keine Variable verweist mehr darauf. Es ist nicht
+mehr erreichbar und wird von Python automatisch aus dem Speicher entfernt
+(<em>Garbage Collection</em>).</p>
+<p><strong>d)</strong> In der Heap-Ansicht haben <code>konto1</code> und <code>konto3</code> dieselbe ID.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">2.8</span><h5>Der Geldautomat</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>Zustand 1</strong> – keine Karte im Automaten:</p><figure class="uml"><svg class="umlsvg" viewBox="0 0 613 122" width="613" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf10" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf10o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="254" height="92" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="127.0" y="19" text-anchor="middle" font-weight="700" font-size="13">automat1 : Geldautomat</text><line x1="43.114000000000004" y1="22" x2="210.886" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="254" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">standort = "Kröpeliner Straße"</text><text x="12" y="63" font-size="12.5">bargeld = 50000.0</text><text x="12" y="81" font-size="12.5">akt_konto =</text><circle cx="103.6" cy="77" r="3" fill="#1c2430"/><line x1="103.6" y1="77" x2="284" y2="77" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf10)"/><text x="290" y="81" font-size="12.5" font-style="italic">None</text><rect x="330" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="426.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="373.118" y1="22" x2="479.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="330" y1="28" x2="523" y2="28" stroke="#557a3c"/><text x="342" y="45" font-size="12.5">kontonummer = 65193275</text><text x="342" y="63" font-size="12.5">pin = "0815"</text><text x="342" y="81" font-size="12.5">kontostand = 460.0</text><text x="342" y="99" font-size="12.5">dispo = 500.0</text></svg></figure><p><strong>Zustand 2</strong> – Auszahlung erfolgt, Karte steckt noch:</p><figure class="uml"><svg class="umlsvg" viewBox="0 0 613 122" width="613" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf11" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf11o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="254" height="92" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="127.0" y="19" text-anchor="middle" font-weight="700" font-size="13">automat1 : Geldautomat</text><line x1="43.114000000000004" y1="22" x2="210.886" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="254" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">standort = "Kröpeliner Straße"</text><text x="12" y="63" font-size="12.5">bargeld = 49800.0</text><text x="12" y="81" font-size="12.5">akt_konto =</text><circle cx="103.6" cy="77" r="3" fill="#1c2430"/><line x1="103.6" y1="77" x2="330.0" y2="61.6" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf11)"/><rect x="330" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="426.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="373.118" y1="22" x2="479.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="330" y1="28" x2="523" y2="28" stroke="#557a3c"/><text x="342" y="45" font-size="12.5">kontonummer = 65193275</text><text x="342" y="63" font-size="12.5">pin = "0815"</text><text x="342" y="81" font-size="12.5">kontostand = 260.0</text><text x="342" y="99" font-size="12.5">dispo = 500.0</text></svg></figure><p><strong>Zustand 3</strong> – Karte entnommen:</p><figure class="uml"><svg class="umlsvg" viewBox="0 0 613 122" width="613" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf12" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf12o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="254" height="92" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="127.0" y="19" text-anchor="middle" font-weight="700" font-size="13">automat1 : Geldautomat</text><line x1="43.114000000000004" y1="22" x2="210.886" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="0" y1="28" x2="254" y2="28" stroke="#557a3c"/><text x="12" y="45" font-size="12.5">standort = "Kröpeliner Straße"</text><text x="12" y="63" font-size="12.5">bargeld = 49800.0</text><text x="12" y="81" font-size="12.5">akt_konto =</text><circle cx="103.6" cy="77" r="3" fill="#1c2430"/><line x1="103.6" y1="77" x2="284" y2="77" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf12)"/><text x="290" y="81" font-size="12.5" font-style="italic">None</text><rect x="330" y="0" width="193" height="110" rx="11" fill="#eef6e6" stroke="#557a3c" stroke-width="1.4"/><text x="426.5" y="19" text-anchor="middle" font-weight="700" font-size="13">konto2 : Konto</text><line x1="373.118" y1="22" x2="479.882" y2="22" stroke="#1c2430" stroke-width="1"/><line x1="330" y1="28" x2="523" y2="28" stroke="#557a3c"/><text x="342" y="45" font-size="12.5">kontonummer = 65193275</text><text x="342" y="63" font-size="12.5">pin = "0815"</text><text x="342" y="81" font-size="12.5">kontostand = 260.0</text><text x="342" y="99" font-size="12.5">dispo = 500.0</text></svg></figure><p><strong>b)</strong> <code>inhaber</code> ist eine <em>dauerhafte</em> Referenz: Sie besteht,
+solange das Konto existiert. <code>akt_konto</code> ist nur <em>vorübergehend</em> gesetzt,
+nämlich für die Dauer eines Vorgangs am Automaten. Beide werden aber gleich dargestellt: als
+Attribut mit Referenzpfeil.</p></div></article><h4 style="margin:26px 0 8px">Baustein 3</h4><article class="auf"><div class="aufkopf"><span class="aid">3.1</span><h5>Die Klasse Konto entwerfen</h5></div><div class="loesung" style="margin:14px 20px 18px"><figure class="uml"><svg class="umlsvg" viewBox="0 0 252 150" width="252" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf14" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf14o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="162" height="138" fill="#e7f0f8" stroke="#2f5d8c" stroke-width="1.4"/><text x="81.0" y="19" text-anchor="middle" font-weight="700" font-size="13">Konto</text><line x1="0" y1="28" x2="162" y2="28" stroke="#2f5d8c"/><text x="12" y="45" font-size="12.5">kontonummer : Zahl</text><text x="12" y="63" font-size="12.5">pin : Text</text><text x="12" y="81" font-size="12.5">kontostand : Zahl</text><text x="12" y="99" font-size="12.5">dispo : Zahl</text><line x1="0" y1="110" x2="162" y2="110" stroke="#2f5d8c"/></svg></figure>
+<p>Der Unterschied zum Objektdiagramm: Der Kopf enthält nur den Klassennamen (nicht
+unterstrichen, kein Objektbezeichner), die Attribute tragen Datentypen statt Werten.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">3.2</span><h5>Klasse oder Objekt?</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> Klassen: Konto, Kunde, Geldautomat. Objekte: das Konto 65193275,
+Mia Schulz, der Geldautomat in der Kröpeliner Straße.</p>
+<p><strong>b)</strong> Ein Objektdiagramm zeigt ein bestimmtes Objekt mit seinen aktuellen Werten
+(<code>konto1 : Konto</code>, <code>kontostand = 2020.0</code>). Ein Entwurfsdiagramm zeigt den
+Bauplan aller Konten mit Datentypen (<code>kontostand : Zahl</code>) und Methoden.</p>
+<p><strong>c)</strong> Die Aussage ist falsch. Die Klasse legt nur fest, <em>dass</em> es ein
+Attribut <code>kontostand</code> vom Typ Zahl gibt. Der Wert gehört zum einzelnen Objekt.
+Ändert sich der Kontostand von <code>konto1</code>, ändert sich nur dessen Zustand – alle anderen
+Konten und der Bauplan bleiben unverändert.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">3.3</span><h5>Methoden festlegen</h5></div><div class="loesung" style="margin:14px 20px 18px"><table class="ref"><tr><th>Anforderung</th><th>Klasse</th><th>Methode</th></tr>
+<tr><td>1: Name ändern bei Heirat</td><td>Kunde</td><td>name_aendern</td></tr>
+<tr><td>2: neues Konto startet mit 0,00&nbsp;€</td><td>Konto</td><td>– (geschieht beim Erzeugen des Objekts)</td></tr>
+<tr><td>5: Geld einzahlen / abheben</td><td>Konto</td><td>einzahlen, abheben</td></tr>
+<tr><td>6: PIN prüfen</td><td>Konto</td><td>pin_pruefen</td></tr>
+<tr><td>7: Geld überweisen</td><td>Konto</td><td>ueberweisen</td></tr>
+<tr><td>8: Kontostand abfragen, Kontoauszug</td><td>Konto</td><td>kontostand_abfragen, auszug_drucken</td></tr>
+<tr><td>9: gespeicherte Daten ausgeben</td><td>Kunde</td><td>daten_drucken</td></tr>
+</table><figure class="uml"><svg class="umlsvg" viewBox="0 0 660 240" width="660" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf15" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf15o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="170" height="228" fill="#e7f0f8" stroke="#2f5d8c" stroke-width="1.4"/><text x="85.0" y="19" text-anchor="middle" font-weight="700" font-size="13">Konto</text><line x1="0" y1="28" x2="170" y2="28" stroke="#2f5d8c"/><text x="12" y="45" font-size="12.5">kontonummer : Zahl</text><text x="12" y="63" font-size="12.5">pin : Text</text><text x="12" y="81" font-size="12.5">kontostand : Zahl</text><text x="12" y="99" font-size="12.5">dispo : Zahl</text><line x1="0" y1="110" x2="170" y2="110" stroke="#2f5d8c"/><text x="12" y="127" font-size="12.5">einzahlen</text><text x="12" y="145" font-size="12.5">abheben</text><text x="12" y="163" font-size="12.5">ueberweisen</text><text x="12" y="181" font-size="12.5">kontostand_abfragen</text><text x="12" y="199" font-size="12.5">auszug_drucken</text><text x="12" y="217" font-size="12.5">pin_pruefen</text><rect x="400" y="0" width="170" height="156" fill="#e7f0f8" stroke="#2f5d8c" stroke-width="1.4"/><text x="485.0" y="19" text-anchor="middle" font-weight="700" font-size="13">Kunde</text><line x1="400" y1="28" x2="570" y2="28" stroke="#2f5d8c"/><text x="412" y="45" font-size="12.5">kundennummer : Zahl</text><text x="412" y="63" font-size="12.5">name : Text</text><text x="412" y="81" font-size="12.5">vorname : Text</text><text x="412" y="99" font-size="12.5">geburtsdatum : Text</text><line x1="400" y1="110" x2="570" y2="110" stroke="#2f5d8c"/><text x="412" y="127" font-size="12.5">name_aendern</text><text x="412" y="145" font-size="12.5">daten_drucken</text></svg></figure></div></article><article class="auf"><div class="aufkopf"><span class="aid">3.4</span><h5>Zahl oder Text?</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> Kriterium 1: Wird mit dem Wert gerechnet? Dann <em>Zahl</em>.
+Kriterium 2: Kann er führende Nullen, Buchstaben, Leer- oder Sonderzeichen enthalten? Dann
+<em>Text</em>.</p>
+<table class="ref"><tr><th>Angabe</th><th>Typ</th><th>Begründung</th></tr>
+<tr><td>Kontostand</td><td>Zahl</td><td>wird bei jeder Buchung verrechnet</td></tr>
+<tr><td>Kontonummer</td><td>Zahl</td><td>bei der WarnowBank rein numerisch ohne führende Null; Text wäre ebenfalls vertretbar</td></tr>
+<tr><td>PIN</td><td>Text</td><td>kann mit 0 beginnen (0815)</td></tr>
+<tr><td>Kundennummer</td><td>Zahl</td><td>wie Kontonummer</td></tr>
+<tr><td>Geburtsdatum</td><td>Text</td><td>enthält Punkte (14.05.1988)</td></tr>
+<tr><td>Postleitzahl</td><td>Text</td><td>kann mit 0 beginnen (01067 Dresden)</td></tr>
+<tr><td>Telefonnummer</td><td>Text</td><td>führende 0, oft mit + oder Leerzeichen</td></tr>
+<tr><td>Hausnummer</td><td>Text</td><td>kann Buchstaben enthalten (12a)</td></tr>
+<tr><td>IBAN</td><td>Text</td><td>enthält Buchstaben (DE…)</td></tr>
+<tr><td>PIN-Fehlversuche</td><td>Zahl</td><td>wird hochgezählt und mit 3 verglichen</td></tr>
+</table></div></article><article class="auf"><div class="aufkopf"><span class="aid">3.5</span><h5>Die Assoziation interpretieren</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> Jedes Objekt der Klasse <code>Konto</code> verwaltet über das Attribut
+<code>inhaber</code> genau ein Objekt der Klasse <code>Kunde</code>. Die Beziehung ist gerichtet:
+Ein Konto kennt seinen Inhaber, ein Kunde kennt seine Konten nicht.</p>
+<p><strong>b)</strong> Laut Satz 3 der Anforderung gehört <em>jedes</em> Konto <em>genau einem</em>
+Kunden. Ein Konto ohne Inhaber darf es nicht geben – also <code>1</code>, nicht <code>0..1</code>.</p></div></article><article class="auf"><div class="aufkopf"><span class="aid">3.6</span><h5>Weitere Klassen der Bank</h5></div><div class="loesung" style="margin:14px 20px 18px"><figure class="uml"><svg class="umlsvg" viewBox="0 0 630 150" width="630" font-family="Consolas,'Cascadia Code',Menlo,'DejaVu Sans Mono',monospace" fill="#1c2430" role="img"><defs><marker id="pf17" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1c2430"/></marker><marker id="pf17o" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#1c2430" stroke-width="1.4"/></marker></defs><rect x="0" y="0" width="147" height="138" fill="#e7f0f8" stroke="#2f5d8c" stroke-width="1.4"/><text x="73.5" y="19" text-anchor="middle" font-weight="700" font-size="13">Geldautomat</text><line x1="0" y1="28" x2="147" y2="28" stroke="#2f5d8c"/><text x="12" y="45" font-size="12.5">standort : Text</text><text x="12" y="63" font-size="12.5">bargeld : Zahl</text><line x1="0" y1="74" x2="147" y2="74" stroke="#2f5d8c"/><text x="12" y="91" font-size="12.5">karte_einstecken</text><text x="12" y="109" font-size="12.5">geld_auszahlen</text><text x="12" y="127" font-size="12.5">karte_auswerfen</text><rect x="400" y="0" width="140" height="84" fill="#e7f0f8" stroke="#2f5d8c" stroke-width="1.4"/><text x="470.0" y="19" text-anchor="middle" font-weight="700" font-size="13">Konto</text><line x1="400" y1="28" x2="540" y2="28" stroke="#2f5d8c"/><text x="412" y="45" font-size="12.5">…</text><line x1="400" y1="56" x2="540" y2="56" stroke="#2f5d8c"/><text x="412" y="73" font-size="12.5">…</text><line x1="147.0" y1="64.0" x2="400.0" y2="46.8" stroke="#1c2430" stroke-width="1.3" marker-end="url(#pf17o)"/><text x="274.2" y="70.4" font-size="12.5" text-anchor="middle">akt_konto</text><text x="369.2" y="39.8" font-size="12.5" text-anchor="middle">0..1</text></svg></figure>
+<p><strong>a)</strong> <code>0..1</code>, weil der Automat nur während eines Vorgangs mit einem
+Konto verbunden ist.</p>
+<p><strong>b)</strong> Es kommt eine zweite Assoziation von <code>Kunde</code> zu <code>Konto</code>
+hinzu, z.&nbsp;B. mit dem Bezeichner <code>konten</code> und der Multiplizität <code>0..*</code>
+(oder <code>1..*</code>, wenn jeder Kunde mindestens ein Konto haben muss). Bei der Umsetzung
+braucht der Kunde dann eine <em>Liste</em> von Konten. Nachteil: Beide Richtungen müssen immer
+zueinander passen – eröffnet jemand ein Konto, müssen zwei Objekte geändert werden.</p></div></article><h4 style="margin:26px 0 8px">Baustein 4</h4><article class="auf"><div class="aufkopf"><span class="aid">4.1</span><h5>Den Prototyp verstehen</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> Python erzeugt ein neues, leeres Konto-Objekt und führt automatisch den
+Konstruktor <code>__init__</code> aus. <code>self</code> verweist dabei auf dieses neue Objekt. Die
+Werte aus der Klammer werden der Reihe nach an die Parameter <code>kontonummer</code>,
+<code>pin</code>, <code>kontostand</code> und <code>inhaber</code> übergeben. Jede Zeile
+<code>self.… = …</code> legt im Objekt ein Attribut an und speichert darin den Wert des Parameters;
+<code>dispo</code> wird ohne Parameter auf 500.0 gesetzt. Zum Schluss wird in <code>konto1</code> eine
+Referenz auf das fertige Objekt gespeichert.</p>
+<table class="ref"><tr><th>Abweichung vom Modell</th><th>Beurteilung</th></tr>
+<tr><td>Der Konstruktor hat einen Parameter <code>kontostand</code>.</td><td>Fehler: Laut Satz 2 startet jedes neue Konto mit 0,00&nbsp;€.</td></tr>
+<tr><td><code>abheben</code> prüft weder den Dispo noch den Betrag.</td><td>Fehler: verstößt gegen Satz 4 und 5 (vgl. 2.4: −550&nbsp;€).</td></tr>
+<tr><td><code>einzahlen</code> nimmt auch negative Beträge an.</td><td>Fehler: verstößt gegen Satz 5.</td></tr>
+<tr><td>Es fehlen <code>ueberweisen</code>, <code>kontostand_abfragen</code>, <code>auszug_drucken</code> und <code>pin_pruefen</code>.</td><td>unvollständig: Die Sätze 6–8 sind noch nicht umgesetzt – typisch für einen Prototyp.</td></tr>
+<tr><td><code>inhaber</code> ist ein Attribut im Konstruktor, im Entwurfsdiagramm dagegen ein Assoziationspfeil.</td><td>kein Fehler: Eine Assoziation wird in Python als Attribut umgesetzt, das eine Referenz speichert (vgl. 4.6).</td></tr>
+</table></div></article><article class="auf"><div class="aufkopf"><span class="aid">4.2</span><h5>Zwei gleiche Kunden?</h5></div><div class="loesung" style="margin:14px 20px 18px"><p><strong>a)</strong> <code>False</code>, dann zweimal etwas wie
+<code>&lt;__main__.Kunde object at 0x7f3c732cf230&gt;</code> mit <em>verschiedenen</em> Adressen.</p>
+<p><strong>b)</strong> Es wurden zwei Objekte erzeugt, die zufällig im selben Zustand sind. Jedes
+Objekt besitzt eine eigene <strong>Identität</strong> (hier sichtbar an der Speicheradresse).
+<code>==</code> vergleicht bei eigenen Klassen standardmäßig die Identität, nicht die Werte. In der
+Bank wäre das übrigens ein Problem: Zwei Kundenobjekte mit derselben Kundennummer dürfte es gar
+nicht geben.</p></div></article>
+</section>
+
+<section class="kap" id="staende">
+<div class="kaphead"><div class="knr">C</div><div><h3>Code-Stände für den Austauschordner</h3>
+<div class="meta">Getestet mit Python 3.13; die Dateien liegen auch im Ordner <code>oop_staende/selbstlern/</code></div></div></div>
+<h4 style="margin:18px 0 4px">Prototyp vor Etappe 2.A (als <code>prototyp.py</code> speichern)</h4><div class="codebox"><pre class="hl"># prototyp.py – erster Prototyp der Kontoverwaltung der WarnowBank
+# Ausgabe vor Etappe 2.A. Die Schülerinnen und Schüler benutzen den Code nur,
+# sie müssen ihn noch nicht verstehen. Die Abweichungen von der Anforderung
+# (Version 2) sind beabsichtigt und werden in 2.4 und 4.1 untersucht.
+
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+
+class Konto:
+    def __init__(self, kontonummer, pin, kontostand, inhaber):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = kontostand
+        self.dispo = 500.0
+        self.inhaber = inhaber
+
+    def einzahlen(self, betrag):
+        self.kontostand = self.kontostand + betrag
+
+    def abheben(self, betrag):
+        self.kontostand = self.kontostand - betrag</pre></div><h4 style="margin:18px 0 4px">Stand nach Sicherung 4.B</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Sicherung 4.B
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0</pre></div><h4 style="margin:18px 0 4px">Stand nach Sicherung 5.B</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Sicherung 5.B
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+    def get_kundennummer(self):
+        return self.kundennummer
+
+    def get_name(self):
+        return self.name
+
+    def get_vorname(self):
+        return self.vorname
+
+    def get_geburtsdatum(self):
+        return self.geburtsdatum
+
+    def set_name(self, neuer_name):
+        self.name = neuer_name
+
+    def daten_drucken(self):
+        print("Kundennummer:", self.kundennummer)
+        print("Name:", self.vorname, self.name)
+        print("Geboren am:", self.geburtsdatum)
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0
+
+    def get_kontonummer(self):
+        return self.kontonummer
+
+    def get_kontostand(self):
+        return self.kontostand
+
+    def pin_pruefen(self, eingabe):
+        return eingabe == self.pin
+
+    def einzahlen(self, betrag):
+        self.kontostand = self.kontostand + betrag
+
+    def abheben(self, betrag):
+        if self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+        else:
+            print("Abhebung abgelehnt: Der Dispo reicht nicht aus.")</pre></div><h4 style="margin:18px 0 4px">Stand nach Abschluss Baustein 5 (Sicherung 5.D)</h4><div class="codebox"><pre class="hl"># bank.py – Stand nach Abschluss von Baustein 5
+class Kunde:
+    def __init__(self, kundennummer, name, vorname, geburtsdatum):
+        self.kundennummer = kundennummer
+        self.name = name
+        self.vorname = vorname
+        self.geburtsdatum = geburtsdatum
+
+    def get_kundennummer(self):
+        return self.kundennummer
+
+    def get_name(self):
+        return self.name
+
+    def get_vorname(self):
+        return self.vorname
+
+    def get_geburtsdatum(self):
+        return self.geburtsdatum
+
+    def set_name(self, neuer_name):
+        self.name = neuer_name
+
+    def daten_drucken(self):
+        print("Kundennummer:", self.kundennummer)
+        print("Name:", self.vorname, self.name)
+        print("Geboren am:", self.geburtsdatum)
+
+
+class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        self.pin = pin
+        self.kontostand = 0.0
+        self.dispo = 500.0
+        self.buchungen = []
+
+    def get_kontonummer(self):
+        return self.kontonummer
+
+    def get_kontostand(self):
+        return self.kontostand
+
+    def pin_pruefen(self, eingabe):
+        return eingabe == self.pin
+
+    def einzahlen(self, betrag):
+        if betrag &gt; 0:
+            self.kontostand = self.kontostand + betrag
+            self.buchungen.append(betrag)
+        else:
+            print("Einzahlung abgelehnt: Der Betrag muss positiv sein.")
+
+    def abheben(self, betrag):
+        if betrag &lt;= 0:
+            print("Abhebung abgelehnt: Der Betrag muss positiv sein.")
+        elif self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+            self.buchungen.append(-betrag)
+        else:
+            print("Abhebung abgelehnt: Der Dispo reicht nicht aus.")
+
+    def ueberweisen(self, betrag, zielkonto):
+        if betrag &lt;= 0:
+            print("Überweisung abgelehnt: Der Betrag muss positiv sein.")
+        elif self.kontostand - betrag &gt;= -self.dispo:
+            self.kontostand = self.kontostand - betrag
+            self.buchungen.append(-betrag)
+            zielkonto.einzahlen(betrag)
+        else:
+            print("Überweisung abgelehnt: Der Dispo reicht nicht aus.")
+
+    def auszug_drucken(self):
+        print("Kontoauszug für Konto", self.kontonummer)
+        for buchung in self.buchungen:
+            print(buchung, "€")
+        print("Kontostand:", self.kontostand, "€")
+
+
+# Testablauf aus Aufgabe 2.4
+kunde1 = Kunde(4711, "Lehmann", "Jan", "14.05.1988")
+konto1 = Konto(987654321, "1234")
+konto2 = Konto(65193275, "0815")
+konto1.einzahlen(2020)
+konto2.einzahlen(340)
+konto1.abheben(50)
+konto1.ueberweisen(120, konto2)
+konto1.abheben(2400)
+konto1.auszug_drucken()</pre></div>
+</section>
+</main>
+</div>
+<script>
+// ---- Python-Syntaxhervorhebung (ohne externe Bibliothek) ----
+var KW = ("and|or|not|if|elif|else|for|while|in|def|return|import|from|as|True|False|None|"
+        + "break|continue|pass|del|is|lambda|global|nonlocal|try|except|finally|raise|"
+        + "class|with|assert|yield|self").split("|");
+var BI = ("turtle|print|len|range|int|float|str|round|abs|type|input|random|time|list|"
+        + "max|min|sum|bool|sorted|append|insert|remove|index|pop|math").split("|");
+
+var RE = new RegExp(
+  "(#[^\\n]*)"                                            // 1 Kommentar
++ "|(\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''"
++ "|\"[^\"\\n]*\"|'[^'\\n]*')"                            // 2 String
++ "|\\b(" + KW.join("|") + ")\\b"                         // 3 Schluesselwort
++ "|\\b(" + BI.join("|") + ")\\b"                         // 4 eingebaut
++ "|\\b(\\d+\\.?\\d*)\\b",                                // 5 Zahl
+  "g");
+
+function esc(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function hervorheben(roh){
+  return esc(roh).replace(RE, function(m,k,s,kw,bi,nu){
+    if(k)  return '<span class="tok-com">'+k+'</span>';
+    if(s)  return '<span class="tok-str">'+s+'</span>';
+    if(kw) return '<span class="tok-kw">'+kw+'</span>';
+    if(bi) return '<span class="tok-bi">'+bi+'</span>';
+    if(nu) return '<span class="tok-num">'+nu+'</span>';
+    return m;
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+
+  // Codebloecke einfaerben und Kopierknopf einsetzen
+  document.querySelectorAll("pre.hl").forEach(function(pre){
+    var roh = pre.textContent;
+    pre.dataset.roh = roh;
+    pre.innerHTML = hervorheben(roh);
+    var box = pre.parentElement;
+    if(box && box.classList.contains("codebox")){
+      var b = document.createElement("button");
+      b.className = "kopieren"; b.type = "button"; b.textContent = "kopieren";
+      b.addEventListener("click", function(){
+        navigator.clipboard.writeText(roh).then(function(){
+          b.textContent = "kopiert!";
+          setTimeout(function(){ b.textContent = "kopieren"; }, 1400);
+        }, function(){ b.textContent = "Strg+C"; });
+      });
+      box.appendChild(b);
+    }
+  });
+  document.querySelectorAll("pre.code").forEach(function(pre){
+    pre.innerHTML = hervorheben(pre.textContent);
+  });
+
+});
+</script>
+</body>
+</html>
