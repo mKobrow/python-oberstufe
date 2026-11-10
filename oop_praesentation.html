@@ -171,6 +171,24 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
 #menue a:hover{text-decoration:underline}
 #menue a.hier{color:#ffcc80; font-weight:700}
 #menue .hilfe{font-size:17px; color:#b8c4d2; margin-top:30px}
+#menue .pdf{margin-top:26px; font-size:18px; color:#b8c4d2}
+#menue .pdf a,#menue .pdf button{display:inline-block; margin:6px 8px 0 0; padding:6px 14px; border-radius:8px;
+  background:#2f5d8c; color:#fff; font:inherit; font-size:17px; border:none; cursor:pointer; text-decoration:none}
+#menue .pdf a:hover,#menue .pdf button:hover{background:#3d74ad; text-decoration:none}
+
+/* Druckmodus: alle Folien untereinander, alle Schritte aufgedeckt */
+@page{size:1600px 900px; margin:0}
+body.druck{overflow:visible; height:auto; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+body.druck #buehne{position:static; transform:none !important; width:1600px; height:auto; background:none; overflow:visible}
+body.druck section.folie{display:block; position:relative; inset:auto; width:1600px; height:900px; overflow:hidden;
+  background:var(--bg); break-after:page; page-break-after:always}
+body.druck section.folie.titel{background:linear-gradient(135deg,#2f5d8c,#1f3f61)}
+body.druck section.folie.aus{display:none}
+body.druck #leiste,body.druck #steuer,body.druck #notizen,body.druck #menue,body.druck #schwarz,body.druck #info,
+body.druck [data-ks],body.druck [data-hp],body.druck #fehler-alle{display:none !important}
+body.druck .schritt{transition:none}
+body.druck button.karte::after{content:""}
+@media print{ #leiste,#steuer,#notizen,#menue,#schwarz{display:none !important} }
 #notizen{position:fixed; left:0; right:0; bottom:6px; max-height:42vh; overflow:auto; background:#fffdf3;
   border-top:4px solid #e0b400; padding:16px 28px 18px; z-index:30; display:none; font-size:19px; line-height:1.5}
 #notizen.an{display:block}
@@ -930,9 +948,10 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
   var info = document.createElement("div"); info.id = "info";
 
   // Kapitel zuordnen
-  var kap = "";
+  var kap = "", kapId = "";
   folien.forEach(function(f){
-    if(f.dataset.kapitel) kap = f.dataset.kapitel;
+    if(f.dataset.kapitel){ kap = f.dataset.kapitel; kapId = f.id; }
+    f.dataset.kapId = kapId;
     f.dataset.kap = kap;
     f.dataset.titelText = f.dataset.titel || (f.querySelector("h2") ? f.querySelector("h2").textContent : "");
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -944,6 +963,7 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
 
   // ---- Skalierung
   function skalieren(){
+    if(document.body.classList.contains("druck")) return;
     skala = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
     buehne.style.transform = "translate(-50%,-50%) scale(" + skala + ")";
     pfeileZeichnen();
@@ -966,8 +986,8 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
     var t = Math.min(tx, ty);
     return {x: cx + dx * t, y: cy + dy * t};
   }
-  function pfeileZeichnen(){
-    var f = folien[nr]; if(!f) return;
+  function pfeileZeichnen(ziel){
+    var f = ziel || folien[nr]; if(!f) return;
     var g = f.querySelector("svg.pfeile g"); g.innerHTML = "";
     var i = folien.indexOf(f);
     f.querySelectorAll("i.pfeil").forEach(function(p){
@@ -1074,11 +1094,18 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
       if(f.dataset.kap !== kap){ if(kap !== null) h += "</ol>"; kap = f.dataset.kap; h += "<h3>" + kap + "</h3><ol start='" + (i + 1) + "'>"; }
       h += '<li><a href="#" data-i="' + i + '"' + (i === nr ? ' class="hier"' : '') + '>' + f.dataset.titelText + '</a></li>';
     });
-    h += "</ol><p class='hilfe'>Tasten: → / Leertaste weiter · ← zurück · N Notizen · M Menü · F Vollbild · B Schwarzbild · Pos1/Ende erste/letzte Folie · Esc schließen</p>";
+    h += "</ol><div class='pdf'>PDF herunterladen: "
+      + "<a href='oop_praesentation_pdf/oop_praesentation.pdf' download>alle Teile</a>"
+      + "<a href='oop_praesentation_pdf/teil1_objekte.pdf' download>Teil 1</a>"
+      + "<a href='oop_praesentation_pdf/teil2_klassen.pdf' download>Teil 2</a>"
+      + "<a href='oop_praesentation_pdf/teil3_python.pdf' download>Teil 3</a>"
+      + "<button type='button' id='druck-jetzt'>selbst drucken (P)</button></div>";
+    h += "<p class='hilfe'>Tasten: → / Leertaste weiter · ← zurück · N Notizen · M Menü · F Vollbild · B Schwarzbild · P drucken bzw. als PDF speichern · Pos1/Ende erste/letzte Folie · Esc schließen</p>";
     m.innerHTML = h;
-    m.querySelectorAll("a").forEach(function(a){
+    m.querySelectorAll("a[data-i]").forEach(function(a){
       a.addEventListener("click", function(e){ e.preventDefault(); m.classList.remove("an"); zeige(+a.dataset.i); });
     });
+    document.getElementById("druck-jetzt").addEventListener("click", function(){ m.classList.remove("an"); drucken(); });
   }
   function menue(){ var m = document.getElementById("menue"); if(!m.classList.contains("an")) menueBauen(); m.classList.toggle("an"); }
   function notizen(){ document.getElementById("notizen").classList.toggle("an"); }
@@ -1096,6 +1123,7 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
     else if(k === "n" || k === "N"){ notizen(); }
     else if(k === "m" || k === "M"){ menue(); }
     else if(k === "f" || k === "F"){ vollbild(); }
+    else if(k === "p" || k === "P"){ e.preventDefault(); drucken(); }
     else if(k === "b" || k === "B" || k === "."){ document.getElementById("schwarz").classList.toggle("an"); }
     else if(k === "Escape"){ document.getElementById("menue").classList.remove("an"); document.getElementById("schwarz").classList.remove("an"); }
   });
@@ -1283,8 +1311,37 @@ table.tab th{font-size:21px; text-transform:uppercase; letter-spacing:.07em; col
   }
   window.addEventListener("resize", skalieren);
   window.addEventListener("hashchange", function(){ var i = hashIndex(); if(i !== nr) zeige(i); });
+  // ---- Druckmodus
+  function druckModus(teil){
+    document.body.classList.add("druck");
+    skala = 1;
+    folien.forEach(function(f){
+      f.classList.add("aktiv");
+      f.classList.toggle("aus", !!teil && f.dataset.kapId !== teil);
+      alleSchritte(f, true);
+      f.querySelectorAll("button.karte").forEach(function(k){ k.classList.add("offen"); });
+      if(f._widget && f._widget.zuruecksetzen) f._widget.zuruecksetzen(true);
+    });
+    folien.forEach(function(f){ pfeileZeichnen(f); });
+  }
+  function druckEnde(){
+    if(!document.body.classList.contains("druck") || urlDruck) return;
+    document.body.classList.remove("druck");
+    folien.forEach(function(f){
+      f.classList.remove("aus");
+      f.querySelectorAll("button.karte").forEach(function(k){ k.classList.remove("offen"); });
+      f.querySelectorAll("svg.pfeile g").forEach(function(g){ g.innerHTML = ""; });
+    });
+    skalieren(); zeige(nr);
+  }
+  function drucken(){ druckModus(null); setTimeout(function(){ window.print(); }, 50); }
+  window.addEventListener("beforeprint", function(){ if(!document.body.classList.contains("druck")) druckModus(null); });
+  window.addEventListener("afterprint", druckEnde);
+
+  var urlDruck = new URLSearchParams(location.search).has("druck");
   skalieren();
   zeige(hashIndex());
+  if(urlDruck) druckModus(new URLSearchParams(location.search).get("druck") || null);
 })();
 </script>
 </body>
