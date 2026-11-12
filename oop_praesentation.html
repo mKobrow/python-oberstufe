@@ -311,17 +311,17 @@ body.druck button.karte::after{content:""}
   <h2><small>Kurz geprüft</small>Text oder Zahl?</h2>
   <div class="karten" style="grid-template-columns:repeat(3,1fr)">
     <button class="karte" type="button">Kontonummer<br><span class="mono">987654321</span>
-      <span class="hinten"><span class="loes">Zahl:</span> <code>987654321</code></span></button>
+      <span class="hinten"><span class="loes">Zahl (<code>int</code>):</span> <code>987654321</code></span></button>
     <button class="karte" type="button">PIN<br><span class="mono">0815</span>
-      <span class="hinten"><span class="loes">Text:</span> <code>"0815"</code> – als Zahl ginge die Null verloren.</span></button>
+      <span class="hinten"><span class="loes">Text (<code>str</code>):</span> <code>"0815"</code> – als Zahl ginge die Null verloren.</span></button>
     <button class="karte" type="button">Kontostand<br><span class="mono">2.020,50 €</span>
-      <span class="hinten"><span class="loes">Zahl:</span> <code>2020.5</code> – Punkt statt Komma, ohne €</span></button>
+      <span class="hinten"><span class="loes">Zahl (<code>float</code>):</span> <code>2020.5</code> – Punkt statt Komma, ohne €</span></button>
     <button class="karte" type="button">Name<br><span class="mono">Lehmann</span>
-      <span class="hinten"><span class="loes">Text:</span> <code>"Lehmann"</code></span></button>
+      <span class="hinten"><span class="loes">Text (<code>str</code>):</span> <code>"Lehmann"</code></span></button>
     <button class="karte" type="button">Geburtsdatum<br><span class="mono">14.05.1988</span>
-      <span class="hinten"><span class="loes">Text:</span> <code>"14.05.1988"</code> – mehrere Punkte, keine Zahl</span></button>
+      <span class="hinten"><span class="loes">Text (<code>str</code>):</span> <code>"14.05.1988"</code> – mehrere Punkte, keine Zahl</span></button>
     <button class="karte" type="button">Dispo<br><span class="mono">500 €</span>
-      <span class="hinten"><span class="loes">Zahl:</span> <code>500.0</code></span></button>
+      <span class="hinten"><span class="loes">Zahl (<code>float</code>):</span> <code>500.0</code></span></button>
   </div>
   <aside class="notiz"><p>Erst abstimmen lassen (Handzeichen Text/Zahl), dann Karte antippen. Bei der PIN nachfragen: Was passiert mit 0815 als Zahl? (In Python ist <code>0815</code> sogar ein SyntaxError.)</p></aside>
 </section>
@@ -564,10 +564,10 @@ body.druck button.karte::after{content:""}
       <div class="obj wandel" id="wandel" style="font-size:30px; min-width:500px">
         <div class="kopf"><span class="oname">konto1 : Konto</span><span class="kname">Konto</span></div>
         <div class="atts">
-          <div class="att">kontonummer <span class="wert">= 987654321</span><span class="typ">: Zahl</span></div>
-          <div class="att">pin <span class="wert">= "1234"</span><span class="typ">: Text</span></div>
-          <div class="att">kontostand <span class="wert">= 2020.0</span><span class="typ">: Zahl</span></div>
-          <div class="att">dispo <span class="wert">= 500.0</span><span class="typ">: Zahl</span></div>
+          <div class="att">kontonummer <span class="wert">= 987654321</span><span class="typ">: int</span></div>
+          <div class="att">pin <span class="wert">= "1234"</span><span class="typ">: str</span></div>
+          <div class="att">kontostand <span class="wert">= 2020.0</span><span class="typ">: float</span></div>
+          <div class="att">dispo <span class="wert">= 500.0</span><span class="typ">: float</span></div>
         </div>
         <div class="meth"><div class="att">einzahlen</div><div class="att">abheben</div><div class="att">…</div></div>
       </div>
@@ -575,7 +575,7 @@ body.druck button.karte::after{content:""}
     <div class="spalte">
       <p class="schritt">① <strong>Klassenbezeichner</strong> statt Objektname – groß, nicht unterstrichen</p>
       <i class="schritt" data-ziel="wandel" data-klasse="st-kopf"></i>
-      <p class="schritt">② Statt Werten stehen <strong>Datentypen</strong>: Text, Zahl, Wahrheitswert</p>
+      <p class="schritt">② Statt Werten stehen die <strong>Python-Datentypen</strong>: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code></p>
       <i class="schritt" data-ziel="wandel" data-klasse="st-typ"></i>
       <p class="schritt">③ Ein dritter Bereich für die <strong>Methoden</strong></p>
       <i class="schritt" data-ziel="wandel" data-klasse="st-meth"></i>
@@ -588,30 +588,33 @@ body.druck button.karte::after{content:""}
 </section>
 
 <section class="folie" data-titel="Datentypen">
-  <h2><small>Entscheiden</small>Datentypen: Text, Zahl oder Wahrheitswert?</h2>
+  <h2><small>Entscheiden</small>Datentypen: <span class="mono">int</span>, <span class="mono">float</span>, <span class="mono">str</span> oder <span class="mono">bool</span>?</h2>
   <div class="zeile" style="gap:50px">
-    <div class="spalte" style="flex:0 0 640px">
+    <div class="spalte" style="flex:0 0 680px">
       <div class="kasten klein">
-        <p style="margin-top:0"><b>Zwei Prüffragen</b></p>
-        <ol style="padding-left:1.1em">
-          <li>Wird mit dem Wert gerechnet oder der Größe nach verglichen? → <strong>Zahl</strong></li>
-          <li>Kann er mit 0 beginnen oder Buchstaben, Leer- und Sonderzeichen enthalten? → <strong>Text</strong></li>
-        </ol>
-        <p>Nur zwei mögliche Werte, ja oder nein? → <strong>Wahrheitswert</strong></p>
+        <p style="margin-top:0"><b>Bekannt aus der Programmierung</b></p>
+        <table class="tab mono" style="font-size:25px; margin-bottom:10px">
+          <tr><td>int</td><td style="font-family:inherit">ganze Zahl</td><td>4711</td></tr>
+          <tr><td>float</td><td style="font-family:inherit">Kommazahl</td><td>2020.0</td></tr>
+          <tr><td>str</td><td style="font-family:inherit">Text</td><td>"0815"</td></tr>
+          <tr><td>bool</td><td style="font-family:inherit">wahr oder falsch</td><td>False</td></tr>
+        </table>
+        <p><b>Prüffragen:</b> Wird gerechnet oder der Größe nach verglichen? → <code>int</code> bzw. <code>float</code>.
+        Führende 0, Buchstaben, Leer- oder Sonderzeichen? → <code>str</code>. Nur ja oder nein? → <code>bool</code></p>
       </div>
     </div>
     <div class="spalte karten" style="grid-template-columns:1fr 1fr; gap:16px">
       <button class="karte" type="button" style="min-height:100px">Kartennummer<br><span class="mono klein">4000 1234 5678</span>
-        <span class="hinten"><span class="loes">Text</span> – Leerzeichen, kein Rechnen</span></button>
+        <span class="hinten"><span class="loes">str</span> – Leerzeichen, kein Rechnen</span></button>
       <button class="karte" type="button" style="min-height:100px">PIN-Fehlversuche<br><span class="mono klein">2</span>
-        <span class="hinten"><span class="loes">Zahl</span> – wird hochgezählt</span></button>
+        <span class="hinten"><span class="loes">int</span> – wird hochgezählt</span></button>
       <button class="karte" type="button" style="min-height:100px">Karte gesperrt?<br><span class="mono klein">ja / nein</span>
-        <span class="hinten"><span class="loes">Wahrheitswert</span></span></button>
+        <span class="hinten"><span class="loes">bool</span> – <code>True</code> oder <code>False</code></span></button>
       <button class="karte" type="button" style="min-height:100px">Zinssatz<br><span class="mono klein">1,5 %</span>
-        <span class="hinten"><span class="loes">Zahl</span> – <code>1.5</code>, damit wird gerechnet</span></button>
+        <span class="hinten"><span class="loes">float</span> – <code>1.5</code>, damit wird gerechnet</span></button>
     </div>
   </div>
-  <aside class="notiz"><p>Beispiele bewusst außerhalb von Aufgabe 3.3 gewählt (dort: Kontonummer, PLZ, Telefonnummer, IBAN …).</p></aside>
+  <aside class="notiz"><p>Die Python-Datentypen kennen die Schülerinnen und Schüler aus „Algorithmen und Daten“; hier geht es nur um die Auswahl. Beispiele bewusst außerhalb von Aufgabe 3.3 gewählt (dort: Kontonummer, PLZ, Telefonnummer, IBAN …).</p></aside>
 </section>
 
 <section class="folie" data-titel="Methoden aus den Verben">
@@ -654,12 +657,12 @@ body.druck button.karte::after{content:""}
   <div style="position:relative; height:330px">
     <div class="kl" id="as-konto" style="position:absolute; left:0; top:10px; font-size:26px">
       <div class="kopf">Konto</div>
-      <div class="atts"><div class="att">kontonummer : Zahl</div><div class="att">pin : Text</div><div class="att">kontostand : Zahl</div><div class="att">dispo : Zahl</div></div>
+      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div></div>
       <div class="meth"><div class="m">…</div></div>
     </div>
     <div class="kl" id="as-kunde" style="position:absolute; left:900px; top:30px; font-size:26px">
       <div class="kopf">Kunde</div>
-      <div class="atts"><div class="att">kundennummer : Zahl</div><div class="att">name : Text</div><div class="att">…</div></div>
+      <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">…</div></div>
       <div class="meth"><div class="m">…</div></div>
     </div>
     <i class="pfeil" data-von="as-konto" data-nach="as-kunde" data-label="inhaber" data-mult="1"></i>
@@ -708,13 +711,13 @@ body.druck button.karte::after{content:""}
   <div style="position:relative; height:560px">
     <div class="kl" id="m-konto" style="position:absolute; left:40px; top:0; font-size:27px">
       <div class="kopf">Konto</div>
-      <div class="atts"><div class="att">kontonummer : Zahl</div><div class="att">pin : Text</div><div class="att">kontostand : Zahl</div><div class="att">dispo : Zahl</div></div>
+      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div></div>
       <div class="meth schritt"><div class="m">einzahlen</div><div class="m">abheben</div><div class="m">ueberweisen</div>
         <div class="m">kontostand_abfragen</div><div class="m">auszug_drucken</div><div class="m">pin_pruefen</div></div>
     </div>
     <div class="kl" id="m-kunde" style="position:absolute; left:930px; top:40px; font-size:27px">
       <div class="kopf">Kunde</div>
-      <div class="atts"><div class="att">kundennummer : Zahl</div><div class="att">name : Text</div><div class="att">vorname : Text</div><div class="att">geburtsdatum : Text</div></div>
+      <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">vorname : str</div><div class="att">geburtsdatum : str</div></div>
       <div class="meth schritt"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
     </div>
     <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1"></i>
@@ -730,8 +733,8 @@ body.druck button.karte::after{content:""}
     <h1>Klassen in Python</h1>
     <p>Vom Entwurfsdiagramm zum Programm: Konstruktor, <span class="mono">self</span>, Objekte erzeugen und Referenzen</p>
   </div>
-  <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min · Thonny bereithalten</div>
-  <aside class="notiz"><p><b>Input Baustein 3, Teil 3, ca. 15 min.</b> Thonny am Board öffnen (Ansicht → Variablen und Heap). Danach Etappe 3.B (Aufgaben 3.6–3.9).</p></aside>
+  <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min · GuiPy bereithalten</div>
+  <aside class="notiz"><p><b>Input Baustein 3, Teil 3, ca. 15 min.</b> GuiPy am Board öffnen, <code>bank.py</code> mit der Klasse Kunde vorbereiten. Ab hier arbeiten die Schülerinnen und Schüler mit GuiPy. Danach Etappe 3.B (Aufgaben 3.6–3.9).</p></aside>
 </section>
 
 <section class="folie" data-titel="Vom Entwurf zum Code">
@@ -741,10 +744,10 @@ body.druck button.karte::after{content:""}
       <div class="kl" style="font-size:27px; min-width:420px">
         <div class="kopf"><span data-paar="k">Kunde</span></div>
         <div class="atts">
-          <div class="att"><span data-paar="a1">kundennummer</span> : <span data-paar="t1">Zahl</span></div>
-          <div class="att"><span data-paar="a2">name</span> : Text</div>
-          <div class="att"><span data-paar="a3">vorname</span> : Text</div>
-          <div class="att"><span data-paar="a4">geburtsdatum</span> : Text</div>
+          <div class="att"><span data-paar="a1">kundennummer</span> : <span data-paar="t1">int</span></div>
+          <div class="att"><span data-paar="a2">name</span> : str</div>
+          <div class="att"><span data-paar="a3">vorname</span> : str</div>
+          <div class="att"><span data-paar="a4">geburtsdatum</span> : str</div>
         </div>
         <div class="meth"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
       </div>
@@ -755,7 +758,7 @@ body.druck button.karte::after{content:""}
       <ul class="klein" style="margin-top:18px">
         <li class="schritt"><code>class Kunde:</code> – Klassenname groß, alles Eingerückte gehört dazu</li>
         <li class="schritt"><code>__init__</code> – der <strong>Konstruktor</strong>: legt die Attribute an (je zwei Unterstriche)</li>
-        <li class="schritt">Datentypen: Text → <code>str</code>, Zahl → <code>int</code>/<code>float</code>, Wahrheitswert → <code>bool</code></li>
+        <li class="schritt">Die Datentypen stehen im Code nicht: Python erkennt sie am Wert – <code>4711</code> ist ein <code>int</code></li>
         <li class="schritt">Methoden folgen in Baustein 4</li>
       </ul>
     </div>
@@ -790,7 +793,7 @@ body.druck button.karte::after{content:""}
       <i class="pfeil" id="ks-p-var" data-von="ks-vdot" data-nach="ks-obj" style="display:none"></i>
     </div>
   </div>
-  <aside class="notiz"><p>Mit Pfeiltaste oder „Schritt“ durchgehen. Kernaussagen: <code>self</code> ist das neue Objekt; <code>self.name = name</code> kopiert den Parameterwert ins Objekt; Parameter verschwinden nach dem Konstruktor, Attribute bleiben. Anschließend dasselbe in Thonny mit dem Debugger (<kbd>Strg</kbd>+<kbd>F5</kbd>, dann <kbd>F7</kbd>) zeigen.</p></aside>
+  <aside class="notiz"><p>Mit Pfeiltaste oder „Schritt“ durchgehen. Kernaussagen: <code>self</code> ist das neue Objekt; <code>self.name = name</code> kopiert den Parameterwert ins Objekt; Parameter verschwinden nach dem Konstruktor, Attribute bleiben. Anschließend in GuiPy im UML-Fenster ein Kundenobjekt erzeugen: Der Konstruktor fragt genau die vier Parameter ab, <code>self</code> nicht.</p></aside>
 </section>
 
 <section class="folie" data-titel="Feste Startwerte">
@@ -814,21 +817,52 @@ body.druck button.karte::after{content:""}
 </section>
 
 <section class="folie" data-titel="Objekte erzeugen und benutzen">
-  <h2><small>In Thonny</small>Objekte erzeugen und benutzen</h2>
+  <h2><small>Im Interpreter</small>Objekte erzeugen und benutzen</h2>
   <div class="zeile" style="gap:50px">
     <div style="flex:0 0 860px">
-<pre class="code" style="font-size:25px"><span class="z"><span class="c"># Datei mit F5 ausführen, dann in der Shell:</span></span><span class="z">&gt;&gt;&gt; kunde1 = Kunde(<span class="n">4711</span>, <span class="s">"Lehmann"</span>, <span class="s">"Jan"</span>, <span class="s">"14.05.1988"</span>)</span><span class="z schritt">&gt;&gt;&gt; kunde1.vorname</span><span class="z schritt"><span class="s">'Jan'</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name = <span class="s">"Lehmann-Krüger"</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name</span><span class="z schritt"><span class="s">'Lehmann-Krüger'</span></span></pre>
+<pre class="code" style="font-size:25px"><span class="z"><span class="c"># Datei ausführen, dann im Interpreter:</span></span><span class="z">&gt;&gt;&gt; kunde1 = Kunde(<span class="n">4711</span>, <span class="s">"Lehmann"</span>, <span class="s">"Jan"</span>, <span class="s">"14.05.1988"</span>)</span><span class="z schritt">&gt;&gt;&gt; kunde1.vorname</span><span class="z schritt"><span class="s">'Jan'</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name = <span class="s">"Lehmann-Krüger"</span></span><span class="z schritt">&gt;&gt;&gt; kunde1.name</span><span class="z schritt"><span class="s">'Lehmann-Krüger'</span></span></pre>
     </div>
     <div class="spalte">
       <ul class="klein">
         <li><strong>Instanziierung:</strong> <code>objekt = Klasse(Werte)</code> – <code>self</code> wird nicht mitgeschrieben</li>
         <li class="schritt"><strong>Punktnotation:</strong> <code>objekt.attribut</code></li>
         <li class="schritt">Zuweisung ändert den Zustand (ob das gut ist, klären wir in Baustein 5)</li>
-        <li class="schritt"><em>Ansicht → Variablen</em>: Doppelklick öffnet den <strong>Objektinspektor</strong></li>
       </ul>
     </div>
   </div>
-  <aside class="notiz"><p>Jetzt live in Thonny: Klasse Kunde eintippen oder einfügen, F5, Objekt erzeugen, Objektinspektor zeigen. Bezug herstellen: Der Objektinspektor zeigt genau das Objektdiagramm.</p></aside>
+  <aside class="notiz"><p>Live in GuiPy: Klasse Kunde im Editor, speichern, ausführen (grünes Dreieck), dann die Zeilen im Interpreter eingeben. Danach weiter zum UML-Fenster.</p></aside>
+</section>
+
+<section class="folie" data-titel="Das UML-Fenster von GuiPy">
+  <h2><small>In GuiPy</small>Objekte im UML-Fenster</h2>
+  <div class="zeile" style="gap:60px; align-items:flex-start">
+    <div style="flex:0 0 700px; position:relative; height:520px">
+      <div class="kl" id="gp-kl" style="position:absolute; left:0; top:20px; font-size:24px; min-width:0">
+        <div class="kopf">Kunde</div>
+        <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">vorname : str</div><div class="att">geburtsdatum : str</div></div>
+        <div class="meth"><div class="m">…</div></div>
+        <span id="gp-start" style="position:absolute; left:40%; bottom:-3px; width:2px; height:2px"></span>
+      </div>
+      <div class="schritt mono" style="position:absolute; left:0; top:350px; font-size:22px; color:var(--mut)">Konstruktor(…)</div>
+      <div class="obj schritt" id="gp-obj" style="position:absolute; left:260px; top:330px; font-size:23px; min-width:0">
+        <div class="kopf"><span>kunde1 : Kunde</span></div>
+        <div class="atts"><div class="att">kundennummer = 4711</div><div class="att">name = "Lehmann"</div><div class="att">vorname = "Jan"</div><div class="att">geburtsdatum = "14.05.1988"</div></div>
+      </div>
+      <i class="pfeil schritt" data-von="gp-start" data-nach="gp-obj"></i>
+      <p class="klein mut" style="position:absolute; left:0; top:540px">schematisch</p>
+    </div>
+    <div class="spalte">
+      <ol class="klein" style="padding-left:1.1em">
+        <li>Datei speichern und ausführen</li>
+        <li><em>Diagramm aus geöffneten Dateien</em>: Die Klassen erscheinen als Entwurfsdiagramm</li>
+        <li class="schritt">Rechtsklick auf die Klasse → <strong>Konstruktor</strong>, Werte eingeben → das Objekt erscheint mit seinen Attributwerten</li>
+        <li class="schritt">Rechtsklick auf das Objekt: Attribute bearbeiten, Methoden aufrufen – danach wird der neue Zustand angezeigt</li>
+      </ol>
+      <div class="merke schritt klein" style="margin-top:18px">Code geändert? Die Klasse wird <b>violett</b> → neu ausführen. Die Objekte gehen dabei verloren.</div>
+    </div>
+  </div>
+  <aside class="notiz"><p>Live vorführen: UML-Fenster öffnen, <code>kunde1</code> über den Konstruktor erzeugen, Attribut <code>name</code> bearbeiten. Hinweis auf das Protokollfenster, das die Aktionen aufzeichnet und die Objekte nach dem Neu-Ausführen wiederherstellen kann.</p>
+  <p>Den Klassen-Modellierer erst in Baustein 5 einsetzen: Er kann get- und set-Methoden erzeugen – das ist Thema der Datenkapselung.</p></aside>
 </section>
 
 <section class="folie" data-titel="Variablen speichern Referenzen" id="heap">
@@ -860,7 +894,7 @@ body.druck button.karte::after{content:""}
       <i class="pfeil" id="hp-pc" data-von="hp-dc" data-nach="hp-o1" style="display:none"></i>
     </div>
   </div>
-  <aside class="notiz"><p>Vor Schritt 3 (<code>c = a</code>) vorhersagen lassen: Wie viele Kundenobjekte gibt es danach? Vor Schritt 5: Was liefert <code>a.name</code>? In Thonny mit <em>Ansicht → Heap</em> nachprüfen: <code>a</code> und <code>c</code> haben dieselbe ID.</p>
+  <aside class="notiz"><p>Vor Schritt 3 (<code>c = a</code>) vorhersagen lassen: Wie viele Kundenobjekte gibt es danach? Vor Schritt 5: Was liefert <code>a.name</code>? Im Interpreter nachprüfen: <code>a is c</code> liefert <code>True</code>, <code>id(a)</code> und <code>id(c)</code> stimmen überein.</p>
   <p>Kundenattribute hier auf <code>name</code> und <code>vorname</code> gekürzt.</p></aside>
 </section>
 
@@ -868,7 +902,7 @@ body.druck button.karte::after{content:""}
   <h2><small>Wenn es nicht läuft</small>Fehlermeldungen lesen</h2>
   <div class="karten" style="grid-template-columns:1fr 1fr">
     <button class="karte" type="button"><code style="color:var(--rot)">NameError: name 'Kunde' is not defined</code>
-      <span class="hinten">Die Datei wurde nicht mit <kbd>F5</kbd> ausgeführt – oder der Klassenname ist falsch geschrieben (<code>kunde</code> statt <code>Kunde</code>).</span></button>
+      <span class="hinten">Die Datei wurde nicht ausgeführt – oder der Klassenname ist falsch geschrieben (<code>kunde</code> statt <code>Kunde</code>).</span></button>
     <button class="karte" type="button"><code style="color:var(--rot)">IndentationError: expected an indented block after function definition</code>
       <span class="hinten">Der Rumpf von <code>__init__</code> ist nicht eingerückt. Alles, was zum Konstruktor gehört, steht eine Stufe weiter rechts.</span></button>
     <button class="karte" type="button"><code style="color:var(--rot)">TypeError: Kunde.__init__() takes 5 positional arguments but 6 were given</code>
@@ -894,7 +928,7 @@ body.druck button.karte::after{content:""}
   <h2><small>Jetzt Sie</small>Etappe 3.B: Klassen in Python</h2>
   <div class="kasten" style="font-size:33px">
     <ul>
-      <li>Aufgabe 3.6 – Kunde und Konto implementieren (neue Datei <code>bank.py</code>)</li>
+      <li>Aufgabe 3.6 – Kunde und Konto implementieren (in GuiPy, neue Datei <code>bank.py</code>)</li>
       <li>Aufgabe 3.7 – Zwei gleiche Kunden?</li>
       <li>Aufgabe 3.8 – Wie viele Konten gibt es?</li>
       <li>Aufgabe 3.9 – Fehlersuche</li>
