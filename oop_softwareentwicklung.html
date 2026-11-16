@@ -886,11 +886,17 @@ Instanziierung; das Objekt ist eine <em>Instanz</em> der Klasse. In Python:
 <p>Legen Sie in GuiPy eine neue Datei <code>bank.py</code> an. Darin entsteht ab jetzt Ihr
 Programm.</p>
 <ol class="kompakt" type="a">
-<li>Implementieren Sie die Klasse <code>Kunde</code> nach unserem Modell. Den Code aus der
-Präsentation dürfen Sie übernehmen.</li>
-<li>Implementieren Sie darunter die Klasse <code>Konto</code> nach unserem Modell, zunächst ohne
-<code>inhaber</code>. Der Konstruktor erhält nur die Parameter <code>kontonummer</code> und
-<code>pin</code>. Die Methoden folgen in Baustein&nbsp;4.</li>
+<li>Übernehmen Sie die Klasse <code>Kunde</code> aus der Präsentation (Folie „Vom
+Entwurfsdiagramm zum Code“) in <code>bank.py</code>.</li>
+<li>Übernehmen Sie darunter das folgende Gerüst der Klasse <code>Konto</code>. Vervollständigen Sie
+den Konstruktor nach unserem Modell, zunächst ohne <code>inhaber</code>. Die Methoden folgen in
+Baustein&nbsp;4.<div class="codebox"><pre class="hl">class Konto:
+    def __init__(self, kontonummer, pin):
+        self.kontonummer = kontonummer
+        # PIN speichern
+
+        # Startwerte laut Anforderung: Kontostand und Dispo
+</pre></div></li>
 <li>Führen Sie <code>bank.py</code> aus und öffnen Sie das UML-Fenster. Erzeugen Sie dort
 <code>konto1</code> und <code>konto2</code> aus Baustein&nbsp;2 und bringen Sie sie über das
 Kontextmenü (Attribute bearbeiten) auf die Kontostände 2020.0 bzw. 340.0. Vergleichen Sie die
@@ -1058,10 +1064,16 @@ Klasse. Sie kann Parameter erhalten und einen Wert zurückgeben. Man unterscheid
 beim Aufruf übergeben wird und nur während des Methodenaufrufs existiert. Die Rückgabe ist der
 Wert, den eine Methode mit <code>return</code> an den Aufrufer zurückgibt.</p></div><article class="auf" id="a4-1" data-stufe="basis"><div class="aufkopf"><span class="aid">4.1</span><h5>Anfragen für den Kunden</h5><span class="badge st-basis">Basis</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper">
 <ol class="kompakt" type="a">
-<li>Ergänzen Sie die Klasse <code>Kunde</code> um die Anfragen <code>get_kundennummer</code>,
-<code>get_name</code>, <code>get_vorname</code> und <code>get_geburtsdatum</code>.</li>
-<li>Implementieren Sie den Auftrag <code>daten_drucken</code>, der alle gespeicherten Daten des
-Kunden untereinander ausgibt (Anforderung, Satz 9).</li>
+<li>Übernehmen Sie die folgenden Methoden in die Klasse <code>Kunde</code>.<div class="codebox"><pre class="hl">    def get_kundennummer(self):
+        return self.kundennummer
+
+    def daten_drucken(self):
+        print("Kundennummer:", self.kundennummer)
+</pre></div></li>
+<li>Ergänzen Sie analog zu <code>get_kundennummer</code> die Anfragen <code>get_name</code>,
+<code>get_vorname</code> und <code>get_geburtsdatum</code>.</li>
+<li>Vervollständigen Sie den Auftrag <code>daten_drucken</code>, sodass er alle gespeicherten Daten
+des Kunden untereinander ausgibt (Anforderung, Satz 9).</li>
 <li>Testen Sie alle Methoden an <code>kunde1</code> – im UML-Fenster über das Kontextmenü des
 Objekts oder im Interpreter.</li>
 </ol></div><div class="knopfleiste"><button type="button" data-ziel="t4-1-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-1-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l4-1" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-1-0"><span class="tnr">Tipp 1</span>Jede get-Methode besteht aus genau einer Zeile: <code>return self.…</code></div><div class="tipp verborgen" id="t4-1-1"><span class="tnr">Tipp 2</span>Vergessen Sie beim Aufruf die Klammern nicht: <code>kunde1.get_name()</code>. Ohne Klammern liefert Python nur die Methode selbst, ruft sie aber nicht auf.</div><div class="loesung verborgen" id="l4-1"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">class Kunde:
@@ -1107,11 +1119,18 @@ Ausgabe.</li>
 gibt keinen Wert mit <code>return</code> zurück. In Python liefert jede Methode ohne
 <code>return</code> automatisch den Wert <code>None</code> – „nichts“.</p></div></article><div class="stopp"><div class="stkopf"><span class="stschild">Stopp</span><span class="sttitel">Gemeinsame Sicherung: Anfrage oder Auftrag?</span><span class="etzeit">ca. 15 min · LK 15 min</span></div><p>Warten Sie hier auf die Besprechung im Kurs. Bereiten Sie vor:</p><ul><li>Ihre Erklärung zu 4.2c</li><li>eine Antwort auf die Frage: Warum verwenden get-Methoden <code>return</code> und nicht <code>print</code>?</li><li>die Definitionen <em>Methode</em> sowie <em>Parameter und Rückgabe</em> im Glossar</li></ul></div><div class="etappe" id="e4-B"><div class="etkopf"><span class="etnr">Etappe 4.B</span><span class="ettitel">Das Konto bekommt Fähigkeiten</span><span class="etzeit">ca. 35 min · LK 50 min</span></div><ul><li>Aufgaben 4.3 und 4.4</li></ul></div><article class="auf" id="a4-3" data-stufe="standard"><div class="aufkopf"><span class="aid">4.3</span><h5>Einzahlen und abheben</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper">
 <ol class="kompakt" type="a">
-<li>Ergänzen Sie die Klasse <code>Konto</code> um die Anfragen <code>get_kontonummer</code> und
-<code>get_kontostand</code> sowie den Auftrag <code>einzahlen(betrag)</code>.</li>
-<li>Implementieren Sie den Auftrag <code>abheben(betrag)</code> unter Verwendung einer
-Verzweigung: Die Abhebung wird nur ausgeführt, wenn der Dispo dadurch nicht überschritten wird.
-Andernfalls wird ein Hinweis ausgegeben.</li>
+<li>Übernehmen Sie die folgenden Aufträge in die Klasse <code>Konto</code>. Ergänzen Sie analog
+zu Aufgabe 4.1 die Anfragen <code>get_kontonummer</code> und <code>get_kontostand</code>.<div class="codebox"><pre class="hl">    def einzahlen(self, betrag):
+        self.kontostand = self.kontostand + betrag
+
+    def abheben(self, betrag):
+        self.kontostand = self.kontostand - betrag
+</pre></div></li>
+<li>Zeigen Sie an einem Beispiel im Interpreter, dass die vorgegebene Methode <code>abheben</code>
+gegen die Anforderung verstößt.</li>
+<li>Ändern Sie <code>abheben(betrag)</code> unter Verwendung einer Verzweigung: Die Abhebung wird
+nur ausgeführt, wenn der Dispo dadurch nicht überschritten wird. Andernfalls wird ein Hinweis
+ausgegeben.</li>
 <li>Testen Sie Ihre Klasse mit dem Ablauf aus Aufgabe 2.3: Einzahlung von 2020&nbsp;€,
 Abhebung von 50&nbsp;€, Abhebung von 120&nbsp;€ (anstelle der Überweisung, die folgt später),
 Abhebung von 2400&nbsp;€. Vergleichen Sie die Kontostände mit Ihren Objektdiagrammen.</li>
@@ -1142,21 +1161,33 @@ Abhebung von 2400&nbsp;€. Vergleichen Sie die Kontostände mit Ihren Objektdia
 &gt;&gt;&gt; konto1.get_kontostand()
 1850.0
 &gt;&gt;&gt; konto1.abheben(2400)</pre><pre class="ausgabe">Abhebung abgelehnt: Der Dispo reicht nicht aus.</pre>
-<p>Die Kontostände stimmen mit den Zuständen 2 und 3 aus Aufgabe 2.3 überein. Bei der letzten
+<p><strong>b)</strong> Mit der vorgegebenen Fassung lässt sich ein neues Konto beliebig überziehen:
+Nach <code>konto1.abheben(1000)</code> liefert <code>konto1.get_kontostand()</code> den Wert
+<code>-1000.0</code>. Laut Anforderung darf ein Konto aber nur bis zum Dispo von 500&nbsp;€
+überzogen werden.</p>
+<p><strong>d)</strong> Die Kontostände stimmen mit den Zuständen 2 und 3 aus Aufgabe 2.3 überein. Bei der letzten
 Abhebung wäre der Kontostand 1850 − 2400 = −550, also unter −500: Die Bedingung ist
 <code>False</code>, der <code>else</code>-Zweig wird ausgeführt und der Kontostand bleibt 1850.0.</p>
 <p>Achtung bei der Bedingung: Der Vergleich muss <code>&gt;=</code> lauten, nicht <code>&gt;</code> –
 sonst wäre ein Kontostand von genau −500&nbsp;€ verboten. Das wird in Aufgabe 4.6 getestet.</p></div></article><article class="auf" id="a4-4" data-stufe="standard"><div class="aufkopf"><span class="aid">4.4</span><h5>PIN prüfen</h5><span class="badge st-standard">Standard</span><label class="hakenbox" title="als erledigt markieren"><input type="checkbox"></label></div><div class="aufkoerper">
 <ol class="kompakt" type="a">
-<li>Implementieren Sie die Anfrage <code>pin_pruefen(eingabe)</code>, die <code>True</code>
-zurückgibt, wenn die eingegebene PIN mit der gespeicherten übereinstimmt, sonst
-<code>False</code>.</li>
+<li>Übernehmen Sie die folgende Anfrage in die Klasse <code>Konto</code>. Erläutern Sie, wie die
+Methode ihren Rückgabewert bestimmt. Vereinfachen Sie die Methode so, dass sie nur aus einer
+<code>return</code>-Anweisung besteht.<div class="codebox"><pre class="hl">    def pin_pruefen(self, eingabe):
+        if eingabe == self.pin:
+            return True
+        else:
+            return False
+</pre></div></li>
 <li>Testen Sie: <code>konto2.pin_pruefen("0815")</code>, <code>konto2.pin_pruefen("1234")</code>
 und <code>konto2.pin_pruefen(815)</code>. Erklären Sie das dritte Ergebnis.</li>
 <li>Ergänzen Sie in <code>bank.py</code> unter den Klassen ein kleines Testprogramm: Es erzeugt
 <code>konto2</code>, zahlt 340&nbsp;€ ein und hebt 200&nbsp;€ nur dann ab, wenn die PIN
 <code>"0815"</code> stimmt.</li>
-</ol></div><div class="knopfleiste"><button type="button" data-ziel="t4-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l4-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-4-0"><span class="tnr">Tipp 1</span>Ein Vergleich mit <code>==</code> liefert bereits <code>True</code> oder <code>False</code>. Diesen Wert kann man direkt zurückgeben.</div><div class="tipp verborgen" id="t4-4-1"><span class="tnr">Tipp 2</span>Zu c): Eine Anfrage, die einen Wahrheitswert liefert, kann direkt als Bedingung in einem <code>if</code> stehen.</div><div class="loesung verborgen" id="l4-4"><h6>Lösung und Erläuterung</h6><div class="codebox"><pre class="hl">    def pin_pruefen(self, eingabe):
+</ol></div><div class="knopfleiste"><button type="button" data-ziel="t4-4-0" data-auf="Tipp 1 verbergen" data-zu="Tipp 1">Tipp 1</button><button type="button" data-ziel="t4-4-1" data-auf="Tipp 2 verbergen" data-zu="Tipp 2">Tipp 2</button><button type="button" class="loesknopf" data-ziel="l4-4" data-auf="Lösung verbergen" data-zu="Lösung anzeigen">Lösung anzeigen</button></div><div class="tipp verborgen" id="t4-4-0"><span class="tnr">Tipp 1</span>Ein Vergleich mit <code>==</code> liefert bereits <code>True</code> oder <code>False</code>. Diesen Wert kann man direkt zurückgeben.</div><div class="tipp verborgen" id="t4-4-1"><span class="tnr">Tipp 2</span>Zu c): Eine Anfrage, die einen Wahrheitswert liefert, kann direkt als Bedingung in einem <code>if</code> stehen.</div><div class="loesung verborgen" id="l4-4"><h6>Lösung und Erläuterung</h6><p><strong>a)</strong> Die
+Methode vergleicht die Eingabe mit der gespeicherten PIN. Ist der Vergleich <code>True</code>, gibt sie
+<code>True</code> zurück, sonst <code>False</code>. Der Vergleich <code>eingabe == self.pin</code>
+liefert aber bereits genau diesen Wahrheitswert – die Verzweigung ist überflüssig:</p><div class="codebox"><pre class="hl">    def pin_pruefen(self, eingabe):
         return eingabe == self.pin</pre></div><pre class="code">&gt;&gt;&gt; konto2.pin_pruefen("0815")
 True
 &gt;&gt;&gt; konto2.pin_pruefen("1234")
