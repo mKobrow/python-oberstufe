@@ -75,6 +75,7 @@ section.titel .fuss{position:absolute; left:110px; bottom:70px; font-size:24px; 
 .kl .att,.kl .m{padding:3px 22px; white-space:nowrap}
 
 /* Objekt -> Klasse (Verwandlung) */
+.verdeckt{visibility:hidden} .verdeckt.sichtbar{visibility:visible}
 .wandel .typ{display:none}
 .wandel.st-typ .wert{display:none} .wandel.st-typ .typ{display:inline}
 .wandel .kname{display:none}
@@ -277,7 +278,7 @@ body.druck button.karte::after{content:""}
       <p class="schritt"><strong>Bezeichner</strong> klein, ohne Umlaute und Leerzeichen</p>
     </div>
   </div>
-  <aside class="notiz"><p>Die PIN ist Text, weil sie mit 0 beginnen kann (0815) – das wird auf der nächsten Folie geprüft. Die Kontonummer der WarnowBank beginnt nie mit 0 und bleibt eine Zahl (strittig, wird in 3.3 nochmals diskutiert).</p></aside>
+  <aside class="notiz"><p>Die PIN ist Text, weil sie mit 0 beginnen kann (0815) – das wird auf der nächsten Folie geprüft. Die Kontonummer der WarnowBank beginnt nie mit 0 und bleibt eine Zahl (strittig, wird in 3.1 nochmals diskutiert).</p></aside>
 </section>
 
 <section class="folie" data-titel="Das Objektdiagramm">
@@ -536,7 +537,7 @@ body.druck button.karte::after{content:""}
     <p>Vom einzelnen Objekt zum Bauplan: Entwurfsdiagramme, Datentypen, Methoden und Assoziationen</p>
   </div>
   <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min</div>
-  <aside class="notiz"><p><b>Input Baustein 3, Teil 2, ca. 15 min.</b> Ziel: Unterschied Klasse/Objekt, Entwurfsdiagramm mit Datentypen und Methoden, Assoziation mit Multiplizität. Danach Etappe 3.A (Aufgaben 3.1–3.4).</p></aside>
+  <aside class="notiz"><p><b>Input Baustein 3, Teil 2, ca. 15 min.</b> Ziel: Unterschied Klasse/Objekt, Entwurfsdiagramm mit Datentypen und Methoden, Assoziation mit Multiplizität. Danach Etappe 3.A (Aufgaben 3.1–3.3).</p></aside>
 </section>
 
 <section class="folie" data-titel="Gleichartige Objekte">
@@ -569,7 +570,7 @@ body.druck button.karte::after{content:""}
           <div class="att">kontostand <span class="wert">= 2020.0</span><span class="typ">: float</span></div>
           <div class="att">dispo <span class="wert">= 500.0</span><span class="typ">: float</span></div>
         </div>
-        <div class="meth"><div class="att">einzahlen</div><div class="att">abheben</div><div class="att">…</div></div>
+        <div class="meth"><div class="att">einzahlen(betrag : float)</div><div class="att">abheben(betrag : float)</div><div class="att">…</div></div>
       </div>
     </div>
     <div class="spalte">
@@ -614,7 +615,7 @@ body.druck button.karte::after{content:""}
         <span class="hinten"><span class="loes">float</span> – <code>1.5</code>, damit wird gerechnet</span></button>
     </div>
   </div>
-  <aside class="notiz"><p>Die Python-Datentypen kennen die Schülerinnen und Schüler aus „Algorithmen und Daten“; hier geht es nur um die Auswahl. Beispiele bewusst außerhalb von Aufgabe 3.3 gewählt (dort: Kontonummer, PLZ, Telefonnummer, IBAN …).</p></aside>
+  <aside class="notiz"><p>Die Python-Datentypen kennen die Schülerinnen und Schüler aus „Algorithmen und Daten“; hier geht es nur um die Auswahl.</p></aside>
 </section>
 
 <section class="folie" data-titel="Methoden aus den Verben">
@@ -626,12 +627,13 @@ body.druck button.karte::after{content:""}
     <div class="spalte schritt">
       <div class="kl" style="font-size:28px"><div class="kopf">Konto</div>
         <div class="atts"><div class="att">…</div></div>
-        <div class="meth"><div class="m" data-paar="v1">einzahlen</div><div class="m" data-paar="v2">abheben</div></div></div>
+        <div class="meth"><div class="m" data-paar="v1">einzahlen(betrag : float)</div><div class="m" data-paar="v2">abheben(betrag : float)</div></div></div>
     </div>
     <div class="spalte">
       <ul>
         <li class="schritt">Das Verb wird zur <strong>Methode</strong> der Klasse, die die Fähigkeit besitzt</li>
         <li class="schritt">Konvention: klein, ohne Umlaute, Wortteile mit Unterstrich: <code>name_aendern</code></li>
+        <li class="schritt">In der Klammer die <strong>Parameter</strong> mit Datentyp, dahinter der Datentyp der <strong>Rückgabe</strong>: <code>zinsen_berechnen(jahre : int) : float</code></li>
         <li class="schritt">Nicht jeder Satz liefert eine Methode – Startwerte beschreiben, was beim <strong>Erzeugen</strong> passiert</li>
       </ul>
     </div>
@@ -654,10 +656,10 @@ body.druck button.karte::after{content:""}
 
 <section class="folie" data-titel="Assoziation">
   <h2><small>Beziehungen</small>Aus der Referenz wird eine Assoziation</h2>
-  <div style="position:relative; height:330px">
+  <div style="position:relative; height:400px">
     <div class="kl" id="as-konto" style="position:absolute; left:0; top:10px; font-size:26px">
       <div class="kopf">Konto</div>
-      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div></div>
+      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div><div class="att" data-paar="inh">inhaber : Kunde</div></div>
       <div class="meth"><div class="m">…</div></div>
     </div>
     <div class="kl" id="as-kunde" style="position:absolute; left:900px; top:30px; font-size:26px">
@@ -670,7 +672,7 @@ body.druck button.karte::after{content:""}
   <div class="zeile" style="gap:40px">
     <ul class="spalte klein">
       <li class="schritt">Pfeil von Klasse zu Klasse: <strong>Assoziation</strong></li>
-      <li class="schritt">Am Pfeil der <strong>Bezeichner</strong> des Attributs – nicht zusätzlich im Attributbereich</li>
+      <li class="schritt">Das Attribut bleibt im Attributbereich – mit der <strong>Klasse als Datentyp</strong>: <code>inhaber : Kunde</code>. Am Pfeil steht sein Bezeichner.</li>
       <li class="schritt">An der Spitze die <strong>Multiplizität</strong>: Wie viele Kunden hat ein Konto?</li>
     </ul>
     <table class="tab spalte schritt" style="font-size:24px">
@@ -678,15 +680,15 @@ body.druck button.karte::after{content:""}
       <tr><td class="mono">1..*</td><td>mindestens eins</td><td class="mono">0..*</td><td>beliebig viele</td></tr>
     </table>
   </div>
-  <aside class="notiz"><p>Zurück zur Folie „Objekte kennen andere Objekte“: Der Pfeil zwischen Objekten wird im Entwurf zum Pfeil zwischen Klassen. In 3.4 begründen die Schülerinnen und Schüler, warum hier 1 und nicht 0..1 steht.</p></aside>
+  <aside class="notiz"><p>Zurück zur Folie „Objekte kennen andere Objekte“: Der Pfeil zwischen Objekten wird im Entwurf zum Pfeil zwischen Klassen. In 3.3 begründen die Schülerinnen und Schüler, warum hier 1 und nicht 0..1 steht.</p></aside>
 </section>
 
 <section class="folie" data-titel="Merke: Klassen">
   <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 2</h2>
   <table class="tab" style="font-size:27px">
     <tr><td style="width:300px"><b>Klasse</b></td><td>Bauplan für gleichartige Objekte: dieselben Attribute und Methoden. Attribute mit Datentypen statt Werten.</td></tr>
-    <tr class="schritt"><td><b>Entwurfsdiagramm</b></td><td>Rechteck mit drei Bereichen: Klassenbezeichner, Attribute mit Datentyp, Methoden</td></tr>
-    <tr class="schritt"><td><b>Assoziation</b></td><td>Beziehung zwischen Klassen über ein Attribut, dessen Datentyp eine andere Klasse ist; Pfeil mit Bezeichner</td></tr>
+    <tr class="schritt"><td><b>Entwurfsdiagramm</b></td><td>Rechteck mit drei Bereichen: Klassenbezeichner, Attribute mit Datentyp, Methoden mit Parametern und Rückgabetyp</td></tr>
+    <tr class="schritt"><td><b>Assoziation</b></td><td>Beziehung zwischen Klassen über ein Attribut, dessen Datentyp eine andere Klasse ist (<code>inhaber : Kunde</code>); zusätzlich Pfeil mit Bezeichner</td></tr>
     <tr class="schritt"><td><b>Multiplizität</b></td><td>wie viele Objekte der anderen Klasse ein Objekt verwalten kann oder muss (1, 0..1, 0..*)</td></tr>
   </table>
 </section>
@@ -698,9 +700,8 @@ body.druck button.karte::after{content:""}
     <ul>
       <li>Aufgabe 3.1 – Kunde und Konto entwerfen</li>
       <li>Aufgabe 3.2 – Klasse oder Objekt?</li>
-      <li>Aufgabe 3.3 – Zahl oder Text?</li>
-      <li>Aufgabe 3.4 – Die Assoziation interpretieren</li>
-      <li class="mut">Wer fertig ist: Aufgabe 3.5 – Weitere Klassen der Bank (LK verbindlich)</li>
+      <li>Aufgabe 3.3 – Die Assoziation interpretieren</li>
+      <li class="mut">Wer fertig ist: Aufgabe 3.4 – Weitere Klassen der Bank (LK verbindlich)</li>
     </ul>
     <p class="mut">ca. 30 min (LK 40 min) · danach Stopp</p>
   </div>
@@ -709,20 +710,19 @@ body.druck button.karte::after{content:""}
 <section class="folie" id="sicherung-3a" data-titel="Sicherung 3.A: Unser Modell">
   <h2><small>Sicherung 3.A</small>Unser Modell der WarnowBank</h2>
   <div style="position:relative; height:560px">
-    <div class="kl" id="m-konto" style="position:absolute; left:40px; top:0; font-size:27px">
+    <div class="kl" id="m-konto" style="position:absolute; left:0; top:0; font-size:23px">
       <div class="kopf">Konto</div>
-      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div></div>
-      <div class="meth schritt"><div class="m">einzahlen</div><div class="m">abheben</div><div class="m">ueberweisen</div>
-        <div class="m">kontostand_abfragen</div><div class="m">auszug_drucken</div><div class="m">pin_pruefen</div></div>
+      <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div><div class="att verdeckt" id="m-inh">inhaber : Kunde</div></div>
+      <div class="meth schritt"><div class="m">einzahlen(betrag : float)</div><div class="m">abheben(betrag : float)</div><div class="m">ueberweisen(betrag : float, zielkonto : Konto)</div><div class="m">kontostand_abfragen() : float</div><div class="m">auszug_drucken()</div><div class="m">pin_pruefen(eingabe : str) : bool</div></div>
     </div>
-    <div class="kl" id="m-kunde" style="position:absolute; left:930px; top:40px; font-size:27px">
+    <div class="kl" id="m-kunde" style="position:absolute; left:960px; top:40px; font-size:23px">
       <div class="kopf">Kunde</div>
       <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">vorname : str</div><div class="att">geburtsdatum : str</div></div>
-      <div class="meth schritt"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
+      <div class="meth schritt"><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
     </div>
-    <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1"></i>
+    <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1" data-ziel="m-inh" data-klasse="sichtbar"></i>
   </div>
-  <aside class="notiz"><p>Erst Attribute (aus 3.1a), dann Methoden (3.1b), dann Assoziation (3.4). Strittig in 3.3: Kontonummer – im Kurs als Zahl festgelegt, weil sie bei der WarnowBank nie mit 0 beginnt. Weichen Kursentscheidungen ab, im Glossar vermerken.</p>
+  <aside class="notiz"><p>Erst Methoden (3.1b, c), dann Assoziation mit Attribut <code>inhaber : Kunde</code> und Pfeil (3.3). Strittig in 3.1a: Kontonummer – im Kurs als Zahl festgelegt, weil sie bei der WarnowBank nie mit 0 beginnt. Weichen Kursentscheidungen ab, im Glossar vermerken.</p>
   <p>Dieses Diagramm steht auf der Kursseite am Anfang von Etappe 3.B.</p></aside>
 </section>
 
@@ -734,14 +734,14 @@ body.druck button.karte::after{content:""}
     <p>Vom Entwurfsdiagramm zum Programm: Konstruktor, <span class="mono">self</span>, Objekte erzeugen und Referenzen</p>
   </div>
   <div class="fuss">WarnowBank Rostock · Baustein 3 · ca. 15 min · GuiPy bereithalten</div>
-  <aside class="notiz"><p><b>Input Baustein 3, Teil 3, ca. 15 min.</b> GuiPy am Board öffnen, <code>bank.py</code> mit der Klasse Kunde vorbereiten. Ab hier arbeiten die Schülerinnen und Schüler mit GuiPy. Danach Etappe 3.B (Aufgaben 3.6–3.9).</p></aside>
+  <aside class="notiz"><p><b>Input Baustein 3, Teil 3, ca. 15 min.</b> GuiPy am Board öffnen, <code>bank.py</code> mit der Klasse Kunde vorbereiten. Ab hier arbeiten die Schülerinnen und Schüler mit GuiPy. Danach Etappe 3.B (Aufgaben 3.5–3.8).</p></aside>
 </section>
 
 <section class="folie" data-titel="Vom Entwurf zum Code">
   <h2><small>Übersetzen</small>Vom Entwurfsdiagramm zum Code</h2>
   <div class="zeile" style="gap:50px; align-items:center">
     <div style="flex:0 0 440px">
-      <div class="kl" style="font-size:27px; min-width:420px">
+      <div class="kl" style="font-size:22px; min-width:0">
         <div class="kopf"><span data-paar="k">Kunde</span></div>
         <div class="atts">
           <div class="att"><span data-paar="a1">kundennummer</span> : <span data-paar="t1">int</span></div>
@@ -749,7 +749,7 @@ body.druck button.karte::after{content:""}
           <div class="att"><span data-paar="a3">vorname</span> : str</div>
           <div class="att"><span data-paar="a4">geburtsdatum</span> : str</div>
         </div>
-        <div class="meth"><div class="m">name_aendern</div><div class="m">daten_drucken</div></div>
+        <div class="meth"><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
       </div>
       <p class="klein mut" style="margin-top:14px">Antippen: Was gehört zusammen?</p>
     </div>
@@ -763,7 +763,7 @@ body.druck button.karte::after{content:""}
       </ul>
     </div>
   </div>
-  <aside class="notiz"><p>Die Klasse Kunde wird hier vollständig gezeigt – sie dürfen die Schülerinnen und Schüler in 3.6 übernehmen. Die Klasse Konto implementieren sie selbst.</p></aside>
+  <aside class="notiz"><p>Die Klasse Kunde wird hier vollständig gezeigt – sie dürfen die Schülerinnen und Schüler in 3.5 übernehmen. Die Klasse Konto implementieren sie selbst.</p></aside>
 </section>
 
 <section class="folie" data-titel="Der Konstruktor Schritt für Schritt" id="konstruktor">
@@ -813,7 +813,7 @@ body.druck button.karte::after{content:""}
     <li class="schritt">Was für alle neuen Objekte <strong>gleich</strong> ist, setzt der Konstruktor selbst: <strong>fester Startwert</strong></li>
     <li class="schritt"><code>None</code>: Das Attribut verweist (noch) auf kein Objekt</li>
   </ul>
-  <aside class="notiz"><p>Übertrag in 3.6: Laut Anforderung startet jedes Konto mit 0,00 € und hat 500 € Dispo. Welche Attribute werden also Parameter? – nicht vorwegnehmen.</p></aside>
+  <aside class="notiz"><p>Übertrag in 3.5: Laut Anforderung startet jedes Konto mit 0,00 € und hat 500 € Dispo. Welche Attribute werden also Parameter? – nicht vorwegnehmen.</p></aside>
 </section>
 
 <section class="folie" data-titel="Objekte erzeugen und benutzen">
@@ -911,7 +911,7 @@ body.druck button.karte::after{content:""}
       <span class="hinten">Das Attribut heißt anders: Im Konstruktor wurde <code>self.name</code> angelegt, nicht <code>self.nachname</code>.</span></button>
   </div>
   <p class="klein mut" style="margin-top:22px">Faustregel: Die letzte Zeile der Meldung wörtlich übersetzen – sie verrät fast immer die Ursache.</p>
-  <aside class="notiz"><p>Bewusst andere Fehler als in Aufgabe 3.9 (dort: <code>_init_</code>, fehlendes <code>self.</code>, fehlendes <code>self</code> als Parameter, fehlender Wert).</p></aside>
+  <aside class="notiz"><p>Bewusst andere Fehler als in Aufgabe 3.8 (dort: <code>_init_</code>, fehlendes <code>self.</code>, fehlendes <code>self</code> als Parameter, fehlender Wert).</p></aside>
 </section>
 
 <section class="folie" data-titel="Merke: Klassen in Python">
@@ -928,11 +928,11 @@ body.druck button.karte::after{content:""}
   <h2><small>Jetzt Sie</small>Etappe 3.B: Klassen in Python</h2>
   <div class="kasten" style="font-size:33px">
     <ul>
-      <li>Aufgabe 3.6 – Kunde und Konto implementieren (in GuiPy, neue Datei <code>bank.py</code>)</li>
-      <li>Aufgabe 3.7 – Zwei gleiche Kunden?</li>
-      <li>Aufgabe 3.8 – Wie viele Konten gibt es?</li>
-      <li>Aufgabe 3.9 – Fehlersuche</li>
-      <li class="mut">Wer fertig ist: 3.10 Die Klasse Karte, 3.11 Das Konto kennt seinen Inhaber (LK verbindlich)</li>
+      <li>Aufgabe 3.5 – Kunde und Konto implementieren (in GuiPy, neue Datei <code>bank.py</code>)</li>
+      <li>Aufgabe 3.6 – Zwei gleiche Kunden?</li>
+      <li>Aufgabe 3.7 – Wie viele Konten gibt es?</li>
+      <li>Aufgabe 3.8 – Fehlersuche</li>
+      <li class="mut">Wer fertig ist: 3.9 Die Klasse Karte, 3.10 Das Konto kennt seinen Inhaber (LK verbindlich)</li>
     </ul>
     <p class="mut">ca. 40 min (LK 55 min) · danach Stopp</p>
   </div>
@@ -1091,7 +1091,7 @@ body.druck button.karte::after{content:""}
       schrittAnwenden(naechster, true);
       // unsichtbare Steuer-Fragmente direkt mitnehmen
       var rest = schritte(f).filter(function(s){ return !s.classList.contains("an"); });
-      while(rest[0] && rest[0].tagName === "I" && rest[0].dataset.ziel){ schrittAnwenden(rest.shift(), true); }
+      while(rest[0] && rest[0].tagName === "I" && rest[0].dataset.ziel && !rest[0].classList.contains("pfeil")){ schrittAnwenden(rest.shift(), true); }
       pfeileZeichnen(); return;
     }
     if(nr < folien.length - 1) zeige(nr + 1);
@@ -1101,7 +1101,7 @@ body.druck button.karte::after{content:""}
     if(f._widget && f._widget.zurueck && f._widget.zurueck()) return;
     var an = schritte(f).filter(function(s){ return s.classList.contains("an"); });
     if(an.length){
-      while(an.length && an[an.length - 1].tagName === "I" && an[an.length - 1].dataset.ziel){ schrittAnwenden(an.pop(), false); }
+      while(an.length && an[an.length - 1].tagName === "I" && an[an.length - 1].dataset.ziel && !an[an.length - 1].classList.contains("pfeil")){ schrittAnwenden(an.pop(), false); }
       if(an.length) schrittAnwenden(an.pop(), false);
       pfeileZeichnen(); return;
     }
