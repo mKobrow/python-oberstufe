@@ -562,7 +562,7 @@ body.druck button.karte::after{content:""}
   <h2><small>Begriff</small>Die Klasse als Bauplan</h2>
   <div class="zeile" style="gap:70px; align-items:center">
     <div style="flex:0 0 560px" class="mitte">
-      <div class="obj wandel" id="wandel" style="font-size:27px; min-width:500px">
+      <div class="obj wandel" id="wandel" style="font-size:26px; min-width:500px">
         <div class="kopf"><span class="oname">konto1 : Konto</span><span class="kname">Konto</span></div>
         <div class="atts">
           <div class="att">kontonummer <span class="wert">= 987654321</span><span class="typ">: int</span></div>
@@ -570,7 +570,7 @@ body.druck button.karte::after{content:""}
           <div class="att">kontostand <span class="wert">= 2020.0</span><span class="typ">: float</span></div>
           <div class="att">dispo <span class="wert">= 500.0</span><span class="typ">: float</span></div>
         </div>
-        <div class="meth"><div class="att">__init__(kontonummer : int,</div><div class="att">&nbsp;&nbsp;&nbsp;&nbsp;pin : str)</div><div class="att">einzahlen(betrag : float)</div><div class="att">abheben(betrag : float)</div><div class="att">…</div></div>
+        <div class="meth"><div class="att">Konto(kontonummer : int, pin : str)</div><div class="att">einzahlen(betrag : float)</div><div class="att">abheben(betrag : float)</div><div class="att">…</div></div>
       </div>
     </div>
     <div class="spalte">
@@ -627,14 +627,14 @@ body.druck button.karte::after{content:""}
     <div class="spalte schritt">
       <div class="kl" style="font-size:28px"><div class="kopf">Konto</div>
         <div class="atts"><div class="att">…</div></div>
-        <div class="meth"><div class="m" data-paar="v0">__init__(kontonummer : int, pin : str)</div><div class="m" data-paar="v1">einzahlen(betrag : float)</div><div class="m" data-paar="v2">abheben(betrag : float)</div></div></div>
+        <div class="meth"><div class="m">Konto(kontonummer : int, pin : str)</div><div class="m" data-paar="v1">einzahlen(betrag : float)</div><div class="m" data-paar="v2">abheben(betrag : float)</div></div></div>
     </div>
     <div class="spalte">
       <ul>
         <li class="schritt">Das Verb wird zur <strong>Methode</strong> der Klasse, die die Fähigkeit besitzt</li>
         <li class="schritt">Konvention: klein, ohne Umlaute, Wortteile mit Unterstrich: <code>name_aendern</code></li>
         <li class="schritt">In der Klammer die <strong>Parameter</strong> mit Datentyp, dahinter der Datentyp der <strong>Rückgabe</strong>: <code>zinsen_berechnen(jahre : int) : float</code></li>
-        <li class="schritt">Zuerst steht der <strong>Konstruktor</strong> <code>__init__(…)</code>: Er erzeugt das Objekt. Startwerte wie „0,00&nbsp;€“ (Satz 2) gehören zu ihm.</li>
+        <li class="schritt">Zuerst steht der <strong>Konstruktor</strong>. Er erzeugt das Objekt und heißt im UML wie die Klasse. Startwerte (Satz 2) gehören zu ihm.</li>
       </ul>
     </div>
   </div>
@@ -687,7 +687,7 @@ body.druck button.karte::after{content:""}
   <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 2</h2>
   <table class="tab" style="font-size:27px">
     <tr><td style="width:300px"><b>Klasse</b></td><td>Bauplan für gleichartige Objekte: dieselben Attribute und Methoden. Attribute mit Datentypen statt Werten.</td></tr>
-    <tr class="schritt"><td><b>Entwurfsdiagramm</b></td><td>Rechteck mit drei Bereichen: Klassenbezeichner, Attribute mit Datentyp, Methoden mit Parametern und Rückgabetyp, zuerst der Konstruktor <code>__init__(…)</code></td></tr>
+    <tr class="schritt"><td><b>Entwurfsdiagramm</b></td><td>Rechteck mit drei Bereichen: Klassenbezeichner, Attribute mit Datentyp, Methoden mit Parametern und Rückgabetyp, zuerst der Konstruktor mit dem Namen der Klasse, z.&nbsp;B. <code>Konto(…)</code></td></tr>
     <tr class="schritt"><td><b>Assoziation</b></td><td>Beziehung zwischen Klassen über ein Attribut, dessen Datentyp eine andere Klasse ist (<code>inhaber : Kunde</code>); zusätzlich Pfeil mit Bezeichner</td></tr>
     <tr class="schritt"><td><b>Multiplizität</b></td><td>wie viele Objekte der anderen Klasse ein Objekt verwalten kann oder muss (1, 0..1, 0..*)</td></tr>
   </table>
@@ -713,12 +713,12 @@ body.druck button.karte::after{content:""}
     <div class="kl" id="m-konto" style="position:absolute; left:0; top:0; font-size:21px">
       <div class="kopf">Konto</div>
       <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div><div class="att verdeckt" id="m-inh">inhaber : Kunde</div></div>
-      <div class="meth schritt"><div class="m">__init__(kontonummer : int, pin : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;inhaber : Kunde)</div><div class="m">einzahlen(betrag : float)</div><div class="m">abheben(betrag : float)</div><div class="m">ueberweisen(betrag : float, zielkonto : Konto)</div><div class="m">kontostand_abfragen() : float</div><div class="m">auszug_drucken()</div><div class="m">pin_pruefen(eingabe : str) : bool</div></div>
+      <div class="meth schritt"><div class="m">Konto(kontonummer : int, pin : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;inhaber : Kunde)</div><div class="m">einzahlen(betrag : float)</div><div class="m">abheben(betrag : float)</div><div class="m">ueberweisen(betrag : float, zielkonto : Konto)</div><div class="m">kontostand_abfragen() : float</div><div class="m">auszug_drucken()</div><div class="m">pin_pruefen(eingabe : str) : bool</div></div>
     </div>
     <div class="kl" id="m-kunde" style="position:absolute; left:900px; top:40px; font-size:21px">
       <div class="kopf">Kunde</div>
       <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">vorname : str</div><div class="att">geburtsdatum : str</div></div>
-      <div class="meth schritt"><div class="m">__init__(kundennummer : int, name : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;vorname : str, geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
+      <div class="meth schritt"><div class="m">Kunde(kundennummer : int, name : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;vorname : str, geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
     </div>
     <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1" data-ziel="m-inh" data-klasse="sichtbar"></i>
   </div>
@@ -742,27 +742,26 @@ body.druck button.karte::after{content:""}
   <div class="zeile" style="gap:50px; align-items:center">
     <div style="flex:0 0 440px">
       <div class="kl" style="font-size:22px; min-width:0">
-        <div class="kopf"><span data-paar="k">Kunde</span></div>
+        <div class="kopf">Kunde</div>
         <div class="atts">
-          <div class="att"><span data-paar="a1">kundennummer</span> : <span data-paar="t1">int</span></div>
-          <div class="att"><span data-paar="a2">name</span> : str</div>
-          <div class="att"><span data-paar="a3">vorname</span> : str</div>
-          <div class="att"><span data-paar="a4">geburtsdatum</span> : str</div>
+          <div class="att">kundennummer : int</div>
+          <div class="att">name : str</div>
+          <div class="att">vorname : str</div>
+          <div class="att">geburtsdatum : str</div>
         </div>
-        <div class="meth"><div class="m"><span data-paar="ini">__init__</span>(kundennummer : int,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;name : str, vorname : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
+        <div class="meth"><div class="m">Kunde(kundennummer : int,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;name : str, vorname : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
       </div>
-      <p class="klein mut" style="margin-top:14px">Antippen: Was gehört zusammen?</p>
     </div>
     <div class="spalte">
-<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> <span data-paar="k">Kunde</span>:</span><span class="z">    <span class="k">def</span> <span class="f" data-paar="ini">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.<span data-paar="a1">kundennummer</span> = kundennummer</span><span class="z">        <span class="k">self</span>.<span data-paar="a2">name</span> = name</span><span class="z">        <span class="k">self</span>.<span data-paar="a3">vorname</span> = vorname</span><span class="z">        <span class="k">self</span>.<span data-paar="a4">geburtsdatum</span> = geburtsdatum</span></pre>
+<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> Kunde:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.kundennummer = kundennummer</span><span class="z">        <span class="k">self</span>.name = name</span><span class="z">        <span class="k">self</span>.vorname = vorname</span><span class="z">        <span class="k">self</span>.geburtsdatum = geburtsdatum</span><span class="z"> </span><span class="z">    <span class="c"># name_aendern() und daten_drucken() folgen in Baustein 4</span></span></pre>
       <ul class="klein" style="margin-top:18px">
         <li class="schritt"><code>class Kunde:</code> – Klassenname groß, alles Eingerückte gehört dazu</li>
         <li class="schritt"><code>__init__</code> – der <strong>Konstruktor</strong>: legt die Attribute an (je zwei Unterstriche)</li>
         <li class="schritt">Die Datentypen stehen im Code nicht: Python erkennt sie am Wert – <code>4711</code> ist ein <code>int</code></li>
-        <li class="schritt">Methoden folgen in Baustein 4</li>
       </ul>
     </div>
   </div>
+  <div class="merke schritt" style="margin-top:22px">Der <b>Konstruktor</b> heißt im UML wie die Klasse: <code>Kunde(…)</code>. In Python wird er immer mit <code style="white-space:nowrap">def __init__(self, …)</code> definiert.</div>
   <aside class="notiz"><p>Die Klasse Kunde wird hier vollständig gezeigt – sie dürfen die Schülerinnen und Schüler in 3.5 übernehmen. Die Klasse Konto implementieren sie selbst.</p></aside>
 </section>
 
@@ -917,7 +916,7 @@ body.druck button.karte::after{content:""}
 <section class="folie" data-titel="Merke: Klassen in Python">
   <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 3</h2>
   <table class="tab" style="font-size:27px">
-    <tr><td style="width:300px"><b>Konstruktor</b></td><td>Methode <code>__init__</code>, die beim Erzeugen automatisch ausgeführt wird; legt die Attribute an und belegt sie mit Parametern oder festen Startwerten</td></tr>
+    <tr><td style="width:300px"><b>Konstruktor</b></td><td>im UML benannt wie die Klasse (<code>Kunde(…)</code>), in Python als Methode <code>__init__</code> definiert, die beim Erzeugen automatisch ausgeführt wird; legt die Attribute an und belegt sie mit Parametern oder festen Startwerten</td></tr>
     <tr class="schritt"><td><b><code>self</code></b></td><td>das Objekt, das gerade erzeugt bzw. benutzt wird; immer erster Parameter</td></tr>
     <tr class="schritt"><td><b>Instanziierung</b></td><td>Erzeugen eines Objekts: <code>objektname = Klassenname(Werte)</code></td></tr>
     <tr class="schritt"><td><b>Referenz</b></td><td>Variablen speichern Verweise auf Objekte; <code>c = a</code> kopiert den Verweis, nicht das Objekt</td></tr>
