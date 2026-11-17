@@ -101,6 +101,9 @@ const SEITENUNTERTITEL = "Materialien und Übungen";
 </script>
 
 <style>
+/* keine Ligaturen (z. B. >= als ein Zeichen in Cascadia Code) */
+html{font-variant-ligatures:none; font-feature-settings:"liga" 0, "calt" 0}
+
 *,*::before,*::after{box-sizing:border-box}
 :root{
   --bg:#f4f6f9; --panel:#fff; --ink:#1c2430; --mut:#5d6b7e;
