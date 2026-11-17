@@ -633,9 +633,9 @@ body.druck button.karte::after{content:""}
         <div class="meth"><div class="m">Konto(kontonummer : int, pin : str)</div><div class="m" data-paar="v1">einzahlen(betrag : float)</div><div class="m" data-paar="v2">abheben(betrag : float)</div></div></div>
     </div>
     <div class="spalte">
-      <ul>
+      <ul style="font-size:27px">
         <li class="schritt">Das Verb wird zur <strong>Methode</strong> der Klasse, die die Fähigkeit besitzt</li>
-        <li class="schritt">Konvention: klein, ohne Umlaute, Wortteile mit Unterstrich: <code>name_aendern</code></li>
+        <li class="schritt">Konvention: klein, ohne Umlaute, mit Unterstrich: <code>auszug_drucken</code>; nur Wert lesen/ändern: <code>get_…</code>/<code>set_…</code></li>
         <li class="schritt">In der Klammer die <strong>Parameter</strong> mit Datentyp, dahinter der Datentyp der <strong>Rückgabe</strong>: <code>zinsen_berechnen(jahre : int) : float</code></li>
         <li class="schritt">Zuerst steht der <strong>Konstruktor</strong>. Er erzeugt das Objekt und heißt im UML wie die Klasse. Startwerte (Satz 2) gehören zu ihm.</li>
       </ul>
@@ -716,12 +716,12 @@ body.druck button.karte::after{content:""}
     <div class="kl" id="m-konto" style="position:absolute; left:0; top:0; font-size:21px">
       <div class="kopf">Konto</div>
       <div class="atts"><div class="att">kontonummer : int</div><div class="att">pin : str</div><div class="att">kontostand : float</div><div class="att">dispo : float</div><div class="att verdeckt" id="m-inh">inhaber : Kunde</div></div>
-      <div class="meth schritt"><div class="m">Konto(kontonummer : int, pin : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;inhaber : Kunde)</div><div class="m">einzahlen(betrag : float)</div><div class="m">abheben(betrag : float)</div><div class="m">ueberweisen(betrag : float, zielkonto : Konto)</div><div class="m">kontostand_abfragen() : float</div><div class="m">auszug_drucken()</div><div class="m">pin_pruefen(eingabe : str) : bool</div></div>
+      <div class="meth schritt"><div class="m">Konto(kontonummer : int, pin : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;inhaber : Kunde)</div><div class="m">einzahlen(betrag : float)</div><div class="m">abheben(betrag : float)</div><div class="m">ueberweisen(betrag : float, zielkonto : Konto)</div><div class="m">get_kontostand() : float</div><div class="m">auszug_drucken()</div><div class="m">pin_pruefen(eingabe : str) : bool</div></div>
     </div>
     <div class="kl" id="m-kunde" style="position:absolute; left:900px; top:40px; font-size:21px">
       <div class="kopf">Kunde</div>
       <div class="atts"><div class="att">kundennummer : int</div><div class="att">name : str</div><div class="att">vorname : str</div><div class="att">geburtsdatum : str</div></div>
-      <div class="meth schritt"><div class="m">Kunde(kundennummer : int, name : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;vorname : str, geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
+      <div class="meth schritt"><div class="m">Kunde(kundennummer : int, name : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;vorname : str, geburtsdatum : str)</div><div class="m">set_name(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
     </div>
     <i class="pfeil schritt" data-von="m-konto" data-nach="m-kunde" data-label="inhaber" data-mult="1" data-ziel="m-inh" data-klasse="sichtbar"></i>
   </div>
@@ -752,11 +752,11 @@ body.druck button.karte::after{content:""}
           <div class="att">vorname : str</div>
           <div class="att">geburtsdatum : str</div>
         </div>
-        <div class="meth"><div class="m">Kunde(kundennummer : int,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;name : str, vorname : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;geburtsdatum : str)</div><div class="m">name_aendern(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
+        <div class="meth"><div class="m">Kunde(kundennummer : int,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;name : str, vorname : str,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;geburtsdatum : str)</div><div class="m">set_name(neuer_name : str)</div><div class="m">daten_drucken()</div></div>
       </div>
     </div>
     <div class="spalte">
-<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> Kunde:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.kundennummer = kundennummer</span><span class="z">        <span class="k">self</span>.name = name</span><span class="z">        <span class="k">self</span>.vorname = vorname</span><span class="z">        <span class="k">self</span>.geburtsdatum = geburtsdatum</span><span class="z"> </span><span class="z">    <span class="c"># name_aendern() und daten_drucken() folgen in Baustein 4</span></span></pre>
+<pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> Kunde:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kundennummer, name, vorname, geburtsdatum):</span><span class="z">        <span class="k">self</span>.kundennummer = kundennummer</span><span class="z">        <span class="k">self</span>.name = name</span><span class="z">        <span class="k">self</span>.vorname = vorname</span><span class="z">        <span class="k">self</span>.geburtsdatum = geburtsdatum</span><span class="z"> </span><span class="z">    <span class="c"># set_name() und daten_drucken() folgen in Baustein 4</span></span></pre>
       <ul class="klein" style="margin-top:18px">
         <li class="schritt"><code>class Kunde:</code> – Klassenname groß, alles Eingerückte gehört dazu</li>
         <li class="schritt"><code>__init__</code> – der <strong>Konstruktor</strong>: legt die Attribute an (je zwei Unterstriche)</li>
@@ -962,6 +962,145 @@ body.druck button.karte::after{content:""}
   <aside class="notiz"><p>Code-Stand entspricht <code>oop_staende/bank_stand_3B.py</code> im Repository. Danach geht es mit Baustein 4 (Methoden) weiter.</p></aside>
 </section>
 
+
+<section class="folie titel" id="kapselung" data-kapitel="Teil 4 · Datenkapselung" data-titel="Titel: Datenkapselung">
+  <div class="tinnen">
+    <div class="teil">Teil 4 · Objektorientierte Softwareentwicklung</div>
+    <h1>Datenkapselung</h1>
+    <p>Attribute schützen: Die Prüfung bleibt bei der Klasse</p>
+  </div>
+  <div class="fuss">WarnowBank Rostock · Baustein 5 · Einstieg ca. 8 min, Input ca. 12 min</div>
+  <aside class="notiz"><p><b>Baustein 5, Einstieg ca. 8 min.</b> Anknüpfen an den Kasten <em>Ein Problem bleibt</em> aus Sicherung 4.D: Jedes Programm kann den Kontostand direkt ändern. Nächste Folie zeigen, dann Aufgabe 5.1 bearbeiten lassen. Der Input ab Folie „Die Prüfung gehört in die Klasse“ folgt nach 5.1.</p></aside>
+</section>
+
+<section class="folie" data-titel="Einstieg: Drei Teams, ein Konto">
+  <h2><small>Einstieg</small>Drei Teams, ein Konto</h2>
+  <div class="zeile" style="gap:44px; align-items:flex-start">
+    <div style="flex:0 0 1000px"><div><p style="margin:0px 0 6px; font-weight:700; font-size:22px">Team A: Geldautomat</p><pre class="code" style="font-size:18px; padding:10px 18px"><span class="z"><span class="k">def</span> <span class="f">automat_auszahlen</span>(konto, betrag):</span><span class="z">    <span class="k">if</span> konto.kontostand - betrag &gt;= -konto.dispo:</span><span class="z">        konto.kontostand = konto.kontostand - betrag</span><span class="z">        print(<span class="s">"Bitte entnehmen Sie"</span>, betrag, <span class="s">"€"</span>)</span></pre></div><div class="schritt"><p style="margin:14px 0 6px; font-weight:700; font-size:22px">Team B: Schalter</p><pre class="code" style="font-size:18px; padding:10px 18px"><span class="z"><span class="k">def</span> <span class="f">schalter_auszahlen</span>(konto, betrag):</span><span class="z">    <span class="k">if</span> betrag &gt; <span class="n">0</span> <span class="k">and</span> konto.kontostand - betrag &gt;= -konto.dispo:</span><span class="z">        konto.kontostand = konto.kontostand - betrag</span><span class="z">        konto.buchungen.append(-betrag)</span></pre></div><div class="schritt"><p style="margin:14px 0 6px; font-weight:700; font-size:22px">Team C: Online-Banking</p><pre class="code" style="font-size:18px; padding:10px 18px"><span class="z"><span class="k">def</span> <span class="f">online_ueberweisen</span>(konto, zielkonto, betrag):</span><span class="z">    <span class="k">if</span> betrag &gt; <span class="n">0</span> <span class="k">and</span> konto.kontostand - betrag &gt;= -konto.dispo:</span><span class="z">        konto.kontostand = konto.kontostand - betrag</span><span class="z">        zielkonto.kontostand = zielkonto.kontostand + betrag</span></pre></div></div>
+    <div class="spalte" style="font-size:28px">
+      <p style="margin-top:0">Alle drei Programme benutzen die Klasse <code>Konto</code> aus Code-Stand 4.D – und ändern den Kontostand <strong>direkt</strong>.</p>
+      <p class="schritt"><span class="impuls">Frau Schulz (460&nbsp;€) gibt am Automaten −200&nbsp;€ ein.</span></p>
+      <p class="schritt">Untersuchen Sie die drei Programme:<br><strong>Aufgabe 5.1</strong></p>
+    </div>
+  </div>
+  <aside class="notiz"><p>Die drei Funktionen nacheinander aufdecken und kurz vorlesen lassen. Nicht auflösen: Den Fehler bei −200&nbsp;€ (Kontostand steigt auf 660&nbsp;€) und die fehlenden Buchungen finden die Schülerinnen und Schüler in 5.1 selbst. Die Funktionen stehen auch in der Aufgabe auf der Kursseite.</p></aside>
+</section>
+
+<section class="folie" id="privat" data-titel="Die Prüfung gehört in die Klasse">
+  <h2><small>Datenkapselung</small>Die Prüfung gehört in die Klasse</h2>
+  <div style="position:relative; height:430px">
+    <div class="chip" style="position:absolute; left:0; top:30px; width:300px; text-align:center; white-space:nowrap">Geldautomat<span id="dk-a" style="position:absolute; right:0; top:50%; width:2px; height:2px"></span></div>
+    <div class="chip" style="position:absolute; left:0; top:180px; width:300px; text-align:center; white-space:nowrap">Schalter<span id="dk-b" style="position:absolute; right:0; top:50%; width:2px; height:2px"></span></div>
+    <div class="chip" style="position:absolute; left:0; top:330px; width:300px; text-align:center; white-space:nowrap">Online-Banking<span id="dk-c" style="position:absolute; right:0; top:50%; width:2px; height:2px"></span></div>
+    <div class="schritt" style="position:absolute; left:470px; top:0; width:720px; height:430px; border:4px solid var(--akz); border-radius:40px; background:#eef4fa">
+      <div style="position:absolute; left:28px; top:16px; font-weight:700; font-size:26px; color:var(--akz)">Konto</div>
+      <div class="mono" id="dk-m1" style="position:absolute; left:28px; top:70px; font-size:24px; background:#fff; border:2px solid var(--akz); border-radius:10px; padding:6px 14px">+ einzahlen(…)</div>
+      <div class="mono" style="position:absolute; left:28px; top:150px; font-size:24px; background:#fff; border:2px solid var(--akz); border-radius:10px; padding:6px 14px">+ abheben(…)<span id="dk-m2" style="position:absolute; left:0; top:50%; width:2px; height:2px"></span></div>
+      <div class="mono" style="position:absolute; left:28px; top:230px; font-size:24px; background:#fff; border:2px solid var(--akz); border-radius:10px; padding:6px 14px">+ ueberweisen(…)<span id="dk-m3" style="position:absolute; left:0; top:50%; width:2px; height:2px"></span></div>
+      <div class="mono" id="dk-m4" style="position:absolute; left:28px; top:310px; font-size:24px; background:#fff; border:2px solid var(--akz); border-radius:10px; padding:6px 14px">+ get_kontostand()</div>
+      <div class="mono" style="position:absolute; left:380px; top:60px; width:300px; height:330px; background:#1e2733; color:#e6edf3; border-radius:24px; padding:22px 26px; font-size:24px; line-height:1.7">🔒 privat<br>- kontonummer<br>- pin<br>- kontostand<br>- dispo<br>- buchungen</div>
+    </div>
+    <i class="pfeil schritt" data-von="dk-a" data-nach="dk-m2"></i>
+    <i class="pfeil schritt" data-von="dk-b" data-nach="dk-m2"></i>
+    <i class="pfeil schritt" data-von="dk-c" data-nach="dk-m3"></i>
+  </div>
+  <ul style="margin-top:26px">
+    <li class="schritt">Die Attribute sind <strong>privat</strong>: Nur die Methoden der eigenen Klasse lesen und ändern sie</li>
+    <li class="schritt">Andere Programme benutzen die <strong>öffentlichen Methoden</strong> – und kommen an der Prüfung nicht vorbei</li>
+    <li class="schritt">Die Prüfung steht <strong>einmal</strong> im Programm und gilt für alle: <strong>Datenkapselung</strong></li>
+  </ul>
+  <aside class="notiz"><p><b>Input nach Aufgabe 5.1, ca. 12 min.</b> Anknüpfen an 5.1c: Die Regel steht schon in <code>abheben</code> – sie wird nur umgangen. Bild: Das Konto ist eine Kapsel, an die man nur über ihre Methoden herankommt. Bezug zu Baustein 0: Korrektheit, Robustheit, Wartbarkeit.</p></aside>
+</section>
+
+<section class="folie" data-titel="Private Attribute in Python">
+  <h2><small>In Python</small>Private Attribute</h2>
+  <div class="zeile" style="gap:44px; align-items:flex-start">
+    <div style="flex:0 0 800px"><pre class="code" style="font-size:22px"><span class="z"><span class="k">class</span> Konto:</span><span class="z">    <span class="k">def</span> <span class="f">__init__</span>(<span class="k">self</span>, kontonummer, pin):</span><span class="z">        <span class="k">self</span>.__kontonummer = kontonummer</span><span class="z">        <span class="k">self</span>.__pin = pin</span><span class="z">        <span class="k">self</span>.__kontostand = <span class="n">0.0</span></span><span class="z">        <span class="k">self</span>.__dispo = <span class="n">500.0</span></span><span class="z">        <span class="k">self</span>.__buchungen = []</span><span class="z leer"></span><span class="z">    <span class="k">def</span> <span class="f">get_kontostand</span>(<span class="k">self</span>):</span><span class="z">        <span class="k">return</span> <span class="k">self</span>.__kontostand</span></pre></div>
+    <div class="spalte"><pre class="code" style="font-size:21px"><span class="z">&gt;&gt;&gt; konto1 = Konto(<span class="n">987654321</span>, <span class="s">"1234"</span>)</span><span class="z">&gt;&gt;&gt; konto1.get_kontostand()</span><span class="z schritt"><span class="n">0.0</span></span><span class="z schritt">&gt;&gt;&gt; konto1.__kontostand</span><span class="z schritt"><span style="color:#ff9e80">AttributeError: 'Konto' object</span></span><span class="z schritt"><span style="color:#ff9e80">&nbsp;has no attribute '__kontostand'</span></span></pre>
+      <ul class="klein" style="margin-top:22px">
+        <li class="schritt">Zwei Unterstriche vor dem Bezeichner: Das Attribut ist <strong>privat</strong></li>
+        <li class="schritt">Innerhalb der Klasse ganz normal: <code>self.__kontostand</code></li>
+        <li class="schritt">Von außen: <code>AttributeError</code> – Zugriff nur noch über Methoden</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notiz"><p>Live in GuiPy möglich: Code-Stand 4.D öffnen, bei <code>kontostand</code> die Unterstriche ergänzen und zeigen, dass <code>auszug_drucken</code> erst beim Aufruf scheitert, wenn man dort die Änderung vergisst. Je nach Python-Version schlägt die Fehlermeldung <em>Did you mean: 'get_kontostand'?</em> vor. Die Falle <code>konto1.__kontostand = 5</code> nicht vorwegnehmen (Aufgabe 5.5).</p></aside>
+</section>
+
+<section class="folie" data-titel="Datenkapselung im Klassendiagramm">
+  <h2><small>Im UML</small>Datenkapselung im Klassendiagramm</h2>
+  <div class="zeile" style="gap:60px; align-items:center">
+    <div style="flex:0 0 640px"><div class="kl" style="font-size:25px; min-width:0"><div class="kopf">Konto</div><div class="atts"><div class="att">- kontonummer : int</div><div class="att">- pin : str</div><div class="att">- kontostand : float</div><div class="att">- dispo : float</div><div class="att">- buchungen : list</div></div><div class="meth"><div class="m">+ Konto(kontonummer : int, pin : str)</div><div class="m">+ get_kontostand() : float</div><div class="m">+ einzahlen(betrag : float)</div><div class="m">+ abheben(betrag : float)</div><div class="m">+ …</div></div></div></div>
+    <div class="spalte">
+      <table class="tab" style="font-size:28px">
+        <tr><td class="mono" style="width:70px; font-size:36px"><b>-</b></td><td><b>privat</b>: nur die eigene Klasse<br><span class="klein mut">in Python: <code>self.__kontostand</code></span></td></tr>
+        <tr class="schritt"><td class="mono" style="font-size:36px"><b>+</b></td><td><b>öffentlich</b>: jedes Programm</td></tr>
+      </table>
+      <p class="schritt" style="margin-top:30px"><span class="impuls">Regel: Attribute privat, Methoden öffentlich</span></p>
+      <p class="schritt klein">Das UML-Fenster von GuiPy zeigt private Attribute ebenfalls mit <code>-</code> an.</p>
+    </div>
+  </div>
+  <aside class="notiz"><p>Bewusst nur ein Ausschnitt der Methoden: Welche get- und set-Methoden das Konto bekommt, entscheiden die Schülerinnen und Schüler in Aufgabe 5.3.</p></aside>
+</section>
+
+<section class="folie" data-titel="get und set mit Prüfung">
+  <h2><small>Zugriff steuern</small>get und set: gezielt freigeben</h2>
+  <div class="zeile" style="gap:50px; align-items:flex-start">
+    <div style="flex:0 0 780px"><pre class="code" style="font-size:23px"><span class="z">    <span class="k">def</span> <span class="f">get_name</span>(<span class="k">self</span>):</span><span class="z">        <span class="k">return</span> <span class="k">self</span>.__name</span><span class="z leer"></span><span class="z">    <span class="k">def</span> <span class="f">set_name</span>(<span class="k">self</span>, neuer_name):</span><span class="z">        <span class="k">if</span> neuer_name != <span class="s">""</span>:</span><span class="z">            <span class="k">self</span>.__name = neuer_name</span><span class="z">        <span class="k">else</span>:</span><span class="z">            print(<span class="s">"Der Name darf nicht leer sein."</span>)</span></pre></div>
+    <ul class="spalte">
+      <li class="schritt"><code>get_…</code>: Lesen erlauben</li>
+      <li class="schritt"><code>set_…</code>: Ändern erlauben – die Methode <strong>prüft</strong> den neuen Wert vorher</li>
+      <li class="schritt">Keine set-Methode: von außen <strong>nicht änderbar</strong>. Der Kontostand ändert sich nur über <code>einzahlen</code>, <code>abheben</code>, <code>ueberweisen</code></li>
+    </ul>
+  </div>
+  <p class="schritt" style="margin-top:34px"><span class="impuls">Welches Attribut von <code>Konto</code> bekommt welche Methode? → Aufgabe 5.3</span></p>
+  <aside class="notiz"><p>Beispiel bewusst an <code>Kunde</code>, damit 5.3 (Konto) offen bleibt. Kernaussage: Datenkapselung heißt nicht „zu jedem Attribut get und set“ – sonst wäre nichts gewonnen.</p></aside>
+</section>
+
+<section class="folie" data-titel="Merke: Datenkapselung">
+  <h2><small>Ins Glossar</small>Das Wichtigste aus Teil 4</h2>
+  <table class="tab" style="font-size:28px">
+    <tr><td style="width:300px"><b>Datenkapselung</b></td><td>Attribute sind privat, der Zugriff erfolgt nur über öffentliche Methoden. So stellt die Klasse selbst sicher, dass ihre Attributwerte gültig bleiben.</td></tr>
+    <tr class="schritt"><td><b>Sichtbarkeit</b></td><td><code>-</code> privat (nur die eigene Klasse, in Python <code>__bezeichner</code>), <code>+</code> öffentlich (jedes Programm)</td></tr>
+    <tr class="schritt"><td><b>get und set</b></td><td>nur dort, wo Lesen bzw. Ändern von außen sinnvoll ist; set-Methoden prüfen den neuen Wert</td></tr>
+  </table>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 5.A">
+  <h2><small>Jetzt Sie</small>Etappe 5.A: Das Konto kapseln</h2>
+  <div class="kasten" style="font-size:33px">
+    <ul>
+      <li>Aufgabe 5.2 – Das Konto kapseln (in <code>bank.py</code> oder mit Code-Stand 4.D)</li>
+    </ul>
+    <p class="mut">ca. 10 min (LK 15 min) · danach kurzer Stopp</p>
+  </div>
+</section>
+
+<section class="folie" data-titel="Arbeitsauftrag Etappe 5.B">
+  <h2><small>Jetzt Sie</small>Etappe 5.B: Zugriff gezielt erlauben</h2>
+  <div class="kasten" style="font-size:33px">
+    <ul>
+      <li>Aufgabe 5.3 – Wer darf was?</li>
+      <li>Aufgabe 5.4 – Eine neue PIN</li>
+      <li>Aufgabe 5.5 – Eine trügerische Zuweisung</li>
+      <li class="mut">Wer fertig ist: 5.6 Den Kunden kapseln, 5.7 Ein individueller Dispo (LK verbindlich)</li>
+    </ul>
+    <p class="mut">ca. 35 min (LK 70 min) · danach Stopp</p>
+  </div>
+</section>
+
+<section class="folie" id="sicherung-5b" data-titel="Sicherung 5.B: Unser gekapseltes Modell">
+  <h2><small>Sicherung 5.B</small>Das gekapselte Konto</h2>
+  <div class="zeile" style="gap:50px; align-items:flex-start">
+    <div style="flex:0 0 720px"><div class="kl" style="font-size:21px; min-width:0"><div class="kopf">Konto</div><div class="atts"><div class="att">- kontonummer : int</div><div class="att">- pin : str</div><div class="att">- kontostand : float</div><div class="att">- dispo : float</div><div class="att">- buchungen : list</div></div><div class="meth"><div class="m">+ Konto(kontonummer : int, pin : str)</div><div class="m">+ get_kontonummer() : int</div><div class="m">+ get_kontostand() : float</div><div class="m">+ set_pin(neue_pin : str)</div><div class="m">+ pin_pruefen(eingabe : str) : bool</div><div class="m">+ einzahlen(betrag : float)</div><div class="m">+ abheben(betrag : float)</div><div class="m">+ ueberweisen(betrag : float,</div><div class="m">&nbsp;&nbsp;&nbsp;&nbsp;zielkonto : Konto)</div><div class="m">+ auszug_drucken()</div></div></div></div>
+    <div class="spalte">
+      <p style="font-weight:700; margin-top:0">Kurz-Check</p>
+      <div class="karten" style="gap:14px"><button class="karte" type="button" style="min-height:0; font-size:24px">Warum gibt es kein <code>set_kontostand</code>?<span class="hinten">Der Kontostand ändert sich nur über <code>einzahlen</code>, <code>abheben</code> und <code>ueberweisen</code> – dort wird geprüft und gebucht.</span></button><button class="karte" type="button" style="min-height:0; font-size:24px">Warum gibt es kein <code>get_pin</code>?<span class="hinten">Die PIN bleibt geheim. Zum Prüfen genügt <code>pin_pruefen</code>.</span></button><button class="karte" type="button" style="min-height:0; font-size:24px"><code>konto1.__kontostand = 5</code> – was passiert?<span class="hinten">Python legt von außen ein neues Attribut an. Der echte Kontostand bleibt unverändert.</span></button></div>
+    </div>
+  </div>
+  <aside class="notiz"><p>Klassendiagramm aus 5.3 gemeinsam abgleichen; <code>get_dispo</code> ist vertretbar, aber laut Anforderung nicht nötig. 5.5 kurz live vorführen. Danach <b>Code-Stand 5</b> (<code>oop_staende/bank_stand_5.py</code>, mit gekapseltem Kunden und <code>set_pin</code>) über den Austauschordner verteilen.</p></aside>
+</section>
+
 </div><!-- #buehne -->
 
 <div id="leiste"><div id="fortschritt"></div></div>
@@ -1135,6 +1274,7 @@ body.druck button.karte::after{content:""}
       + "<a href='oop_praesentation_pdf/teil1_objekte.pdf' download>Teil 1</a>"
       + "<a href='oop_praesentation_pdf/teil2_klassen.pdf' download>Teil 2</a>"
       + "<a href='oop_praesentation_pdf/teil3_python.pdf' download>Teil 3</a>"
+      + "<a href='oop_praesentation_pdf/teil4_kapselung.pdf' download>Teil 4</a>"
       + "<button type='button' id='druck-jetzt'>selbst drucken (P)</button></div>";
     h += "<p class='hilfe'>Tasten: → / Leertaste weiter · ← zurück · N Notizen · M Menü · F Vollbild · B Schwarzbild · P drucken bzw. als PDF speichern · Pos1/Ende erste/letzte Folie · Esc schließen</p>";
     m.innerHTML = h;
